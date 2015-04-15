@@ -1,50 +1,16 @@
-%%%%%%%%%%%%%%%%%%%% author.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% sample root file for your "contribution" to a contributed volume
-%
-% Use this file as a template for your own input.
-%
-%%%%%%%%%%%%%%%% Springer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[graybox]{svmult}
-
-% choose options for [] as required from the list
-% in the Reference Guide
-
-\usepackage{mathptmx}       % selects Times Roman as basic font
-\usepackage{helvet}         % selects Helvetica as sans-serif font
-\usepackage{courier}        % selects Courier as typewriter font
-\usepackage{type1cm}        % activate if the above 3 fonts are
-                            % not available on your system
-%
-\usepackage{makeidx}         % allows index generation
-\usepackage{graphicx}        % standard LaTeX graphics tool
-                             % when including figure files
-\usepackage{multicol}        % used for the two-column index
-\usepackage[bottom]{footmisc}% places footnotes at page bottom
-
-% see the list of further useful packages
-% in the Reference Guide
-
-\makeindex             % used for the subject index
-                       % please use the style svind.ist with
-                       % your makeindex program
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%  Our packages and macros   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[conference]{IEEEtran}
+\usepackage{times}
 
 % numbers option provides compact numerical references in the text. 
 \usepackage[numbers]{natbib}
-%\usepackage{multicol}
+\usepackage{multicol}
 \usepackage[bookmarks=true]{hyperref}
 \usepackage{color}
-%\usepackage{graphicx}
+\usepackage{graphicx}
 %\usepackage{subfloat}
 \usepackage{textcomp}
-%\usepackage{amsthm}
+\usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{subcaption}
 \usepackage{algorithm}
@@ -52,8 +18,8 @@
 \usepackage{pbox}
 \usepackage[normalem]{ulem}
 
-%\theoremstyle{definition}
-%\newtheorem{definition}{Definition}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
 \usepackage{amsmath}
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -68,21 +34,18 @@
 \newcommand{\abt}[1]{\textcolor{magenta}{#1}}
 \usepackage{amsbsy}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
 \begin{document}
 
-\title*{Computer-aided Compositional Design and Verification for Modular Robots}
+% paper title
+\title{Computer-aided Compositional Design and Verification for Modular Robots}
 
 % You will get a Paper-ID when submitting a pdf file to the conference system
 \author{Author Names Omitted for Anonymous Review. Paper-ID [168]}
 
 \maketitle
 
-\abstract{To take full advantage of the flexibility of a modular robot system, users must be
+\begin{abstract}
+To take full advantage of the flexibility of a modular robot system, users must be
 able to create new configurations and behaviors quickly. We present a design framework  that facilitates  rapid creation
 of new configurations and behaviors through composition of existing ones, and tools
 to verify configurations and behaviors as they are being created.
@@ -99,7 +62,8 @@ We provide tools that automatically verify configurations and behaviors during t
 design process, allowing the user to identify problems early and iterate quickly.
 After verification, users can  evaluate their configurations and behaviors in a physical simulator.
 The software we have developed is open-source, and will be made freely available
-online.}
+online.
+\end{abstract}
 
 \section{Introduction}
 Modular reconfigurable robot systems have been studied extensively for several
@@ -165,6 +129,7 @@ important aspects of the framework, including a demonstration of the user's
 workflow.  We demonstrate that our framework saves the
 user time and effort, and allows him or her to easily develop complex and
 capable designs.
+
 
 \section{Related Work}
 \label{sec:related-work}
@@ -398,7 +363,61 @@ X, B)$, where
 \item \(B = \bigcup_{\mathcal{C}_i \in C} \mathcal{C}_i.B\)
 \end{itemize}
 The definitions of $\gamma$, \(X\), and $\delta$ are the same as the ones in Definition~\ref{def:configuration}.
-
+% \subsubsection{Update Positions of all Modules} \label{sec:update_position}
+% As multiple configurations are combined, positions and orientations of some modules in them need to be changed to preserve the relative positioning between modules as in the original configurations.
+% 
+% \begin{algorithm}
+% \caption{Update Module Position}\label{alg:update_position}
+% \begin{algorithmic}[1]
+% \Require
+% \Statex A parent module $\mathcal{M}_p$
+% \Statex A child module $\mathcal{M}_c$
+% \Statex A connection $e=(\mathcal{M}_p.n_p, \mathcal{M}_c.n_c)$ and the labeling function $\delta$
+% \Ensure
+% \Statex The child module $\mathcal{M}_c$ with position and orientation updated
+% \Statex
+% \State c\_wrt\_p $\gets$ get\_transform($\mathcal{M}_p.V_p$, $\mathcal{M}_p.V_p$, $e$, $\delta$) \label{line:1}
+% \State p\_wrt\_world $\gets$ get\_matrix($\mathcal{M}_p.P_p$, $\mathcal{M}_p.O_p$) \label{line:2}
+% \State c\_wrt\_world $\gets$ p\_wrt\_world $\cdot$ c\_wrt\_p \label{line:3}
+% \State $\mathcal{M}_c.P_c \gets$ get\_position(c\_wrt\_world) \label{line:4}
+% \State $\mathcal{M}_c.O_c \gets$ get\_orientation(c\_wrt\_world) \label{line:5}
+% \State \Return $\mathcal{M}_c$
+% \end{algorithmic}
+% \end{algorithm}
+% 
+% \begin{algorithm}
+% \caption{Update All Module Positions}\label{alg:update_all_positions}
+% \begin{algorithmic}[1]
+% \Require
+% \Statex A configuration $\mathcal{C}$
+% \Ensure
+% \Statex The configuration $\mathcal{C}$ whose module positions are all updated
+% \Statex
+% \State $\mathcal{M}_p \gets \mathcal{C}.\mathcal{M}_b$ \label{line:6}
+% \State $M=\{\mathcal{M}_p\}$ \label{line:7}
+% \State $\mathcal{C}.M=\emptyset$ \label{line:8}
+% 
+% \While{$M\neq\emptyset$} \label{line:9}
+% \For{$(\mathcal{M}_i.n_i, \mathcal{M}_j.n_j) \in \mathcal{C}.E$} \label{line:10}
+% \If{$\mathcal{M}_i=\mathcal{M}_p$} \label{line:11}
+% \State $\mathcal{M}_j=$~UpdateModulePosition$($ \label{line:12}
+% \Statex \hspace{3cm}$\mathcal{M}_i, \mathcal{M}_j, (\mathcal{M}_i.n_i, \mathcal{M}_j.n_j), \mathcal{C}.\delta)$
+% \State $M=M\cup\{\mathcal{M}_j\}$ \label{line:13}
+% \State $\mathcal{C}.M=\mathcal{C}.M\cup\{\mathcal{M}_j\}$ \label{line:14}
+% \EndIf \label{line:15}
+% \EndFor \label{line:16}
+% \State $M=M \setminus \{\mathcal{M}_p\}$ \label{line:17}
+% \State $\mathcal{M}_p \gets$ RandomOneFrom$(M)$ \label{line:18}
+% \EndWhile \label{line:19}
+% 
+% \State \Return $\mathcal{M}_c$
+% \end{algorithmic}
+% \end{algorithm}
+% 
+% Given a parent module $\mathcal{M}_p$, a child module $\mathcal{M}_c$, the connection between them and the corresponding labeling function, Algorithm~\ref{alg:update_position} updates the position and orientation in the global reference frame of the child module based on the relative positioning between $\mathcal{M}_p$ and $\mathcal{M}_c$. Function ``get\_transform'' in line~\ref{line:1} computes the transformation matrix for the reference frame from the parent module to the child module. Function ``get\_matrix'' in line~\ref{line:2} computes the transformation matrix from global frame to the parent module frame. With the two transformation matrices, line~\ref{line:3} computes the transformation matrix from the global frame to the child module frame. In line~\ref{line:4}, \ref{line:5}, functions ``get\_position'' and ``get\_orientation'' update the position and orientation of the child module.
+% 
+% With the algorithm to update the position and orientation between two modules, Algorithm~\ref{alg:update_all_positions} shows the procedure to update the position and orientation of all modules in a given configuration $\mathcal{C}$. The algorithm starts with the base module of $\mathcal{C}$ as shown in line~\ref{line:6}. $M$ is the set of modules who are updated already, but some modules that are directly connected to modules in $M$ are not updated yet. The set of modules of $\mathcal{C}$ is reset to the
+% empty set in line~\ref{line:8}. The while loop from line~\ref{line:9} to \ref{line:19} ensures all modules in $\mathcal{C}$ are updated. The for loop and if statement in line~\ref{line:10}, \ref{line:11} find all connections in $\mathcal{C}.E$ whose first module is $\mathcal{M}_p$. In line~\ref{line:12} we apply Algorithm~\ref{alg:update_position} to update the position and orientation of the second module in those connections. Line~\ref{line:13}, \ref{line:14} append the updated module into the set $M$ and $\mathcal{C}.M$. In line~\ref{line:17}, \ref{line:18}, we remove the current $\mathcal{M}_p$ from the set $M$ and randomly choose a new $\mathcal{M}_p$ from $M$. Notice that the assumption we made about connections of a configuration in Definition~\ref{def:configuration} prevents us from updating the same module twice.
 \subsection{Behavior Composition: Series-Parallel Action Graphs}
 \label{sec:behavior-representation}
 We present a novel motion description language for modular robots.  The
@@ -496,6 +515,74 @@ The action completes when both wheels actually reach their commanded angles of \
 \mathrm{SQUARE} = Sc (~\mathrm{DRIVE},~\mathrm{TURN},~\mathrm{DRIVE},~\mathrm{TURN},\\
 ~\mathrm{DRIVE},~\mathrm{TURN},~\mathrm{DRIVE},~\mathrm{TURN} )
 \end{align*}
+
+% Consider the
+% car design shown in Figure X. This design is composed of four wheel modules
+% and a central steering element, which rotates to bend the front wheels to the
+% left or right relative the back, causing the car to turn. The wheel elements
+% expose a function which turns the two side turntables in sync in order to drive
+% forward (DRV). The steering element exposes a steering function (STR). We
+% show these behavior  definitions below:
+% \begin{align*}
+% %
+% \mathrm{DRV}(v,t) =~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \\
+% Pc \left( \begin{array}{cccc}
+% (~lWheel, & \dot\theta=v, & \xi:0, & T:t~), \\
+% (~rWheel, & \dot\theta=v, & \xi:0, & T:t~) \\
+% \end{array} \right)\\
+% %
+% \mathrm{ST R}(x) = ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \\ 
+% Pc \left( \begin{array}{cccc}
+% (~tTable1 & \theta=x, & \xi:[\theta=x], & T=\infty~), \\
+% (~tTable2 & \theta=-x, & \xi: [\theta=-x], & T=\infty~) \\
+% \end{array} \right)
+% %
+% \end{align*}
+% 
+% The DRV behavior sets an angular velocity \(v\) for the left and right 
+% 
+% After composing these sub-configurations into the car, we build higher-level
+% behaviors by composing the behaviors of the sub-configurations. We define functions
+% to go-straight (GST) and turn (TRN):
+% \begin{align*}
+% \mathrm{GST}(v,t) &= Pc (~\mathrm{STR}(0),~ \mathrm{DRV}(v,t)~)\\
+% \mathrm{TRN}(v,t,x) &= Pc (~\mathrm{STR}(x),~\mathrm{DRV}(v,t)~)
+% \end{align*}
+% 
+% We can now easily define trajectories by sequencing go-straight and turn
+% commands in series. Figure \ref{fig:zigzag} shows the path generated by the
+% zig-zag behavior defined below:
+% 
+% \begin{align*}
+% ZGZ = ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+% Sc(~\mathrm{GST}(10,5),~\mathrm{TRN}(10,5,30),~\mathrm{GST}(10,5),\\
+% ~\mathrm{TRN}(10,10,-30),~\mathrm{GST}(10,20), \\
+% \mathrm{TRN}(10,10,30), \mathrm{GST}(10,5), \mathrm{TRN}(10,10, -30 )~)
+% \end{align*}
+% 
+% \begin{figure}
+% \begin{center}
+% \includegraphics[width=0.7\columnwidth]{images/zigzag.png}
+% \end{center}
+% \caption{Zig-zag trajectory \TODO{This is hand-drawn, sorry about that... I will
+% make a more professional-looking replacement}}
+% \label{fig:zigzag}
+% \end{figure}
+ 
+
+% \subsection{Controller Composition}
+% \TODO{Tarik and Jim write}
+% \paragraph{Input}
+% A configurations. A set of controllers. A control composition graph.
+% \paragraph{Output}
+% A composed controller if it is safe.
+% \paragraph{Procedure}
+% \begin{itemize}
+% \item Compose the set of controllers based on the given control composition graph. Explain how the parallel composition and series composition are handled.
+% \item\textbf{Check there is no controller conflict in the composition.}
+% \item Execute the composed controller in user defined incremental time interval. At each time step, update each module position and check collision.
+% \item \textbf{At each time step, check if the configuration will not have any unexpected behavior.}
+% \end{itemize}
 
 \subsection{ Verification of Configuration and Behavior}
 
@@ -611,6 +698,16 @@ Given a composed configuration, the behavior builder aids users in designing beh
 \caption{The program to design and verify configurations and behaviors}
 \label{fig:smores_conf}
 \end{figure}
+
+% \TODO{Tarik and Jim write}\\
+% With simulation in Gazebo:
+% \begin{itemize}
+% \item Show a configuration composed from a set of basic configurations.
+% \item Show a composed controller that results in a collision in the configuration.
+% \item Show an updated controller that resolves the collision
+% \item Show a composed controller that results in an unexpected behavior.
+% \item Show an updated controller that eliminates the unexpected behavior.
+% \end{itemize}
 
 \section{Examples}
 \label{sec:examples}
@@ -797,8 +894,9 @@ Perhaps most importantly, we will test and evaluate the designs and behaviors wi
 
 Currently, each behavior is associated with exactly one configuration. In many cases, a given behavior could be executed by several different configurations (if it were correctly mapped onto a subset of their modules). In the future, we will apply an embedding detection algorithm (see \cite{mantzouratos2014embeddability}) to map behaviors into any configuration capable of executing them.
 
-%\input{referenc}
-%\bibliographystyle{plainnat}
-\bibliographystyle{spbasic}
+%% Use plainnat to work nicely with natbib. 
+
+\bibliographystyle{plainnat}
 \bibliography{references}
+
 \end{document}
