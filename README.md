@@ -1,2 +1,2 @@
-# ISRR2015
-Paper for ISRR 2015
+# RSS2015
+Paper for RSS2015
