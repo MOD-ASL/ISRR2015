@@ -78,37 +78,42 @@
 \title*{Computer-aided Compositional Design and Verification for Modular Robots}
 
 % You will get a Paper-ID when submitting a pdf file to the conference system
-\author{Author Names Omitted for Anonymous Review. Paper-ID [168]}
+\author{Tarik Tosun$^*$, Gangyuan Jing$^*$, Hadas Kress-Gazit, and Mark Yim}
+
+\institute{
+Tarik Tosun \at University of Pennsylvania, Philadelphia PA, \email{tarikt@grasp.upenn.edu}
+\and Gangyuan Jing \at Cornell University, Ithaca NY, \email{gj56@cornell.edu}
+\and Hadas Kress-Gazit \at Cornell University, Ithaca NY, \email{hadaskg@cornell.edu}
+\and Mark Yim \at University of Pennsylvania, Philadelphia PA, \email{yim@grasp.upenn.edu}
+\and $^*$ Tarik Tosun and Gangyuan Jing contributed equally to this work.
+}
 
 \maketitle
 
-\abstract{To take full advantage of the flexibility of a modular robot system, users must be
-able to create new configurations and behaviors quickly. We present a design framework  that facilitates  rapid creation
-of new configurations and behaviors through composition of existing ones, and tools
-to verify configurations and behaviors as they are being created.
-New configurations are created by combining existing
-sub-configurations,
-for example combining four legs and a body to create a walking robot.
-Behaviors are associated with each configuration, so that when sub-configurations
-are composed, their associated behaviors are immediately available for composition
-as well.
-We introduce a new motion description language (Series-Parallel Action Graphs)
-that facilitates the rapid creation of complex behaviors by composition of simpler
-behaviors.
-We provide tools that automatically verify configurations and behaviors during the
-design process, allowing the user to identify problems early and iterate quickly.
-After verification, users can  evaluate their configurations and behaviors in a physical simulator.
-The software we have developed is open-source, and will be made freely available
-online.}
+\abstract{To take full advantage of the flexibility of a modular robot system,
+users must be able to create new configurations and behaviors quickly. We
+present a design framework  that facilitates  rapid creation of new
+configurations and behaviors through composition of existing ones, and tools to
+verify configurations and behaviors as they are being created. New
+configurations are created by combining existing sub-configurations, for example
+combining four legs and a body to create a walking robot. Behaviors are
+associated with each configuration, so that when sub-configurations are
+composed, their associated behaviors are immediately available for composition
+as well. We introduce a new motion description language (Series-Parallel Action
+Graphs) that facilitates the rapid creation of complex behaviors by composition
+of simpler behaviors. We provide tools that automatically verify configurations
+and behaviors during the design process, allowing the user to identify problems
+early and iterate quickly. After verification, users can  evaluate their
+configurations and behaviors in a physical simulator. The software we have
+developed is open-source, and will be made freely available online.}
 
-\section{Introduction}
+\section{Introduction} 
+
 Modular reconfigurable robot systems have been studied extensively for several
-decades.  These systems distinguish themselves from conventional robotic systems in their
-ability to transform into different shapes to address a wide variety of tasks. They
-promise to be versatile, robust, and low cost \cite{yim2000polybot}. Dozens of groups
-have different kinds of reconfigurable robots \cite{fukuda1990cellular, lipson2000towards}, and introduced approaches
-for programming them \cite{salemi2001hormone, walter2002choosing, melek2003neurofuzzy}.  Over 800 papers, a book \cite{stoy2010book}, and a survey \cite{yim2007modular}
-have been written on the subject.
+decades.  These systems distinguish themselves from conventional robotic systems in their ability to transform into different shapes to address a wide variety of tasks. They promise to be versatile, robust, and low cost
+\cite{yim2000polybot}. Dozens of groups have different kinds of reconfigurable robots\cite{fukuda1990cellular, lipson2000towards}, and introduced approaches for
+programming them \cite{salemi2001hormone, walter2002choosing,
+melek2003neurofuzzy}.  Over 800 papers, a book \cite{stoy2010book}, and a survey \cite{yim2007modular} have been written on the subject.
 
 This versatility places an additional burden on the user, because
 solving problems with modular robots involves not only designing  programs,
@@ -362,10 +367,14 @@ mass onto the group plane lies within the convex hull of its load-supporting con
 ground plane.
 \end{definition}
 
-\section{Approach and Algorithm}
-\label{sec:approach}
-The three major components of our framework are configuration composition, behavior
-composition, and verification of configurations and behaviors. 
+\section{Approach and Algorithm} \label{sec:approach} The three major
+components of our framework are configuration composition, behavior
+composition, and verification of configurations and behaviors.  Together,
+these three components provide a streamlined workflow to quickly create
+functional robots by leveraging an existing library of designs and behaviors.
+Combining existing designs and behaviors into new ones allows users to create
+large, complicated, and highly functional designs.
+
 \subsection{Configuration Composition} \label{sec:conf_composition}
 
 Before discussing about configuration composition, we will first define a set of connections $E_C$ between configurations in a given set $C$ as $(\mathcal{C}_i.\mathcal{M}_i.a_i, \mathcal{C}_j.\mathcal{M}_j.a_j) \in E_C$, where $\mathcal{C}_{i},\mathcal{C}_j\in C$, $\mathcal{M}_i \in \gamma(\mathcal{C}_i), \mathcal{M}_j \in \gamma(\mathcal{C}_j)$, and $a_i\in \mathcal{M}_i.A$, $a_j\in \mathcal{M}_j.A$. Similar to the assumption about connections in a configuration, we assume that we form an
@@ -401,61 +410,109 @@ The definitions of $\gamma$, \(X\), and $\delta$ are the same as the ones in Def
 
 \subsection{Behavior Composition: Series-Parallel Action Graphs}
 \label{sec:behavior-representation}
-We present a novel motion description language for modular robots.  The
-language aims to balance simplicity and expressiveness, and is designed specifically
-for composition, allowing complex behaviors
-to be rapidly created by combining existing behaviors. 
-Typical motion description languages, which have atomic elements that represent controller
-commands (set-points and gains) with limited duration \cite{brockett1988computer}.
-Extended motion description languages introduce interrupts to control the duration
-of commands \cite{hristu2003motion}.  Our language distinguishes itself by allowing
-existing behaviors to be easily composed to form new behaviors.
-%The atomic commands of our language have unlimitedduration (until they are superseded by another command), and each apply to a singleDoF of the robot.
-%These properties allow complex behaviors to be created through composition operations.
 
- The fundamental atoms of the language are called actions.  An \textit{action} is a tuple \(
-(J, X, \xi, T)\), where \(J\) identifies a single DoF of a configuration, \(X\) is a
-controller setpoint for that DoF, \(\xi\) specifies an interrupt
-condition, and T specifies a timeout. When an action executes, the controller
-setpoint (position or velocity) for the specified DoF is changed to the specified
-value. The controller maintains this setpoint until receiving a new one from another
-action. The interrupt condition is a boolean function of the (sensed) state of the DoF \(J\).
-When either the interrupt condition is met or time runs out (whichever comes
-first), the action is considered complete, and the next action  begins. The
-interrupt condition can be set to \(false\) (so that only the timeout has effect),
-and \(T\) can be set to infinity (so that only the interrupt has effect). As an example,
-the action \((~Module0\_L,~ \theta_{set}=\pi,~ \xi:\theta==\pi,~T:\infty~)\) encodes
-``Command the controller of the left wheel of module zero to maintain a setpoint
-of \(\pi\) radians.  When the encoder of that wheel indicates that \(\pi\) radians
-has actually been reached, consider this action complete and move on.''
+In this section, we present a programming paradigm for creating new behaviors for
+modular robots by composing existing ones.  We wanted to allow
+users to create  designs and behaviors quickly and easily,  enabling them
+address tasks by generating a new robot and behavior on-the-fly.
+
+The modular robotics community has developed a number of languages and  methods
+to create behaviors, including gait tables \cite{yim1994locomotion}, phased automata
+\cite{zhang2003phase}, hormone-based control \cite{salemi2001hormone},
+and role-based control \cite{stoy2002using}. Phased automata, hormone, and role-based
+control are typically used to specify a single, cyclic behavior (such as a gait for
+locomotion) in a distributed fashion.
+These methods have good scaling and robustness properties, but are not well-suited
+to specifying the kind of non-cyclic, globally coordinated behaviors required for many tasks
+(like picking up and moving an object with an arm).
+  
+The simplicity and clarity of gait tables makes them appealing for our
+application.  However, gait tables are difficult to re-use, and also hard to
+scale to very complicated designs. The  motion description language we present
+allows low-level behaviors to be combined in series and parallel to create new
+higher-level behaviors, encapsulating complexity and facilitating code re-use.
+The resulting programs are precise and expressive, and have a nested structure
+that is easy to understand and debug.
+
+%    
+% We present a novel motion description language for modular robots.  The
+% language aims to balance simplicity and expressiveness, and is designed specifically
+% for composition, allowing complex behaviors
+% to be rapidly created by combining existing behaviors. 
+% Typical motion description languages have atomic elements that represent controller
+% commands (set-points and gains) with limited duration \cite{brockett1988computer}.
+% Extended motion description languages introduce interrupts to control the duration
+% of commands \cite{hristu2003motion}.  Our language distinguishes itself by allowing
+% existing behaviors to be easily composed to form new behaviors.
+
+ The atoms of the language are called actions.  Similar to a single entry of a gait
+table, an action specifies a controller setpoint for a single DoF of a module.  Unlike
+a gait table entry, actions do not have explicit timestamps.  Rather, each action has an associated
+interrupt condition, which is a boolean function of the (sensed) state of the robot. Similar
+to a state transition in a finite state machine (FSM), when the interrupt condition is met the action is  considered
+complete, and  execution moves on to the next actions.  Interrupts allow the programmer
+to precisely specify behaviors in a natural way: rather than specifying a timed sequence
+of motions, the programmer specifies an ordered sequence of actions and has some
+assurance that an action will not begin until the robot has actually achieved the goal
+state of the previous action. Actions
+may optionally include a timeout, which causes the action to be considered complete
+automatically once time runs out.
+
+An important distinction between actions in our language and states in a traditional
+FSM is that multiple actions may execute in parallel.   Actions are combined through
+parallel and series composition to create behaviors. When two actions are composed in series,
+the second begins when the first ends. When composed in parallel they
+begin simultaneously, and the following actions do not begin until both complete.
+A behavior created using these operations is a directed acyclic graph of actions with
+series-parallel structure \cite{valdes1979recognition};  Figure \ref{fig:graph-composition} provides
+a visual example. This structure is advantageous because the
+ series and parallel composition operations   
+remain valid for behaviors of arbitrary size, allowing new behaviors to be easily
+created by combining existing behaviors.
  
-Actions are composed to form behaviors. We define a \textit{behavior} as a directed acyclic graph where nodes are
-actions and edges are transitions between actions.  A behavior \(B\) always has
-two special nodes \(S\) and \(T\), which are the \textit{Start} and
-\textit{Termination} nodes, respectively.  The smallest behavior consists of
-\(S\), \(T\), and a single action.  Behavior execution follows three simple
-rules:
-
-\begin{enumerate}
-\item Execution begins at \(S\).  \(S\) completes immediately.
-\item Each action begins execution upon completion of \textit{all} its parent actions.
-\item All sequences of execution end at \(T\).
-\end{enumerate}
-
-Because execution begins at \(S\) and ends at \(T\), there must be a (directed)
-path from every \(S\) to every node in \(B\), and also from every node in \(B\)
-to \(T\). Since \(B\) is acyclic, it is therefore a \textit{directed series-parallel graph} (SPG).
-SPG's can always be formed recursively by parallel and series composition
-operations \cite{valdes1979recognition}. The parallel composition \(P\) of two behaviors \(B_1\),
-\(B_2\), \(P = Pc(B_1, B_2)\) is the disjoint union of their nodes (actions),
-merging \(S_1\) with \(S_2\) and \(T_1\) with \(T_2\). The series composition
-of \(B_1\), \(B_2\), \(S = Sc(B_1, B_2)\) is created from their disjoint union
-by merging \(T_1\) and \(S_2\), so that \(B_1\) and \(B_2\) execute
-sequentially\footnote{Since the merged node is not an action, we can freely
-omit it and instead draw edges from each of its parent nodes to each of its
-child nodes.}.  Note that if \(B_1\) was itself created through parallel
-composition, \(B_2\) will not begin until all chains of execution of \(B_1\)
-are completed. Figure \ref{fig:graph-composition} provides a visual companion.
+% The fundamental atoms of the language are called actions.  An \textit{action} is a tuple \(
+% (J, X, \xi, T)\), where \(J\) identifies a single DoF of a configuration, \(X\) is a
+% controller setpoint for that DoF, \(\xi\) specifies an interrupt
+% condition, and T specifies a timeout. When an action executes, the controller
+% setpoint (position or velocity) for the specified DoF is changed to the specified
+% value. The controller maintains this setpoint until receiving a new one from another
+% action. The interrupt condition is a boolean function of the (sensed) state of the DoF \(J\).
+% When either the interrupt condition is met or time runs out (whichever comes
+% first), the action is considered complete, and the next action  begins. The
+% interrupt condition can be set to \(false\) (so that only the timeout has effect),
+% and \(T\) can be set to infinity (so that only the interrupt has effect). As an example,
+% the action \((~Module0\_L,~ \theta_{set}=\pi,~ \xi:\theta==\pi,~T:\infty~)\) encodes
+% ``Command the controller of the left wheel of module zero to maintain a setpoint
+% of \(\pi\) radians.  When the encoder of that wheel indicates that \(\pi\) radians
+% has actually been reached, consider this action complete and move on.''
+%  
+% Actions are composed to form behaviors. We define a \textit{behavior} as a directed acyclic graph where nodes are
+% actions and edges are transitions between actions.  A behavior \(B\) always has
+% two special nodes \(S\) and \(T\), which are the \textit{Start} and
+% \textit{   Termination} nodes, respectively.  The smallest behavior consists of
+% \(S\), \(T\), and a single action.  Behavior execution follows three simple
+% rules:
+% 
+% \begin{enumerate}
+% \item Execution begins at \(S\).  \(S\) completes immediately.
+% \item Each action begins execution upon completion of \textit{all} its parent actions.
+% \item All sequences of execution end at \(T\).
+% \end{enumerate}
+% 
+% Because execution begins at \(S\) and ends at \(T\), there must be a (directed)
+% path from every \(S\) to every node in \(B\), and also from every node in \(B\)
+% to \(T\). Since \(B\) is acyclic, it is therefore a \textit{directed series-parallel graph} (SPG).
+% SPG's can always be formed recursively by parallel and series composition
+% operations \cite{valdes1979recognition}. The parallel composition \(P\) of two behaviors \(B_1\),
+% \(B_2\), \(P = Pc(B_1, B_2)\) is the disjoint union of their nodes (actions),
+% merging \(S_1\) with \(S_2\) and \(T_1\) with \(T_2\). The series composition
+% of \(B_1\), \(B_2\), \(S = Sc(B_1, B_2)\) is created from their disjoint union
+% by merging \(T_1\) and \(S_2\), so that \(B_1\) and \(B_2\) execute
+% sequentially\footnote{Since the merged node is not an action, we can freely
+% omit it and instead draw edges from each of its parent nodes to each of its
+% child nodes.}.  Note that if \(B_1\) was itself created through parallel
+% composition, \(B_2\) will not begin until all chains of execution of \(B_1\)
+% are completed. Figure \ref{fig:graph-composition} provides a visual companion.
 
 \begin{figure}
 \begin{center}
@@ -463,43 +520,106 @@ are completed. Figure \ref{fig:graph-composition} provides a visual companion.
 \includegraphics[height=0.8in]{images/tikz/parallel.pdf} \vspace{0.in}
 \includegraphics[height=0.8in]{images/tikz/parallel-and-series.pdf}
 \end{center}
-\caption{Series and parallel composition of behaviors }
+\caption{Series and parallel composition }
 \label{fig:graph-composition}
 \end{figure}
 
-\subsubsection*{Example}
-Consider a single module that has two wheels that allow it to drive like a car. To
-drive forward, we might define a DRIVE behavior composing actions for  the left and right wheels
-in parallel:\begin{align*}
-\mathrm{DRIVE} =~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \\
-Pc \left( \begin{array}{cccc}
-(~L, & \dot\theta_{set}=6, & \xi:false, & T:5), \\
-(~R, & \dot\theta_{set}=6, & \xi:false, & T:5) \\
-\end{array} \right)\\
-\end{align*}
-The wheels are set to turn at 6 radians per second, and the action will complete
-in 5 seconds.  We might also define a TURN behavior, commanding the wheels to rotate \(\pi\) radians
-in opposite directions:
-\begin{align*}
-\mathrm{TURN} =~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \\
-Pc \left( \begin{array}{cccc}
-(~L, & \theta_{set}=\theta_0+\pi, & \xi:\theta==\theta_0+\pi, & T:\infty), \\
-(~R, & \theta_{set}=\theta_0-\pi, & \xi:\theta==\theta_0-\pi, & T:\infty) \\
-\end{array} \right)\\
-\end{align*}
+%\subsubsection*{Example}
+As an example, consider the car design shown in figure \ref{fig:car-design}. To create a low-level
+``drive-forward'' behavior, we simply command all of its wheels to spin  in parallel.
+The car steers by swiveling its central steering column, so a ``turn right''
+behavior can be similarly achieved by commanding parallel actions for the steering column joints.
+With these low-level behaviors established, we can command trajectories through series
+composition, for example: \textit{square=series(drive, turn, drive, turn, drive, turn,
+drive, turn)}.
 
-Here, \(\theta_0\) denotes the currently-sensed value of $\theta$ at the beginning of
-the TURN behavior.
-The action completes when both wheels actually reach their commanded angles of \(\theta_0\pm\pi\). To drive in a square, we compose DRIVE and TURN behaviors in series:
+This paradigm  is lightweight enough to code  low-level behaviors quickly and
+easily. However, the real value comes from its ability to  combine behaviors
+in layers and quickly generate behaviors for complicated designs. This works
+particularly well when designs are made by composing smaller designs. For
+example, we can easily develop ``drive'' and ``turn''\ behaviors for the
+18-module backhoe shown in Figure \ref{fig:backhoe-design} by composing  behaviors of
+its component car designs: \(driveBackhoe= parallel( driveCar1, driveCar2)\),
+and \(turnBackhoe = parallel(turnCar1, turnCar2)\). Each of these one-line
+statements commands the movement of  28 degrees of freedom.
 
-\begin{align*}
-\mathrm{SQUARE} = Sc (~\mathrm{DRIVE},~\mathrm{TURN},~\mathrm{DRIVE},~\mathrm{TURN},\\
-~\mathrm{DRIVE},~\mathrm{TURN},~\mathrm{DRIVE},~\mathrm{TURN} )
-\end{align*}
+We can extend this further to generate a useful high-level behaviors for the
+backhoe.  Suppose that the arm has a laser rangefinder attached to the end,
+and that we've already created a ``scan'' behavior that sweeps or rotates the
+sensor.  We might create a ``patrol'' behavior that scans continuously while
+driving in a square: \(patrol = parallel( scan, square)\). Or, if we only want
+the robot to scan the corners of a room, we can precisely specify this using
+lower-level behaviors:  \(cornerScan=series(drive, scan, turn, drive,scan,
+turn, \ldots) \).
 
+Building behaviors in a layered fashion make it much easier
+to re-use code.
+If primitive behaviors have not yet been built, building a single complicated behavior like ``patrol'' from scratch might  be faster
+than first building primitive behaviors and then composing them into the desired
+complex behavior. However, the latter process is more efficient in the long run,
+because the low-level behaviors can be re-used to quickly create many different
+high-level behaviors.
+
+Our emphasis on abstraction begs the question: why not use  a a more fully-featured
+plan execution model such as behavior trees \cite{marzinotto2014towards}, or even a
+traditional object-oriented programming language (like Java or C++)?  Our
+decision was driven by the tradeoff between complexity and ease-of-use: given
+our desire for a simplicity and speed of programming, we chose to use an
+extremely minimal  paradigm with only two composition operations.
+The language is quite expressive: we have used it to develop a number of  complex behaviors
+for large designs (see Section \ref{sec:examples}). In the future, we hope to expand
+its capabilities without sacrificing ease-of-use.  In particular, facilities
+for high-level decision making based on sensed information about the environment
+will be a priority.
+
+\begin{figure}
+\begin{center}
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[height=1.3in]{images/library/car.png}
+    \caption{Car design}
+    \label{fig:car-design}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[height=1.3in]{images/library/backhoe.jpeg}
+    \caption{Backhoe design}
+    \label{fig:backhoe-design}
+  \end{subfigure}
+\end{center}
+\end{figure} 
+
+
+% Consider a single module that has two wheels that allow it to drive like a car. To
+% drive forward, we might define a DRIVE behavior composing actions for  the left and right wheels
+% in parallel:\begin{align*}
+% \mathrm{DRIVE} =~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \\
+% Pc \left( \begin{array}{cccc}
+% (~L, & \dot\theta_{set}=6, & \xi:false, & T:5), \\
+% (~R, & \dot\theta_{set}=6, & \xi:false, & T:5) \\
+% \end{array} \right)\\
+% \end{align*}
+% The wheels are set to turn at 6 radians per second, and the action will complete
+% in 5 seconds.  We might also define a TURN behavior, commanding the wheels to rotate \(\pi\) radians
+% in opposite directions:
+% \begin{align*}
+% \mathrm{TURN} =~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \\
+% Pc \left( \begin{array}{cccc}
+% (~L, & \theta_{set}=\theta_0+\pi, & \xi:\theta==\theta_0+\pi, & T:\infty), \\
+% (~R, & \theta_{set}=\theta_0-\pi, & \xi:\theta==\theta_0-\pi, & T:\infty) \\
+% \end{array} \right)\\
+% \end{align*}
+% 
+% Here, \(\theta_0\) denotes the currently-sensed value of $\theta$ at the beginning of
+% the TURN behavior.
+% The action completes when both wheels actually reach their commanded angles of \(\theta_0\pm\pi\). To drive in a square, we compose DRIVE and TURN behaviors in series:
+% 
+% \begin{align*}
+% \mathrm{SQUARE} = Sc (~\mathrm{DRIVE},~\mathrm{TURN},~\mathrm{DRIVE},~\mathrm{TURN},\\
+% ~\mathrm{DRIVE},~\mathrm{TURN},~\mathrm{DRIVE},~\mathrm{TURN} )
+% \end{align*}
 \subsection{ Verification of Configuration and Behavior}
 
-\subsubsection{Verification of Configurations}\label{sec:verify_conf} In section~\ref{sec:conf_composition}, we introduced the definition on composing a set of configurations into a single configuration. However, it might not be possible or safe to form the structure represented by the composed configuration with the actual module. Consider the configuration shown in Figure~\ref{fig:smores_conf_collision}. It is easy to tell that such configuration is not ideal for any task, because the self-collision may damage those modules and result in instability of the system. Thus it is important to verify whether the configuration is valid or not for a given modular robot system.
+\subsubsection{Verification of Configurations}\label{sec:verify_conf}
+In section~\ref{sec:conf_composition}, we introduced the definition on composing a set of configurations into a single configuration. However, it might not be possible or safe to form the structure represented by the composed configuration with the actual modules. Consider the configuration shown in Figure~\ref{fig:smores_conf_collision}. It is easy to tell that such configuration is not ideal for any task, because the self-collision may damage those modules and result in instability of the system. Thus it is important to verify whether the configuration is valid or not for a given modular robot system.
 
 \begin{figure}
 \begin{center}
@@ -802,3 +922,11 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spbasic}
 \bibliography{references}
 \end{document}
+
+
+
+
+
+
+
+
