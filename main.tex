@@ -45,7 +45,7 @@
 %\usepackage{subfloat}
 \usepackage{textcomp}
 %\usepackage{amsthm}
-\usepackage{amsfonts}
+%\usepackage{amsfonts}
 \usepackage{subcaption}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -171,48 +171,54 @@ workflow.  We demonstrate that our framework saves the
 user time and effort, and allows him or her to easily develop complex and
 capable designs.
 
-\section{Related Work}
-\label{sec:related-work}
+\section{Related Work} \label{sec:related-work} 
 In some respects, our work parallels the efforts of Mehta \cite{mehta2014design}
-and Bezzo \cite{bezzo2014demo}, who aim to create and program printable robots from
-novice users' design specifications.  Users create new designs by composing
-existing elements from a design library, and appropriate circuitry and
-control software are automatically generated as physical designs are assembled. The framework we present is
-intended specifically for modular robots, and consequently the workflow and design considerations are fundamentally different
-from that presented by Mehta and Bezzo.  In
-traditional robot design (or printable robot design), hardware and software are somewhat
-decoupled - hardware is
-designed and built once, and then programmed many times.  In the case of a modular robot system, the system can be reconfigured to meet new tasks,
-so hardware configuration and behavior programming go hand in hand.  We intend
-our system to be fast enough that the user could conceivably develop and program
-a new design for every new task - designs are built once, and programmed once.  Where Mehta et al. provide many facilities to generate and verify
-low-level behaviors (\textit{e.g.} motor drivers appropriate for motors), we do so for
+and Bezzo \cite{bezzo2014demo}, who aim to create and program printable robots
+from novice users' design specifications.  Users create new designs by composing
+existing elements from a design library, and appropriate circuitry and control
+software are automatically generated as physical designs are assembled. The
+framework we present is intended specifically for modular robots, and
+consequently the workflow and design considerations are fundamentally different
+from that presented by Mehta and Bezzo.  In traditional robot design (or
+printable robot design), hardware and software are somewhat decoupled - hardware
+is designed and built once, and then programmed many times.  In the case of a
+modular robot system, the system can be reconfigured to meet new tasks, so
+hardware configuration and behavior programming go hand in hand.  We intend our
+system to be fast enough that the user could conceivably develop and program a
+new design for every new task - designs are built once, and programmed once.
+Where Mehta et al. provide many facilities to generate and verify low-level
+behaviors (\textit{e.g.} motor drivers appropriate for motors), we do so for
 high-level behaviors.
 
 A significant amount of work has been done in developing behaviors and software
-for modular robots. Much of this work focused on automatically
-generating designs and behaviors using artificial intelligence systems. Genetic
-algorithms have been applied for the automated generation of designs
-and behaviors \cite{hornby2003generative}. Other work has
-focused on distributed control \cite{walter2002choosing} and hormone-based control
-\cite{salemi2001hormone}.
+for modular robots. Much of this work focused on automatically generating
+designs and behaviors using artificial intelligence systems. Genetic algorithms
+have been applied for the automated generation of designs and behaviors
+\cite{hornby2003generative}. Other work has focused on distributed control
+\cite{walter2002choosing} and hormone-based control \cite{salemi2001hormone}.
 
-While significant progress has been made in the automated generation of modular robot behaviors,
-automated systems are not yet capable of making modular robots truly useful in practice
-\cite{yim2007modular}.  The need for new programming techniques to manage the complexity
-of modular robot systems has been acknowledged in the literature \cite{yim2000modular}.
-Historically, gait tables have been a commonly used format in which open-loop kinematic
-behaviors can be easily encoded \cite{yim1994locomotion}. Phased automata have also
-been presented as a way to easily create scalable gaits for large numbers of modular
-robots \cite{zhang2003phase}. In this paper, we introduce a novel motion description
-language that enables users to quickly create behaviors for modular robots.
+Efforts have also been made to generate behaviors by automatically identifying the ``role'' a module should play based on its place in a connected structure \cite{stoy2002using}.  Functionality is propagated downward: based on a high-level goal (like ``walk'') and a connected structure of modules, functional sub-structures (like legs and a spine) are automatically identified, and modules are directed to execute appropriate roles in a distributed fashion.  In our work, modular structures are similarly associated with appropriate behaviors. Rather than identifying roles in a top-down fashion, we build designs with the desired functionality from the bottom up. The use creates new designs by composing sub-components and associated behaviors from a library, building a new structure that can definitely execute the desired behavior.
 
-Our framework assists users in verifying design validity by identifying self-collision
-and loss of gravitational stability. In existing literature, these conditions have
-been checked in the context of modular robot reconfiguration planning \cite{casal2001reconfiguration} and motion
-planning \cite{yoshida2002self}.
-To our knowledge, there is no modular robot design tool that verifies
-these conditions to provide assistance to a human designer.
+While significant progress has been made in the automated generation of modular
+robot behaviors, automated systems are not yet capable of making modular robots
+truly useful in practice \cite{yim2007modular}.  The need for new programming
+techniques to manage the complexity of modular robot systems has been
+acknowledged in the literature \cite{yim2000modular}. Historically, gait tables
+have been a commonly used format in which open-loop kinematic behaviors can be
+easily encoded \cite{yim1994locomotion}. Phased automata have also been
+presented as a way to easily create scalable gaits for large numbers of modular
+robots \cite{zhang2003phase}. In this paper, we introduce a novel motion
+description language that enables users to quickly create behaviors for modular
+robots.
+
+A number of robot simulators have been developed, including simulators specifically for modular robots \cite{christensen2008unified}. For our work, we opted to use Gazebo \cite{koenig2004design} because of its growing popularity in the robotics community. While our software currently only supports the SMORES robot \cite{Davey2012}, other modular robot designs can easily be incorporated given appropriate SDF files. Future work includes incorporating native support for the ckBot robot \cite{davey2012modlock}.
+
+Our framework assists users in verifying design validity by identifying self-
+collision and loss of gravitational stability. In existing literature, these
+conditions have been checked in the context of modular robot reconfiguration
+planning \cite{casal2001reconfiguration} and motion planning
+\cite{yoshida2002self}. To our knowledge, there is no modular robot design tool
+that verifies these conditions to provide assistance to a human designer.
 
 \section{Definitions}
 \label{sec:preliminaries}
@@ -291,12 +297,13 @@ graphical representation. Blue zigzag lines represent connections between
 modules, and the label of each connection shows the angle offset of that
 connection.
 
-In this paper, we consider only configurations without cycles. While this is a constraint,
+{\color{red}In this paper, we consider only configurations without cycles. While this is a constraint,
 the set of functionalities provided by acyclic designs is very rich, so we feel that
 it does not unreasonably limit the utility of our framework. Accommodating designs
-with cycles is left to future work.
+with cycles is left to future work.} \TODO{We are removing this requirement, right?}
 
-Assuming acyclic configurations, we can compute forward kinematics for the entire
+%Assuming acyclic configurations, w
+We can compute forward kinematics for the entire
 configuration by composing displacements module-to-module. Let any module \(\mathcal{M}_f \in M\) have
 fixed displacement \({^\mathcal{W}}D^{\mathcal{B}_f}\) in the world frame.
 Let \(\mathcal{M}_i: (\mathcal{M}_i.a_i,~\mathcal{M}_f.a_f) \in E \) be connected to \(\mathcal{M}_f\).
@@ -310,18 +317,18 @@ Let \(\mathcal{M}_i: (\mathcal{M}_i.a_i,~\mathcal{M}_f.a_f) \in E \) be connecte
 
 where \(e=(\mathcal{M}_i.a_i,~\mathcal{M}_f.a_f)\). To find the world-frame displacements
 of all other modules, we may traverse the connections of the configuration,  repeatedly
-composing displacements in the manner above.
+composing displacements in the manner above. 
 \end{definition}
 
 \begin{figure}
 \begin{center}
-        \begin{subfigure}[b]{0.4\columnwidth}
+        \begin{subfigure}[b]{0.3\columnwidth}
                 \includegraphics[width=\textwidth]{images/smores_conf.JPG}
                 \caption{A configuration}
                 \label{fig:smores_conf_photo}
-           \end{subfigure}
+        \end{subfigure}
            ~
-        \begin{subfigure}[b]{0.4\columnwidth}
+        \begin{subfigure}[b]{0.3\columnwidth}
                 \includegraphics[width=\textwidth]{images/tikz/smores_conf.pdf}
                 \caption{The graphical representation}
                 \label{fig:smores_conf_graph}
@@ -575,12 +582,12 @@ will be a priority.
 \begin{figure}
 \begin{center}
   \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[height=1.3in]{images/library/car.png}
+    \includegraphics[height=1.1in]{images/library/car.png}
     \caption{Car design}
     \label{fig:car-design}
   \end{subfigure}
   \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[height=1.3in]{images/library/backhoe.jpeg}
+    \includegraphics[height=1.1in]{images/library/backhoe.jpeg}
     \caption{Backhoe design}
     \label{fig:backhoe-design}
   \end{subfigure}
@@ -619,56 +626,73 @@ will be a priority.
 \subsection{ Verification of Configuration and Behavior}
 
 \subsubsection{Verification of Configurations}\label{sec:verify_conf}
-In section~\ref{sec:conf_composition}, we introduced the definition on composing a set of configurations into a single configuration. However, it might not be possible or safe to form the structure represented by the composed configuration with the actual modules. Consider the configuration shown in Figure~\ref{fig:smores_conf_collision}. It is easy to tell that such configuration is not ideal for any task, because the self-collision may damage those modules and result in instability of the system. Thus it is important to verify whether the configuration is valid or not for a given modular robot system.
+In Section~\ref{sec:conf_composition}, we introduced the definition on composing a set of configurations into a single configuration. However, it might not be possible or safe to form the structure represented by the composed configuration with the actual modules. Consider the configuration shown in Figure~\ref{fig:smores_conf_collision}. It is easy to tell that such configuration is not ideal for any task, because the self-collision may damage those modules and result in instability of the system. Thus it is important to verify whether the configuration is valid or not for a given modular robot system.
 
 \begin{figure}
+\sidecaption
 \begin{center}
-\includegraphics[width=0.5\columnwidth]{images/walkbot_collision.png}
+\includegraphics[width=0.4\columnwidth]{images/walkbot_collision.png}
 \end{center}
-\caption{A configuration with self-collision}
+\caption{A configuration with self-collision \TODO{If space becomes an issue, we
+might consider taking this figure out.}}
 \label{fig:smores_conf_collision}
 \end{figure}
 
 \begin{definition}[Configuration Verification]
 Given a configuration $\mathcal{C}$ and state \(X_0\), we say $\mathcal{C}$ is valid in
-state \(X_0\) if it satisfied the following set of properties:
-\begin{itemize}
-\item There is no collision between modules in the configuration.
-\item The configuration is gravitationally stable.
-\end{itemize}
-Notice that in order to verify the validity of the configuration, one needs to know some properties of all modules for the given modular robot system, e.g. the geometry information, and the mass of each module.
+state \(X_0\) if it is gravitationally stable and free from self collision between
+modules.  
+
+% it satisfied the following set of properties:
+% \begin{itemize}
+% \item There is no collision between modules in the configuration.
+% \item The configuration is gravitationally stable.
+% \end{itemize}
+%Notice that in order to verify the validity of the configuration, one needs to know some properties of all modules for the given modular robot system, e.g. the geometry information, and the mass of each module.
 \end{definition}
 
-\paragraph{Collision Checking} 
-We obtain the positions and orientation of all modules through forward kinematics.
-Using the known model geometry, we  check whether any two modules occupy the same space. If so, there exists a self-collision in the configuration.
-Our implementation checks self-collision by approximating modules as spheres, and checking
-the distance (radius) between all pairs. More sophisticated techniques are available which
-efficiently produce exact results \cite{pan2012fcl}.
-\paragraph{Stability Checking}
+We will now describe the methods used to identify gravitational instability and
+self-collision. We have implemented these methods for the SMORES robot, but
+could easily apply them to other robots given appropriate geometric and mass
+information for each module.
+
+%\paragraph{Collision Checking}
+
+To check for self-collision, the positions and orientation of all modules are
+obtained  through forward kinematics.
+%Using the known module geometry, we  check
+%whether any two modules occupy the same space. If so, there exists a self-
+%collision in the configuration.
+Our implementation checks self-collision by
+approximating modules as spheres, and checking the distance (radius) between all
+pairs. More sophisticated techniques are available which efficiently produce
+exact results \cite{pan2012fcl}.
+
+%\paragraph{Stability Checking}
  Gravitational stability is checked by computing the location of the center of mass of the configuration. For the given configuration $\mathcal{C}$
-and state \(X_0\), the position of the center of mass is
+and state \(X_0\), the position of the center of mass is:
 \begin{equation*}
  P_{\mathcal{C}}=\dfrac{\sum\limits_{\mathcal{M}\in \gamma(\mathcal{C})}{P(\mathcal{M})\cdot \mathcal{M}_m}}{\sum\limits_{\mathcal{M}\in \gamma(\mathcal{C})}{\mathcal{M}_m}}
 \end{equation*}
-where $\mathcal{M}_m$ is the mass of the module $\mathcal{M}$, and \(P(\mathcal{M})\)
-is a function returning the position coordinates of \(\mathcal{M}\) in the world frame.
-
+where $\mathcal{M}_m$ is the mass of the module $\mathcal{M}$, and
+\(P(\mathcal{M})\) is a function returning the position coordinates of
+\(\mathcal{M}\) in the world frame.
 We find the set of modules $M_c$ that have minimal position in the $z$ direction and consider them to
-be the contact points between the ground plane and the configuration. We treat the
-set \( \sigma = P(\mathcal{M}), \forall \mathcal{M} \in M_c \ \) as an approximate set of contact points.
+be in contact with the ground plane, and treat the
+set \( \sigma = P(\mathcal{M}), \forall \mathcal{M} \in M_c \ \) as an approximate set of ground
+contact points.
 %A set of points in the $x$-$y$ plane can be extracted from $M_c$ as $\sigma=\{(\mathcal{M}.P.x, \mathcal{M}.P.y)\mid \mathcal{M} \in M_c\}$.
 If the projection of \(P_c\) onto the ground plane lies within the convex hull form by the set of points in \(\sigma\),
  configuration $\mathcal{C}$ is considered statically stable in state \(X_0\).
 
-\subsubsection{Verification of Behavior}
+\subsubsection{Verification of Behaviors}
 In section~\ref{sec:behavior-representation}, we introduced a novel motion description language for modular robots. Actions defined by the language can be combined to produce more complex behaviors. Similar to configuration composition, we want to make sure the composed behaviors are valid and safe to execute. For example, a behavior that results in two modules colliding during the execution should be considered unsafe.
 
 \begin{definition}[Behavior Verification]
 A behavior is valid if it satisfies the following set of properties when controlling a configuration of a given modular robot system
 \begin{itemize}
-\item There are no collisions between modules at all times during the execution of the controller.
-\item There are no behavior conflicts at all times during the execution.
+\item Module do not collide at any time during the execution of the behavior.
+\item There are no behavior conflicts at any time during the execution.
 \item The configuration is gravitationally stable at the end of the execution.
 \item The maximum duration for which the configuration is not gravitationally stable during the execution is less than a time bound $t_{max}$.
 \end{itemize}
@@ -680,10 +704,11 @@ For a behavior with duration time $T_B$, we check the state of the configuration
 
 \section{Implementation }
 \label{sec:implementation}
-We implement a design interface to aid users to design and verify complex configurations and behaviors from a set of basic configurations and associated behaviors. We separated the program into two main parts, a configuration builder and a behavior builder.
+A design interface was implemented to aid users in building complex configurations and behaviors from a set of basic configurations and associated behaviors,
+and then verifying their correct execution. We separated the program into two main parts, a configuration builder and a behavior builder.
 Our implementation is built for the SMORES modular robot, but could easily be adapted
-to other modular robot systems. \subsection{SMORES robot}
-We have developed our system for the SMORES modular robot, developed at the
+to any other modular robot for which an SDF description is available. \subsection{SMORES robot}
+We demonstrate our system using the SMORES modular robot, developed at the
 University of Pennsylvania \cite{Davey2012}. Each SMORES modules has four DoF
 - three continuously rotating faces called {\em turntables} and one
 central hinge with a 180\textdegree\ range of motion (Figure~\ref{fig:SmoresRobot}). The
@@ -699,8 +724,9 @@ Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta
 
 
 \begin{figure}[tb]
+    \sidecaption
     \begin{center}
-        \includegraphics[width=0.8\columnwidth]{images/smores_robot.png}
+        \includegraphics[width=0.5\columnwidth]{images/smores_robot.png}
     \end{center}
     \caption{SMORES robot}
     \label{fig:SmoresRobot}
@@ -716,13 +742,12 @@ Given a composed configuration, the behavior builder aids users in designing beh
 
 \begin{figure}
 \begin{center}
-        \begin{subfigure}[b]{0.9\columnwidth}
+        \begin{subfigure}[b]{0.49\columnwidth}
                 \includegraphics[width=\textwidth]{images/conf_window.png}
                 \caption{GUI for configuration builder}
                 \label{fig:gui_conf}
-           \end{subfigure}
-           
-        \begin{subfigure}[b]{0.9\columnwidth}
+        \end{subfigure}   
+        \begin{subfigure}[b]{0.49\columnwidth}
                 \includegraphics[width=\textwidth]{images/gait_window.png}
                 \caption{GUI for behavior builder}
                 \label{fig:gui_gait}
@@ -793,7 +818,7 @@ Figure~\ref{fig:design} demonstrates the design flow when a user is designing a 
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.9\columnwidth]{images/tikz/design_diagram.pdf}
+\includegraphics[width=0.5\columnwidth]{images/tikz/design_diagram.pdf}
 \caption{The design flow}
 \label{fig:design}
 \end{center}
@@ -801,13 +826,13 @@ Figure~\ref{fig:design} demonstrates the design flow when a user is designing a 
 
 \begin{figure}
 \begin{center}
-        \begin{subfigure}[b]{0.7\columnwidth}
+        \begin{subfigure}[b]{0.49\columnwidth}
                 \includegraphics[width=\textwidth]{images/tikz/walkbot.pdf}
                 \caption{Two identical configurations form a body}
                 \label{fig:walkbot1}
-           \end{subfigure}
-           ~
-        \begin{subfigure}[b]{0.9\columnwidth}
+        \end{subfigure}
+        ~
+        \begin{subfigure}[b]{0.49\columnwidth}
                 \includegraphics[width=\textwidth]{images/tikz/walkbot2.pdf}
                 \caption{The body and four identical configurations form a Walkbot}
                 \label{fig:walkbot2}
@@ -927,6 +952,10 @@ Currently, each behavior is associated with exactly one configuration. In many c
 
 
 
+
+
+
+ 
 
 
 
