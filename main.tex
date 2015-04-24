@@ -426,33 +426,14 @@ large, complicated, and highly functional designs.
 Before discussing about configuration composition, we will first define a set of connections $E_C$ between configurations in a given set $C$ as $(\mathcal{C}_i.\mathcal{M}_i.a_i, \mathcal{C}_j.\mathcal{M}_j.a_j) \in E_C$, where $\mathcal{C}_{i},\mathcal{C}_j\in C$, $\mathcal{M}_i \in \gamma(\mathcal{C}_i), \mathcal{M}_j \in \gamma(\mathcal{C}_j)$, and $a_i\in \mathcal{M}_i.A$, $a_j\in \mathcal{M}_j.A$. Similar to the assumption about connections in a configuration, we assume that we form an
 acyclic graph with configurations in $C$ as nodes and connections in $E_C$ as edges.
 \begin{definition}[Configuration Composition]
-Given a set of configurations $C$ %, a base configuration $\mathcal{C}_b\in C$, 
-and a set $E_C$ of connections between them, configuration composition
-combines all configurations in $C$ to a single configuration $\mathcal{C}^*$
-that
-%has the following guarantees: i) $\mathcal{C}^*$ 
-includes all modules and
-connections from $C$ and $E_C$.% (section~\ref{sec:update_connection})
-% ; ii) the
-% positions of all modules in $\mathcal{C}^*$ are adjusted based on the
-% connections to preserve structures of original configurations in $C$
-% (section~\ref{sec:update_position}).
+Given a set of configurations $C$ and a set $E_C$ of connections between them,
+configuration composition combines all configurations in $C$ to a single
+configuration $\mathcal{C}^*$ that includes all modules and connections from $C$
+and $E_C$. we define the composed configuration to be $\mathcal{C}^*=(C^*, \gamma, M, E, \delta,
+X, B)$, where \(C^*\), \(M\), \(E\), and \(B\) are defined as the unions of the
+corresponding sets of the sub-configurations in \(C\). The definitions of $\gamma$, \(X\), and $\delta$ remain
+unchanged from Definition~\ref{def:configuration}. 
 \end{definition}
-%\subsubsection{Update Modules and Connections} \label{sec:update_connection}
-%Before presenting the procedure to update modules and configurations in $\mathcal{C}^*$, we will first discuss some assumptions about the set of connections $E_C$.
-
-
-Given a set of configurations $C$ %, a base configuration $\mathcal{C}_b\in C$, 
-and a set of connections $E_C$, we define the composed configuration to be $\mathcal{C}^*=(C^*, \gamma, M, E, \delta,
-X, B)$, where
-\begin{itemize}
-\item $C^*=C$
-\item $M=\bigcup_{\mathcal{C}\in C^*}{\gamma(\mathcal{C})}$.
-%\item $\mathcal{M}_b\in M$ is the base module of the base configuration $\mathcal{C}_b$.
-\item $E= (\bigcup_{(\mathcal{C}_i.\mathcal{M}_i.n_i, \mathcal{C}_j.\mathcal{M}_j.n_j)\in E_C}{\{(\mathcal{M}_i.n_i, \mathcal{M}_j.n_j)}\})$ $\cup$ $(\bigcup_{\mathcal{C}_i \in C^*}{E_{i}})$
-\item \(B = \bigcup_{\mathcal{C}_i \in C} \mathcal{C}_i.B\)
-\end{itemize}
-The definitions of $\gamma$, \(X\), and $\delta$ are the same as the ones in Definition~\ref{def:configuration}.
 
 \subsection{Behavior Composition: Series-Parallel Action Graphs}
 \label{sec:behavior-representation}
@@ -672,7 +653,8 @@ In Section~\ref{sec:conf_composition}, we introduced the definition on composing
 \begin{figure}
 \sidecaption
 \includegraphics[height=1in]{images/walkbot_collision.png}
-\caption{A configuration with self-collision}
+\caption{A configuration with self-collision \TODO{We might consider taking
+this figure out to save space. I think self-collision is easy enough to understand without a picture}}
 \label{fig:smores_conf_collision}
 \end{figure}
 
@@ -993,6 +975,8 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
+
 
 
 
