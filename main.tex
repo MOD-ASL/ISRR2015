@@ -248,29 +248,39 @@ in the body frame) as a function of \(X\).
 %
 Figure~\ref{fig:smores} shows a schematic representation of a module with  four attachment points.
 \end{definition}
-
+%
+% \begin{figure}
+% \begin{center}
+%         \begin{subfigure}[b]{0.4\columnwidth}
+%                 \begin{center}
+%                 \includegraphics[width=0.7\textwidth]{images/smores.JPG}
+%                 \caption{A module}
+%                 \end{center}
+%                 \label{fig:smores_photo}
+%            \end{subfigure}
+%            ~
+%         \begin{subfigure}[b]{0.4\columnwidth}
+%                 \begin{center}
+%                 \includegraphics[width=0.7\textwidth]{images/tikz/smores.pdf}
+%                 \caption{The graphical representation}
+%                 \end{center}
+%                 \label{fig:smores_graph}
+%         \end{subfigure}
+% \end{center}
+% \caption{A photo of a module and its graphical representation}
+% \label{fig:smores}
+% \end{figure}
+%
 \begin{figure}
-\begin{center}
-        \begin{subfigure}[b]{0.4\columnwidth}
-                \begin{center}
-                \includegraphics[width=0.7\textwidth]{images/smores.JPG}
-                \caption{A module}
-                \end{center}
-                \label{fig:smores_photo}
-           \end{subfigure}
-           ~
-        \begin{subfigure}[b]{0.4\columnwidth}
-                \begin{center}
-                \includegraphics[width=0.7\textwidth]{images/tikz/smores.pdf}
-                \caption{The graphical representation}
-                \end{center}
-                \label{fig:smores_graph}
-        \end{subfigure}
-\end{center}
-\vspace{-0.5cm}
-\caption{A photo of a module and its graphical representation}
+\sidecaption
+%\begin{center}
+        \includegraphics[height=1.1in]{images/smores.JPG}
+        \includegraphics[height=1.1in]{images/tikz/smores.pdf}
+%\end{center}
+\caption{A photo of a module (left) and its graphical representation (right)}
 \label{fig:smores}
 \end{figure}
+
 
 \begin{definition}[Configuration]
 \label{def:configuration}
@@ -343,24 +353,30 @@ of all other modules, we may traverse the connections of the configuration,  rep
 composing displacements in the manner above. 
 \end{definition}
 
+% \begin{figure}
+% \begin{center}
+%         \begin{subfigure}[b]{0.4\columnwidth}
+%                 \includegraphics[width=0.7\textwidth]{images/smores_conf.JPG}
+%                 \caption{A configuration}
+%                 \label{fig:smores_conf_photo}
+%         \end{subfigure}
+%            ~
+%         \begin{subfigure}[b]{0.4\columnwidth}
+%                 \includegraphics[width=0.7\textwidth]{images/tikz/smores_conf.pdf}
+%                 \caption{The graphical representation}
+%                 \label{fig:smores_conf_graph}
+%         \end{subfigure}
+% \end{center}
+% \caption{A photo of a configuration with three modules and its graphical representation}
+% \label{fig:smores_conf}
+% \end{figure}
 \begin{figure}
-\begin{center}
-        \begin{subfigure}[b]{0.4\columnwidth}
-                \includegraphics[width=0.7\textwidth]{images/smores_conf.JPG}
-                \caption{A configuration}
-                \label{fig:smores_conf_photo}
-        \end{subfigure}
-           ~
-        \begin{subfigure}[b]{0.4\columnwidth}
-                \includegraphics[width=0.7\textwidth]{images/tikz/smores_conf.pdf}
-                \caption{The graphical representation}
-                \label{fig:smores_conf_graph}
-        \end{subfigure}
-\end{center}
-\caption{A photo of a configuration with three modules and its graphical representation}
+\sidecaption
+\includegraphics[height=1.2in]{images/smores_conf.JPG}
+\includegraphics[height=1.2in]{images/tikz/smores_conf.pdf}
+\caption{A photo of a configuration with three modules (left) and its graphical representation (right).}
 \label{fig:smores_conf}
 \end{figure}
-
 
 
 \begin{definition}[Behavior]\label{def:behavior}
@@ -555,7 +571,7 @@ created by combining existing behaviors.
 \end{figure}
 
 %\subsubsection*{Example}
-As an example, consider the car design shown in figure \ref{fig:car-design}. To create a low-level
+As an example, consider the car design shown in figure \ref{fig:car-and-backhoe}. To create a low-level
 ``drive-forward'' behavior, we simply command all of its wheels to spin  in parallel.
 The car steers by swiveling its central steering column, so a ``turn right''
 behavior can be similarly achieved by commanding parallel actions for the steering column joints.
@@ -568,7 +584,7 @@ easily. However, the real value comes from its ability to  combine behaviors
 in layers and quickly generate behaviors for complicated designs. This works
 particularly well when designs are made by composing smaller designs. For
 example, we can easily develop ``drive'' and ``turn''\ behaviors for the
-18-module backhoe shown in Figure \ref{fig:backhoe-design} by composing  behaviors of
+18-module backhoe shown in Figure \ref{fig:car-and-backhoe} by composing  behaviors of
 its component car designs: \(driveBackhoe= parallel( driveCar1, driveCar2)\),
 and \(turnBackhoe = parallel(turnCar1, turnCar2)\). Each of these one-line
 statements commands the movement of  28 degrees of freedom.
@@ -602,21 +618,29 @@ its capabilities without sacrificing ease-of-use.  In particular, facilities
 for high-level decision making based on sensed information about the environment
 will be a priority.
 
+% \begin{figure}
+% \begin{center}
+%   \begin{subfigure}[b]{0.4\textwidth}
+%     \includegraphics[height=1.1in]{images/library/car.png}
+%     \caption{Car design}
+%     \label{fig:car-design}
+%   \end{subfigure}
+%   \begin{subfigure}[b]{0.4\textwidth}
+%     \includegraphics[height=1.1in]{images/library/backhoe.jpeg}
+%     \caption{Backhoe design}
+%     \label{fig:backhoe-design}
+%   \end{subfigure}
+% \end{center}
+% \end{figure} 
+%
 \begin{figure}
 \begin{center}
-  \begin{subfigure}[b]{0.4\textwidth}
     \includegraphics[height=1.1in]{images/library/car.png}
-    \caption{Car design}
-    \label{fig:car-design}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.4\textwidth}
     \includegraphics[height=1.1in]{images/library/backhoe.jpeg}
-    \caption{Backhoe design}
-    \label{fig:backhoe-design}
-  \end{subfigure}
+    \caption{Car design (left) and backhoe design (right)}
+    \label{fig:car-and-backhoe}
 \end{center}
 \end{figure} 
-
 
 % Consider a single module that has two wheels that allow it to drive like a car. To
 % drive forward, we might define a DRIVE behavior composing actions for  the left and right wheels
@@ -742,16 +766,11 @@ faces, and are capable of  self-reconfiguration.
 Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta_R,
 \theta_F, \theta_B \rbrace\) and the set of attachment points as \(A=\lbrace L,R,T,B \rbrace\).
 
-
-
-
 \begin{figure}[tb]
-    %\sidecaption
-    \begin{center}
-        \includegraphics[width=0.5\columnwidth]{images/smores_robot.png}
-    \end{center}
-    \caption{SMORES robot}
-    \label{fig:SmoresRobot}
+  \sidecaption
+  \includegraphics[height=1.2in]{images/smores_robot.png}
+  \caption{SMORES robot}
+  \label{fig:SmoresRobot}
 \end{figure}
 
 \subsection{Configuration Builder}
@@ -978,6 +997,7 @@ Currently, each behavior is associated with exactly one configuration. In many c
 
 
  
+
 
 
 
