@@ -456,12 +456,6 @@ The definitions of $\gamma$, \(X\), and $\delta$ are the same as the ones in Def
 
 \subsection{Behavior Composition: Series-Parallel Action Graphs}
 \label{sec:behavior-representation}
-
-In this section, we present a programming paradigm for creating new behaviors for
-modular robots by composing existing ones.  We wanted to allow
-users to create  designs and behaviors quickly and easily,  enabling them
-address tasks by generating a new robot and behavior on-the-fly.
-
 The modular robotics community has developed a number of languages and  methods
 to create behaviors, including gait tables \cite{yim1994locomotion}, phased automata
 \cite{zhang2003phase}, hormone-based control \cite{salemi2001hormone},
@@ -469,7 +463,7 @@ and role-based control \cite{stoy2002using}. Phased automata, hormone, and role-
 control are typically used to specify a single, cyclic behavior (such as a gait for
 locomotion) in a distributed fashion.
 These methods have good scaling and robustness properties, but are not well-suited
-to specifying the kind of non-cyclic, globally coordinated behaviors required for many tasks
+to specifying  the non-cyclic, globally coordinated behaviors required for many tasks
 (like picking up and moving an object with an arm).
   
 The simplicity and clarity of gait tables makes them appealing for our
@@ -675,14 +669,12 @@ will be a priority.
 \subsubsection{Verification of Configurations}\label{sec:verify_conf}
 In Section~\ref{sec:conf_composition}, we introduced the definition on composing a set of configurations into a single configuration. However, it might not be possible or safe to form the structure represented by the composed configuration with the actual modules. Consider the configuration shown in Figure~\ref{fig:smores_conf_collision}. It is easy to tell that such configuration is not ideal for any task, because the self-collision may damage those modules and result in instability of the system. Thus it is important to verify whether the configuration is valid or not for a given modular robot system.
 
-% \begin{figure}
-% \sidecaption
-% \begin{center}
-% \includegraphics[width=0.4\columnwidth]{images/walkbot_collision.png}
-% \end{center}
-% \caption{A configuration with self-collision}
-% \label{fig:smores_conf_collision}
-% \end{figure}
+\begin{figure}
+\sidecaption
+\includegraphics[height=1in]{images/walkbot_collision.png}
+\caption{A configuration with self-collision}
+\label{fig:smores_conf_collision}
+\end{figure}
 
 \begin{definition}[Configuration Verification]
 Given a configuration $\mathcal{C}$ and state \(X_0\), we say $\mathcal{C}$ is valid in
@@ -723,26 +715,33 @@ the modules.
 % \(P(\mathcal{M})\) is a function returning the position coordinates of
 % \(\mathcal{M}\) in the world frame.
 %
-We find the set of modules $M_c$ that have minimal position in the $z$ direction and consider them to
-be in contact with the ground plane, and treat the
-set \( \sigma = P(\mathcal{M}), \forall \mathcal{M} \in M_c \ \) as an approximate set of ground
-contact points.
+We find the set of modules that have minimal position in the $z$ direction and consider them to
+be in contact with the ground plane, treating their centroids as an approximate
+set of ground contact points.
 %A set of points in the $x$-$y$ plane can be extracted from $M_c$ as $\sigma=\{(\mathcal{M}.P.x, \mathcal{M}.P.y)\mid \mathcal{M} \in M_c\}$.
-If the projection of \(P_c\) onto the ground plane lies within the convex hull form by the set of points in \(\sigma\),
- configuration $\mathcal{C}$ is considered statically stable in state \(X_0\).
+If the projection of the configuration center of mass onto the ground plane
+lies within the convex hull of the ground contact points, the configuration
+is considered statically stable in state \(X_0\).
 
 \subsubsection{Verification of Behaviors}
 In section~\ref{sec:behavior-representation}, we introduced a novel motion description language for modular robots. Actions defined by the language can be combined to produce more complex behaviors. Similar to configuration composition, we want to make sure the composed behaviors are valid and safe to execute. For example, a behavior that results in two modules colliding during the execution should be considered unsafe.
 
 \begin{definition}[Behavior Verification]
-A behavior is valid if it satisfies the following set of properties when controlling a configuration of a given modular robot system
-\begin{itemize}
-\item Modules do not collide at any time during the execution of the behavior.
-\item There are no behavior conflicts at any time during the execution.
-\item The configuration is gravitationally stable at the end of the execution.
-\item The maximum duration for which the configuration is not gravitationally stable during the execution is less than a time bound $t_{max}$.
-\end{itemize}
+A behavior is valid if: there are no collisions or behavior conflicts at any time
+during execution, and the maximum duration for which the configuration is not
+gravitationally stable during execution is less than a time bound $t_{max}$.
+Additionally, the configuration must be stable at the end of execution.
 \end{definition}
+
+% \begin{definition}[Behavior Verification]
+% A behavior is valid if it satisfies the following set of properties when controlling a configuration of a given modular robot system
+% \begin{itemize}
+% \item Modules do not collide at any time during the execution of the behavior.
+% \item There are no behavior conflicts at any time during the execution.
+% \item The configuration is gravitationally stable at the end of the execution.
+% \item The maximum duration for which the configuration is not gravitationally stable during the execution is less than a time bound $t_{max}$.
+% \end{itemize}
+% \end{definition}
 % State is the right term, so I deleted the TODO.
 For a behavior with time duration  $T_B$, we check the state of the configuration with sampling time $t_B<t_{max}$. For each sample, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on behavior commands. Then we check collision and gravitational stability of each configuration as discussed in section~\ref{sec:verify_conf}. We argue that this behavior is not safe, if i) there are $n$ consecutive samples when the configuration is not gravitationally stable and $n\cdot t_B > t_{max}$; or ii) the configuration at time $T_B$ is not gravitationally stable.
 %\subsection{Complexity}
@@ -780,24 +779,32 @@ Given a set of basic configurations which could be just single modules, the conf
 \subsection{Behavior Builder}
 Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:gui_gait} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions in the configuration during the execution of composed behaviors without simulations in a physical engine.
 
-
 \begin{figure}
 \begin{center}
-        \begin{subfigure}[b]{0.49\columnwidth}
-                \includegraphics[width=\textwidth]{images/conf_window.png}
-                \caption{GUI for configuration builder}
-                \label{fig:gui_conf}
-        \end{subfigure}   
-        \begin{subfigure}[b]{0.49\columnwidth}
-                \includegraphics[width=\textwidth]{images/gait_window.png}
-                \caption{GUI for behavior builder}
-                \label{fig:gui_gait}
-        \end{subfigure}
+    \includegraphics[height=1.1in]{images/conf_window.png}
+    \includegraphics[height=1.1in]{images/gait_window.png}
+    \caption{GUIs for configuration builder (left) and behavior builder (right)}
+    \label{fig:smores_conf}
 \end{center}
-\caption{The program to design and verify configurations and behaviors}
-\label{fig:smores_conf}
 \end{figure}
 
+% \begin{figure}
+% \begin{center}
+%         \begin{subfigure}[b]{0.49\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/conf_window.png}
+%                 \caption{GUI for configuration builder}
+%                 \label{fig:gui_conf}
+%         \end{subfigure}   
+%         \begin{subfigure}[b]{0.49\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/gait_window.png}
+%                 \caption{GUI for behavior builder}
+%                 \label{fig:gui_gait}
+%         \end{subfigure}
+% \end{center}
+% \caption{The program to design and verify configurations and behaviors}
+% \label{fig:smores_conf}
+% \end{figure}
+%
 \section{Examples}
 \label{sec:examples}
 Here we present a few examples to illustrate important features of our framework.
@@ -860,7 +867,7 @@ Figure~\ref{fig:design} demonstrates the design flow when a user is designing a 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.5\columnwidth]{images/tikz/design_diagram.pdf}
-\caption{The design flow}
+\caption{The design flow \TODO{Can this flowchart be made horizontal?}}
 \label{fig:design}
 \end{center}
 \end{figure}
@@ -976,27 +983,18 @@ hardware.
 
 \section{Future}
 Future work will include expansion of the features of our framework.  We will add verification tools to check for behavior conflict (when two behaviors composed in parallel command the same DoF), and check for behaviors that would exceed the actuator and connector force limits of the modules.  We will also work to include configurations with cycles.
-
 Another area of future work is developing a standard library of configurations and
 behaviors for the SMORES robot.  We will also investigate metrics to evaluate the quality of such a library.
 Perhaps most importantly, we will test and evaluate the designs and behaviors with actual hardware modules.
-
 Currently, each behavior is associated with exactly one configuration. In many cases, a given behavior could be executed by several different configurations (if it were correctly mapped onto a subset of their modules). In the future, we will apply an embedding detection algorithm (see \cite{mantzouratos2014embeddability}) to map behaviors into any configuration capable of executing them.
 
 %\input{referenc}
 %\bibliographystyle{plainnat}
-\bibliographystyle{spbasic}
+\bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
 
 
-
-
-
-
-
-
- 
 
 
 
