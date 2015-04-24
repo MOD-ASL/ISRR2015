@@ -755,11 +755,11 @@ Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta
 \end{figure}
 
 \subsection{Configuration Builder}
-Given a set of basic configurations which could be just single modules, the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated by green nodes in Figure~\ref{fig:gui_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
+Given a set of basic configurations which could be just single modules, the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated by green nodes in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
 \cite{koenig2004design}.
 
 \subsection{Behavior Builder}
-Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:gui_gait} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions in the configuration during the execution of composed behaviors without simulations in a physical engine.
+Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:smores_conf} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions in the configuration during the execution of composed behaviors without simulations in a physical engine.
 
 \begin{figure}
 \begin{center}
@@ -848,8 +848,8 @@ Figure~\ref{fig:design} demonstrates the design flow when a user is designing a 
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.5\columnwidth]{images/tikz/design_diagram.pdf}
-\caption{The design flow \TODO{Can this flowchart be made horizontal?}}
+\includegraphics[width=\columnwidth]{images/tikz/design_diagram_hori.pdf}
+\caption{The design flow}
 \label{fig:design}
 \end{center}
 \end{figure}
