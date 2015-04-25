@@ -330,8 +330,8 @@ Finally, associated with each configuration is a set of \textit{behaviors} \(B\)
 % \item \(B\) is a set of \textit{behaviors} (Definition~\ref{def:behavior}) associated with the configuration.
 % \end{itemize}
 
-Figure~\ref{fig:smores_conf_photo} shows a photo of a configuration composed
-of three modules, each with four attachment points.  Figure~\ref{fig:smores_conf_graph} shows its
+Figure~\ref{fig:smores_conf} shows a photo of a configuration composed
+of three modules, each with four attachment points, and its
 graphical representation. Blue zigzag lines represent connections between
 modules, and the label of each connection shows the angle offset of that
 connection.
@@ -412,6 +412,12 @@ if the projection of its center of
 mass onto the group plane lies within the convex hull of its load-supporting contact points in the
 ground plane.
 \end{definition}
+\begin{definition}[Maintain Connections and Joint Angles]
+Due to the force limit of mechanisms in each module, there maybe situations, 
+especially during execution of a behavior, when force provided is not sufficient to
+maintain all connections between modules in a configuration, or to maintain all joints at desired positions.
+\end{definition}
+
 
 \section{Approach and Algorithm} \label{sec:approach} The three major
 components of our framework are configuration composition, behavior
@@ -710,9 +716,9 @@ In section~\ref{sec:behavior-representation}, we introduced a novel motion descr
 
 \begin{definition}[Behavior Verification]
 A behavior is valid if: there are no collisions or behavior conflicts at any time
-during execution, and the maximum duration for which the configuration is not
-gravitationally stable during execution is less than a time bound $t_{max}$.
-Additionally, the configuration must be stable at the end of execution.
+during execution, and forces required to maintain all module connections and joint positions do not exceed their limit.
+Additionally, the maximum duration for which the configuration is not
+gravitationally stable during execution is less than a time bound $t_{max}$, and the configuration must be stable at the end of execution.
 \end{definition}
 
 % \begin{definition}[Behavior Verification]
@@ -725,7 +731,7 @@ Additionally, the configuration must be stable at the end of execution.
 % \end{itemize}
 % \end{definition}
 % State is the right term, so I deleted the TODO.
-For a behavior with time duration  $T_B$, we check the state of the configuration with sampling time $t_B<t_{max}$. For each sample, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on behavior commands. Then we check collision and gravitational stability of each configuration as discussed in section~\ref{sec:verify_conf}. We argue that this behavior is not safe, if i) there are $n$ consecutive samples when the configuration is not gravitationally stable and $n\cdot t_B > t_{max}$; or ii) the configuration at time $T_B$ is not gravitationally stable.
+For a behavior with time duration  $T_B$, we check the state of the configuration with sampling time $t_B<t_{max}$. For each sample, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on behavior commands. Then we check collision and gravitational stability of each configuration as discussed in section~\ref{sec:verify_conf}. We argue that this behavior is not safe, if i) there are $n$ consecutive samples when the configuration is not gravitationally stable and $n\cdot t_B > t_{max}$; or ii) the configuration at time $T_B$ is not gravitationally stable. 
 %\subsection{Complexity}
 %\TODO{Discuss the complexity of the algorithm with respect to the number of modules and size of gait tables.}
 
@@ -755,7 +761,7 @@ Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta
 \end{figure}
 
 \subsection{Configuration Builder}
-Given a set of basic configurations which could be just single modules, the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated by green nodes in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
+Given a set of basic configurations which could be just single modules, the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
 \cite{koenig2004design}.
 
 \subsection{Behavior Builder}
@@ -763,7 +769,7 @@ Given a composed configuration, the behavior builder aids users in designing beh
 
 \begin{figure}
 \begin{center}
-    \includegraphics[height=1.1in]{images/conf_window.png}
+    \includegraphics[height=1.1in]{images/library/unity/config_designer.png}
     \includegraphics[height=1.1in]{images/gait_window.png}
     \caption{GUIs for configuration builder (left) and behavior builder (right)}
     \label{fig:smores_conf}
