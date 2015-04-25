@@ -617,7 +617,7 @@ will be a priority.
 \begin{figure}
 \begin{center}
     \includegraphics[height=1.1in]{images/library/unity/car.png}
-    \includegraphics[height=1.1in]{images/library/backhoe.jpeg}
+    \includegraphics[height=1.1in]{images/library/unity/backhoe.png}
     \caption{Car design (left) and backhoe design (right)}
     \label{fig:car-and-backhoe}
 \end{center}
@@ -731,7 +731,11 @@ gravitationally stable during execution is less than a time bound $t_{max}$, and
 % \end{itemize}
 % \end{definition}
 % State is the right term, so I deleted the TODO.
-For a behavior with time duration  $T_B$, we check the state of the configuration with sampling time $t_B<t_{max}$. For each sample, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on behavior commands. Then we check collision and gravitational stability of each configuration as discussed in section~\ref{sec:verify_conf}. We argue that this behavior is not safe, if i) there are $n$ consecutive samples when the configuration is not gravitationally stable and $n\cdot t_B > t_{max}$; or ii) the configuration at time $T_B$ is not gravitationally stable. 
+For a behavior with time duration  $T_B$, we check the state of the configuration with sampling time $t_B<t_{max}$. For each sample, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on behavior commands. Then we check collision and gravitational stability of each configuration as discussed in section~\ref{sec:verify_conf}. We argue that this behavior is not safe, if i) there are $n$ consecutive samples when the configuration is not gravitationally stable and $n\cdot t_B > t_{max}$; or ii) the configuration at time $T_B$ is not gravitationally stable.
+
+For checking force limit, we create the model for a module and specify its joint and connection mechanisms in PhysX \cite{PhysX} physics engine with a graphical designing tool called Unity3D \cite{Unity}. By setting the maximum force allowed for the connection between modules and for controlling each joint in the module, we are able to identify a unsafe behavior if we detect, during the behavior execution, any undesired module disconnection or any joint's mismatch between its target position and steady state position.
+
+
 %\subsection{Complexity}
 %\TODO{Discuss the complexity of the algorithm with respect to the number of modules and size of gait tables.}
 
@@ -850,7 +854,7 @@ evaluate the quality of such a library is an interesting opportunity for future 
 % \end{table*}
 
 \subsection{The User Perspective}
-Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration an its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Walkbot. Consider a basic configuration ``CHAIN3'' as shown in Table~\ref{Order-1-configurations}. We can form a ``CHAIN6'' configuration, as a body, by connecting two of the basic configurations as demonstrated in Figure~\ref{fig:walkbot1}. With four more basic configurations attaching to sides of the ``CHAIN6'' configuration with certain angle offset, we can build a complex configuration, Walkbot, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than creating with individual modules.
+Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration an its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider a basic configuration ``CHAIN3'' as shown in Table~\ref{Order-1-configurations}. We can form a ``CROSS'' configuration. With two ``CROSS'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:walkbot1}. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than creating with individual modules.
 
 \begin{figure}
 \begin{center}
@@ -862,19 +866,19 @@ Figure~\ref{fig:design} demonstrates the design flow when a user is designing a 
 
 \begin{figure}
 \begin{center}
-        \begin{subfigure}[b]{0.49\columnwidth}
+        \begin{subfigure}[b]{0.3\columnwidth}
                 \includegraphics[width=\textwidth]{images/tikz/walkbot.pdf}
                 \caption{Two identical configurations form a body}
                 \label{fig:walkbot1}
         \end{subfigure}
         ~
-        \begin{subfigure}[b]{0.49\columnwidth}
+        \begin{subfigure}[b]{0.65\columnwidth}
                 \includegraphics[width=\textwidth]{images/tikz/walkbot2.pdf}
-                \caption{The body and four identical configurations form a Walkbot}
+                \caption{The body and other configurations form a Centaur}
                 \label{fig:walkbot2}
         \end{subfigure}
 \end{center}
-\caption{Building a Walkbot with six identical configurations}
+\caption{Building a Centaur with a set of configurations}
 \label{fig:walkbot}
 \end{figure}
 
@@ -898,9 +902,12 @@ Pc \left(~Sc\begin{pmatrix} halfSine1 \\ halfSine2 \end{pmatrix},
 
 
 \subsection{Verification}
-The need for verification becomes more important as design complexity increases. Consider the Walkbot example. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:designer_unstable}. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:gazebo_unstable2}, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
+The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:designer_unstable}. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:gazebo_unstable2}, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
 
 Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between some modules in this behavior, as shown in Figure~\ref{fig:gait_collision}. The photo shown in Figure~\ref{fig:gait_collision2} demonstrates the moment of collision during simulation.
+
+Despite the design of the modular robot system, modules all have limits on maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from module's hardware to execute a behavior while maintaining all modules connections. 
+As shown in Figure~\ref{fig:break_joint1}, the program detected an undesired disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:break_joint1} demonstrates the disconnection in simulation.
  
 \begin{figure}
 \begin{center}
@@ -936,6 +943,23 @@ Verification of behavior design can also aid the user to create valid and safe r
 \label{fig:gait_unstable}
 \end{figure}
 
+\begin{figure}
+\begin{center}
+        \begin{subfigure}[b]{0.48\columnwidth}
+                \includegraphics[width=\textwidth]{images/library/unity/breakJoint.png}
+                \caption{}
+                \label{fig:break_joint1}
+           \end{subfigure}
+        \begin{subfigure}[b]{0.48\columnwidth}
+                \includegraphics[width=\textwidth]{images/library/unity/breakJoint2.png}
+                \caption{}
+                \label{fig:break_joint2}
+        \end{subfigure}
+\end{center}
+\caption{(a) The program indicates there is undesired disconnection; (b) The configuration disconnected during simulation}
+\label{fig:break_joint}
+\end{figure}
+
 
 \section{Results}
 In the past, designing configurations and behaviors to address new tasks has required
@@ -950,12 +974,40 @@ at a space station on Mars. Teams spent on average about 3 hours building config
 3 hours programming them to address the task \cite{sastra2011using}.  
   
 Using our framework and library, a single person has created and programmed   configurations of similar complexity to those used at
-the competitions (such as the Walkbot or 18-module snake)
+the competitions (such as the Centaur or 18-module snake)
 in under an hour,
-or in a few minutes if the right primitives already exist in the library. It would
+or in a few minutes if the right primitives already exist in the library. Figure~\ref{fig:walk} shows a four-step walking behavior for the Centaur. It would
 not be fair to compare these times to the competition times directly, since they do not include any
 hardware tests or hardware debugging. However, we think we can safely say that
 our framework is an improvement over past design practices.
+
+\begin{figure}
+\begin{center}
+        \begin{subfigure}[b]{0.23\columnwidth}
+                \includegraphics[width=\textwidth]{images/library/unity/step1.png}
+                \caption{}
+                \label{fig:step1}
+           \end{subfigure}
+        \begin{subfigure}[b]{0.23\columnwidth}
+                \includegraphics[width=\textwidth]{images/library/unity/step2.png}
+                \caption{}
+                \label{fig:step2}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.23\columnwidth}
+                \includegraphics[width=\textwidth]{images/library/unity/step3.png}
+                \caption{}
+                \label{fig:step3}
+           \end{subfigure}
+        \begin{subfigure}[b]{0.23\columnwidth}
+                \includegraphics[width=\textwidth]{images/library/unity/step4.png}
+                \caption{}
+                \label{fig:step4}
+        \end{subfigure}
+\end{center}
+\caption{A four-step walking behavior}
+\label{fig:walk}
+\end{figure}
+
 
 \section{Conclusions}
 In this paper, we presented a design framework that facilitates the rapid creation
