@@ -247,7 +247,7 @@ in the body frame) as a function of \(X\).
 % \item \(K: (X, a_i) \rightarrow SE(3) \) is the module's \textit{forward kinematics function}, returning \({^\mathcal{B}}D^{a_{i}}\) (the displacement of attachment point \(a_i\) in the body frame) as a function of \(X\)
 % \end{itemize}
 %
-Figure~\ref{fig:smores} shows a schematic representation of a module with  four attachment points.
+Figure~\ref{fig:graphical-representations} shows a schematic representation of a module with  four attachment points.
 \end{definition}
 %
 % \begin{figure}
@@ -300,7 +300,7 @@ Figure~\ref{fig:smores} shows a schematic representation of a module with  four 
 \end{overpic}
 \caption{From left: (1) A photo of a module, (2) its graphical representation, (3)
 a photo of a configuration with three modules, and (4) its graphical representation.}
-\label{fig:smores_conf}
+\label{fig:graphical-representations}
 \end{figure}
 
 
@@ -352,7 +352,7 @@ Finally, associated with each configuration is a set of \textit{behaviors} \(B\)
 % \item \(B\) is a set of \textit{behaviors} (Definition~\ref{def:behavior}) associated with the configuration.
 % \end{itemize}
 
-Figure~\ref{fig:smores_conf} shows a photo of a configuration composed
+Figure~\ref{fig:graphical-representations} shows a photo of a configuration composed
 of three modules, each with four attachment points, and its
 graphical representation. Blue zigzag lines represent connections between
 modules, and the label of each connection shows the angle offset of that
@@ -392,13 +392,13 @@ composing displacements in the manner above.
 % \caption{A photo of a configuration with three modules and its graphical representation}
 % \label{fig:smores_conf}
 % \end{figure}
-\begin{figure}
-\sidecaption
-\includegraphics[height=1.2in]{images/smores_conf.JPG}
-\includegraphics[height=1.2in]{images/tikz/smores_conf.pdf}
-\caption{A photo of a configuration with three modules (left) and its graphical representation (right).}
-\label{fig:smores_conf}
-\end{figure}
+% \begin{figure}
+% \sidecaption
+% \includegraphics[height=1.2in]{images/smores_conf.JPG}
+% \includegraphics[height=1.2in]{images/tikz/smores_conf.pdf}
+% \caption{A photo of a configuration with three modules (left) and its graphical representation (right).}
+% \label{fig:smores_conf}
+% \end{figure}
 
 
 \begin{definition}[Behavior]\label{def:behavior}
@@ -757,173 +757,10 @@ For a behavior with time duration  $T_B$, we check the state of the configuratio
 
 For checking force limit, we create the model for a module and specify its joint and connection mechanisms in PhysX \cite{PhysX} physics engine with a graphical designing tool called Unity3D \cite{Unity}. By setting the maximum force allowed for the connection between modules and for controlling each joint in the module, we are able to identify a unsafe behavior if we detect, during the behavior execution, any undesired module disconnection or any joint's mismatch between its target position and steady state position.
 
-
-%\subsection{Complexity}
-%\TODO{Discuss the complexity of the algorithm with respect to the number of modules and size of gait tables.}
-
-\section{Implementation }
-\label{sec:implementation}
-A design interface was implemented to aid users in building complex configurations and behaviors from a set of basic configurations and associated behaviors,
-and then verifying their correct execution. We separated the program into two main parts, a configuration builder and a behavior builder.
-Our implementation is built for the SMORES modular robot, but could easily be adapted
-to any other modular robot for which an SDF description is available. \subsection{SMORES robot}
-We demonstrate our system using the SMORES modular robot, developed at the
-University of Pennsylvania \cite{Davey2012}. Each SMORES modules has four DoF
-- three continuously rotating faces called {\em turntables} and one
-central hinge with a 180\textdegree\ range of motion (Figure~\ref{fig:SmoresRobot}). The
-DoF marked 1, 2, and 4 have rotational axes that are parallel and coincident.
-Each SMORES module can drive around as a two-wheel differential
-drive robot.
-SMORES modules may connect to one another via magnets on each of their four
-faces, and are capable of  self-reconfiguration.
-Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta_R,
-\theta_F, \theta_B \rbrace\) and the set of attachment points as \(A=\lbrace L,R,T,B \rbrace\).
-
-\begin{figure}[tb]
-  \sidecaption
-  \includegraphics[height=1.2in]{images/smores_robot.png}
-  \caption{SMORES robot}
-  \label{fig:SmoresRobot}
-\end{figure}
-
-\subsection{Configuration Builder}
-Given a set of basic configurations (which could be just single modules), the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
-\cite{koenig2004design}.
-
-\subsection{Behavior Builder}
-Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:smores_conf} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions in the configuration during the execution of composed behaviors without simulations in a physical engine.
-
-\begin{figure}
-\begin{center}
-    \includegraphics[height=1.1in]{images/library/unity/config_designer.png}
-    \includegraphics[height=1.1in]{images/gait_window.png}
-    \caption{GUIs for configuration builder (left) and behavior builder (right)}
-    \label{fig:smores_conf}
-\end{center}
-\end{figure}
-
-% \begin{figure}
-% \begin{center}
-%         \begin{subfigure}[b]{0.49\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/conf_window.png}
-%                 \caption{GUI for configuration builder}
-%                 \label{fig:gui_conf}
-%         \end{subfigure}   
-%         \begin{subfigure}[b]{0.49\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/gait_window.png}
-%                 \caption{GUI for behavior builder}
-%                 \label{fig:gui_gait}
-%         \end{subfigure}
-% \end{center}
-% \caption{The program to design and verify configurations and behaviors}
-% \label{fig:smores_conf}
-% \end{figure}
-%
-\section{Examples}
-\label{sec:examples}
-Here we present a few examples to illustrate important features of our framework.
-\subsection{Toward a Standard Library}
-Our eventual intention is to develop a large library of configurations and associated
-behaviors which are available to all users of our framework, analogous to the standard
-libraries of major programming languages.  The compositional nature of our framework
-will allow users to rely heavily on the library when approaching new tasks, allowing
-them to create sophisticated robots very quickly.
-
-As a first step toward a standard library, we present a small library of configurations
-and associated behaviors in Tables \ref{Order-1-configurations} and \ref{Order-2-configurations}.
-Configurations in the library are organized by \textit{order}, defined recursively
-as follows: a single module is an order-zero configuration, and the order of all
-other configurations is one greater than the largest order of the sub-configurations
-from which it is composed. Each configuration has an associated set of behaviors,
-which the user can compose to accomplish tasks.  New behaviors for higher-order configuration can be created by composing the behaviors of its component sub-configurations.
-
-For the library to be most effective, the set of configurations and behaviors available
- at each level (and especially at the lowest levels) should provide a rich set of
- functionalities without presenting the user with an overwhelming number of options. 
- Considering the small library in Tables \ref{Order-1-configurations} and \ref{Order-2-configurations},
- it is interested to note that a diverse set of second- and third-order configurations can
-be constructed from only one zero- and one first-order configuration. Developing metrics to
-evaluate the quality of such a library is an interesting opportunity for future work. 
-
-\begin{table*}
-     \begin{center}
-        \begin{tabular}{c c}
-         \includegraphics[scale=1]{images/library/tier0.pdf} &
-         \includegraphics[scale=1]{images/library/tier1.pdf} \\
-         \textbf{Order-0 (single module)} & \textbf{Order-1}
-        \end{tabular}
-         \caption{Order-0 and Order-1 configurations}
-         \label{Order-1-configurations}
-     \end{center}
-\end{table*}
-\begin{table*}
-    \begin{center}
-        \begin{tabular}{c c}
-        \includegraphics[scale=0.9]{images/library/tier2.pdf} &
-        \includegraphics[scale=1]{images/library/tier3.pdf} \\
-        \textbf{Order-2} & \textbf{Order-3}
-        \end{tabular}
-        \caption{Order-2 and Order-3 configurations}
-        \label{Order-2-configurations}
-    \end{center}
-\end{table*}
-% \begin{table*}
-%     \begin{center}
-%         \includegraphics[scale=1]{images/library/tier3.pdf}
-%         \caption{Order-3 configuration}
-%         \label{Order-3-configurations}
-%     \end{center}
-% \end{table*}
-
-\subsection{The User Perspective}
-Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration an its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider a basic configuration ``CHAIN3'' as shown in Table~\ref{Order-1-configurations}. We can form a ``CROSS'' configuration. With two ``CROSS'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:walkbot1}. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than creating with individual modules.
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=\columnwidth]{images/tikz/design_diagram_hori.pdf}
-\caption{The design flow}
-\label{fig:design}
-\end{center}
-\end{figure}
-
-\begin{figure}
-\begin{center}
-        \begin{subfigure}[b]{0.3\columnwidth}
-                \includegraphics[width=\textwidth]{images/tikz/walkbot.pdf}
-                \caption{Two identical configurations form a body}
-                \label{fig:walkbot1}
-        \end{subfigure}
-        ~
-        \begin{subfigure}[b]{0.65\columnwidth}
-                \includegraphics[width=\textwidth]{images/tikz/walkbot2.pdf}
-                \caption{The body and other configurations form a Centaur}
-                \label{fig:walkbot2}
-        \end{subfigure}
-\end{center}
-\caption{Building a Centaur with a set of configurations}
-\label{fig:walkbot}
-\end{figure}
-
-\subsection{Scale-up through composition}
-Our framework allows users to quickly create and program large configurations. The
-first-order CHAIN3 configuration (Table~\ref{Order-1-configurations}) can use a \(sineGait\)
-behavior to locomote like a snake. Defining \(sineGait\)  as the series composition
-of two half-waves will allow us to re-use the gait with larger snakes:
-\begin{displaymath}
-sineGait = Sc(~halfSine1,~halfSine2~)
-\end{displaymath}
-Arbitrarily long snake configurations can be created
-by composing CHAIN3 configurations end-to-end; Table~\ref{Order-2-configurations} shows one with 18 modules.
-A gait for an arbitrarily long snake is created by composing sine wave
-gaits for each component in parallel, but with alternating phase:
-\begin{align*}
-nSnakeSineGait = ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
-Pc \left(~Sc\begin{pmatrix} halfSine1 \\ halfSine2 \end{pmatrix},
-~Sc\begin{pmatrix} halfSine2 \\ halfSine1 \end{pmatrix},\ldots ~\right)
-\end{align*}
-
-
-\subsection{Verification}
+\TODO{I have copied this text here from the verification examples section. 
+I think putting it here makes sense, because it helps motivate why we are doing
+behavior verification.  It will also save space, since there is one less section
+heading.  If possible, try to cut down the text as well to save space.}
 The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:designer_unstable}. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:gazebo_unstable2}, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
 
 Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between some modules in this behavior, as shown in Figure~\ref{fig:gait_collision}. The photo shown in Figure~\ref{fig:gait_collision2} demonstrates the moment of collision during simulation.
@@ -981,6 +818,228 @@ As shown in Figure~\ref{fig:break_joint1}, the program detected an undesired dis
 \caption{(a) The program indicates there is undesired disconnection; (b) The configuration disconnected during simulation}
 \label{fig:break_joint}
 \end{figure}
+
+
+%\subsection{Complexity}
+%\TODO{Discuss the complexity of the algorithm with respect to the number of modules and size of gait tables.}
+
+\section{Implementation }
+\label{sec:implementation}
+A design interface was implemented to aid users in building complex configurations and behaviors from a set of basic configurations and associated behaviors,
+and then verifying their correct execution. We separated the program into two main parts, a configuration builder and a behavior builder.
+
+We demonstrate our system using the SMORES modular robot \cite{Davey2012},  but could easily be adapted
+to any other modular robot for which an SDF description is available. Each SMORES modules has four DoF
+- three continuously rotating faces called {\em turntables} and one
+central hinge with a 180\textdegree\ range of motion (Figure~\ref{fig:SmoresRobot}). The
+DoF marked 1, 2, and 4 have rotational axes that are parallel and coincident.
+Each SMORES module can drive around as a two-wheel differential
+drive robot.
+SMORES modules may connect to one another via magnets on each of their four
+faces, and are capable of  self-reconfiguration.
+Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta_R,
+\theta_F, \theta_B \rbrace\) and the set of attachment points as \(A=\lbrace L,R,T,B \rbrace\).
+
+\begin{figure}[tb]
+  \sidecaption
+  \includegraphics[height=1.2in]{images/smores_robot.png}
+  \caption{SMORES robot \TODO{Could this be combined with figure 1?  Use it
+  as the single module}}
+  \label{fig:SmoresRobot}
+\end{figure}
+
+\subsection{Configuration Builder}
+Given a set of basic configurations (which could be just single modules), the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
+\cite{koenig2004design}.
+
+\subsection{Behavior Builder}
+Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:smores_conf} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions in the configuration during the execution of composed behaviors without simulations in a physical engine.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[height=1.1in]{images/library/unity/config_designer.png}
+    \includegraphics[height=1.1in]{images/gait_window.png}
+    \caption{GUIs for configuration builder (left) and behavior builder (right)}
+    \label{fig:smores_conf}
+\end{center}
+\end{figure}
+
+% \begin{figure}
+% \begin{center}
+%         \begin{subfigure}[b]{0.49\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/conf_window.png}
+%                 \caption{GUI for configuration builder}
+%                 \label{fig:gui_conf}
+%         \end{subfigure}   
+%         \begin{subfigure}[b]{0.49\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/gait_window.png}
+%                 \caption{GUI for behavior builder}
+%                 \label{fig:gui_gait}
+%         \end{subfigure}
+% \end{center}
+% \caption{The program to design and verify configurations and behaviors}
+% \label{fig:smores_conf}
+% \end{figure}
+%
+\section{Examples and User Perspective}
+\label{sec:examples}
+Our eventual intention is to develop a large library of configurations and associated
+behaviors which are available to all users of our framework, analogous to the standard
+libraries of major programming languages.  The compositional nature of our framework
+will allow users to rely heavily on the library when approaching new tasks, allowing
+them to create sophisticated robots very quickly.
+
+As a first step toward a standard library, we present a small library of configurations
+and associated behaviors in Tables \ref{Order-1-configurations} and \ref{Order-2-configurations}.
+Configurations in the library are organized by \textit{order}, defined recursively
+as follows: a single module is an order-zero configuration, and the order of all
+other configurations is one greater than the largest order of the sub-configurations
+from which it is composed. Each configuration has an associated set of behaviors,
+which the user can compose to accomplish tasks.  New behaviors for higher-order configuration can be created by composing the behaviors of its component sub-configurations.
+
+For the library to be most effective, the set of configurations and behaviors available
+ at each level (and especially at the lowest levels) should provide a rich set of
+ functionalities without presenting the user with an overwhelming number of options. 
+ Considering the small library in Tables \ref{Order-1-configurations} and \ref{Order-2-configurations},
+ it is interested to note that a diverse set of second- and third-order configurations can
+be constructed from only one zero- and one first-order configuration. Developing metrics to
+evaluate the quality of such a library is an interesting opportunity for future work. 
+
+\begin{table*}
+     \begin{center}
+        \begin{tabular}{c c}
+         \includegraphics[scale=1]{images/library/tier0.pdf} &
+         \includegraphics[scale=1]{images/library/tier1.pdf} \\
+         \textbf{Order-0 (single module)} & \textbf{Order-1}
+        \end{tabular}
+         \caption{Order-0 and Order-1 configurations}
+         \label{Order-1-configurations}
+     \end{center}
+\end{table*}
+\begin{table*}
+    \begin{center}
+        \begin{tabular}{c c}
+        \includegraphics[scale=0.9]{images/library/tier2.pdf} &
+        \includegraphics[scale=1]{images/library/tier3.pdf} \\
+        \textbf{Order-2} & \textbf{Order-3}
+        \end{tabular}
+        \caption{Order-2 and Order-3 configurations}
+        \label{Order-2-configurations}
+    \end{center}
+\end{table*}
+% \begin{table*}
+%     \begin{center}
+%         \includegraphics[scale=1]{images/library/tier3.pdf}
+%         \caption{Order-3 configuration}
+%         \label{Order-3-configurations}
+%     \end{center}
+% \end{table*}
+
+%\subsection{The User Perspective}
+Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration an its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider a basic configuration ``CHAIN3'' as shown in Table~\ref{Order-1-configurations}. We can form a ``CROSS'' configuration. With two ``CROSS'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:walkbot1}. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than creating with individual modules.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\columnwidth]{images/tikz/design_diagram_hori.pdf}
+\caption{The design flow}
+\label{fig:design}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+        \begin{subfigure}[b]{0.3\columnwidth}
+                \includegraphics[width=\textwidth]{images/tikz/walkbot.pdf}
+                \caption{Two identical configurations form a body}
+                \label{fig:walkbot1}
+        \end{subfigure}
+        ~
+        \begin{subfigure}[b]{0.65\columnwidth}
+                \includegraphics[width=\textwidth]{images/tikz/walkbot2.pdf}
+                \caption{The body and other configurations form a Centaur}
+                \label{fig:walkbot2}
+        \end{subfigure}
+\end{center}
+\caption{Building a Centaur with a set of configurations}
+\label{fig:walkbot}
+\end{figure}
+
+%\subsection{Scale-up through composition}
+% Our framework allows users to quickly create and program large configurations. The
+% first-order CHAIN3 configuration (Table~\ref{Order-1-configurations}) can use a \(sineGait\)
+% behavior to locomote like a snake. Defining \(sineGait\)  as the series composition
+% of two half-waves will allow us to re-use the gait with larger snakes:
+% \begin{displaymath}
+% sineGait = Sc(~halfSine1,~halfSine2~)
+% \end{displaymath}
+% Arbitrarily long snake configurations can be created
+% by composing CHAIN3 configurations end-to-end; Table~\ref{Order-2-configurations} shows one with 18 modules.
+% A gait for an arbitrarily long snake is created by composing sine wave
+% gaits for each component in parallel, but with alternating phase:
+% \begin{align*}
+% nSnakeSineGait = ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+% Pc \left(~Sc\begin{pmatrix} halfSine1 \\ halfSine2 \end{pmatrix},
+% ~Sc\begin{pmatrix} halfSine2 \\ halfSine1 \end{pmatrix},\ldots ~\right)
+% \end{align*}
+
+% \subsection{Verification}
+% The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:designer_unstable}. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:gazebo_unstable2}, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
+% 
+% Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between some modules in this behavior, as shown in Figure~\ref{fig:gait_collision}. The photo shown in Figure~\ref{fig:gait_collision2} demonstrates the moment of collision during simulation.
+% 
+% Despite the design of the modular robot system, modules all have limits on maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from module's hardware to execute a behavior while maintaining all modules connections. 
+% As shown in Figure~\ref{fig:break_joint1}, the program detected an undesired disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:break_joint1} demonstrates the disconnection in simulation.
+%  
+% \begin{figure}
+% \begin{center}
+%         \begin{subfigure}[b]{0.48\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/designer_unstable.png}
+%                 \caption{}
+%                 \label{fig:designer_unstable}
+%            \end{subfigure}
+%         \begin{subfigure}[b]{0.48\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/gazebo_unstable2.png}
+%                 \caption{}
+%                 \label{fig:gazebo_unstable2}
+%         \end{subfigure}
+% \end{center}
+% \caption{(a) The program warns the composed configuration is not gravitationally stable; (b) The robot fell to ground plane due to instability in simulation}
+% \label{fig:unstable}
+% \end{figure}
+% 
+% \begin{figure}
+% \begin{center}
+%         \begin{subfigure}[b]{0.48\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/designer_gait_collision.png}
+%                 \caption{}
+%                 \label{fig:gait_collision}
+%            \end{subfigure}
+%         \begin{subfigure}[b]{0.48\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/gazebo_gait_collision.png}
+%                 \caption{}
+%                 \label{fig:gait_collision2}
+%         \end{subfigure}
+% \end{center}
+% \caption{(a) The program indicates there is collision during the behavior execution; (b) Two feet of  the robot collided during simulation}
+% \label{fig:gait_unstable}
+% \end{figure}
+% 
+% \begin{figure}
+% \begin{center}
+%         \begin{subfigure}[b]{0.48\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/library/unity/breakJoint.png}
+%                 \caption{}
+%                 \label{fig:break_joint1}
+%            \end{subfigure}
+%         \begin{subfigure}[b]{0.48\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/library/unity/breakJoint2.png}
+%                 \caption{}
+%                 \label{fig:break_joint2}
+%         \end{subfigure}
+% \end{center}
+% \caption{(a) The program indicates there is undesired disconnection; (b) The configuration disconnected during simulation}
+% \label{fig:break_joint}
+% \end{figure}
 
 
 \section{Results}
@@ -1055,6 +1114,8 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
+
 
 
 
