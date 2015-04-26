@@ -67,6 +67,7 @@
 \newcommand{\cbj}[2]{\textcolor{blue}{\sout{#1}}\textcolor{blue}{~#2}}
 \newcommand{\abt}[1]{\textcolor{magenta}{#1}}
 \usepackage{amsbsy}
+\usepackage{overpic}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -271,14 +272,35 @@ Figure~\ref{fig:smores} shows a schematic representation of a module with  four 
 % \label{fig:smores}
 % \end{figure}
 %
+% \begin{figure}
+% \sidecaption
+% %\begin{center}
+%         \includegraphics[height=1.1in]{images/smores.JPG}
+%         \includegraphics[height=1.1in]{images/tikz/smores.pdf}
+% %\end{center}
+% \caption{A photo of a module (left) and its graphical representation (right)}
+% \label{fig:smores}
+% \end{figure}
 \begin{figure}
-\sidecaption
-%\begin{center}
-        \includegraphics[height=1.1in]{images/smores.JPG}
-        \includegraphics[height=1.1in]{images/tikz/smores.pdf}
-%\end{center}
-\caption{A photo of a module (left) and its graphical representation (right)}
-\label{fig:smores}
+%1 
+\begin{overpic}[height=1.1in]{images/smores.JPG}
+  \put(4,6) {(1)}
+\end{overpic}
+%2 
+\begin{overpic}[height=1.1in]{images/tikz/smores.pdf}
+  \put(4,6) {(2)}
+\end{overpic}
+%3
+\begin{overpic}[height=1.1in]{images/smores_conf.JPG}
+  \put(4,6) {(3)}
+\end{overpic}
+%4
+\begin{overpic}[height=1.1in]{images/tikz/smores_conf.pdf}
+  \put(4,6) {(4)}
+\end{overpic}
+\caption{From left: (1) A photo of a module, (2) its graphical representation, (3)
+a photo of a configuration with three modules, and (4) its graphical representation.}
+\label{fig:smores_conf}
 \end{figure}
 
 
@@ -765,7 +787,7 @@ Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta
 \end{figure}
 
 \subsection{Configuration Builder}
-Given a set of basic configurations which could be just single modules, the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
+Given a set of basic configurations (which could be just single modules), the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
 \cite{koenig2004design}.
 
 \subsection{Behavior Builder}
@@ -1033,6 +1055,9 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
+
+
 
 
 
