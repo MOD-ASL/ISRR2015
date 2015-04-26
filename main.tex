@@ -283,22 +283,23 @@ Figure~\ref{fig:graphical-representations} shows a schematic representation of a
 % \end{figure}
 \begin{figure}
 %1 
-\begin{overpic}[height=1.1in]{images/smores.JPG}
-  \put(4,6) {(1)}
+\begin{overpic}[height=01.0in]{images/smores_robot.png}
+  \put(3,30) {(1)}
 \end{overpic}
 %2 
-\begin{overpic}[height=1.1in]{images/tikz/smores.pdf}
-  \put(4,6) {(2)}
+\begin{overpic}[height=1.0in]{images/tikz/smores.pdf}
+  \put(3,8) {(2)}
 \end{overpic}
 %3
-\begin{overpic}[height=1.1in]{images/smores_conf.JPG}
+\begin{overpic}[height=1.0in]{images/smores_conf.JPG}
   \put(4,6) {(3)}
 \end{overpic}
 %4
-\begin{overpic}[height=1.1in]{images/tikz/smores_conf.pdf}
+\begin{overpic}[height=1.0in]{images/tikz/smores_conf.pdf}
   \put(4,6) {(4)}
 \end{overpic}
-\caption{From left: (1) A photo of a module, (2) its graphical representation, (3)
+\caption{From left: (1) A photo of a SMORES module with four attachment points
+(left, right, front, and back), (2) its graphical representation, (3)
 a photo of a configuration with three modules, and (4) its graphical representation.}
 \label{fig:graphical-representations}
 \end{figure}
@@ -825,13 +826,11 @@ As shown in Figure~\ref{fig:break_joint1}, the program detected an undesired dis
 
 \section{Implementation }
 \label{sec:implementation}
-A design interface was implemented to aid users in building complex configurations and behaviors from a set of basic configurations and associated behaviors,
-and then verifying their correct execution. We separated the program into two main parts, a configuration builder and a behavior builder.
-
-We demonstrate our system using the SMORES modular robot \cite{Davey2012},  but could easily be adapted
-to any other modular robot for which an SDF description is available. Each SMORES modules has four DoF
+Our implementation currently supports only the SMORES modular robot \cite{Davey2012},  but
+could easily  incorporate any other modular robot for which an SDF description is available
+\TODO{is this true? And should we cite SDF?}. Each SMORES modules has four DoF
 - three continuously rotating faces called {\em turntables} and one
-central hinge with a 180\textdegree\ range of motion (Figure~\ref{fig:SmoresRobot}). The
+central hinge with a 180\textdegree\ range of motion (Figure~\ref{fig:graphical-representations}-1). The
 DoF marked 1, 2, and 4 have rotational axes that are parallel and coincident.
 Each SMORES module can drive around as a two-wheel differential
 drive robot.
@@ -840,19 +839,21 @@ faces, and are capable of  self-reconfiguration.
 Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta_R,
 \theta_F, \theta_B \rbrace\) and the set of attachment points as \(A=\lbrace L,R,T,B \rbrace\).
 
-\begin{figure}[tb]
-  \sidecaption
-  \includegraphics[height=1.2in]{images/smores_robot.png}
-  \caption{SMORES robot \TODO{Could this be combined with figure 1?  Use it
-  as the single module}}
-  \label{fig:SmoresRobot}
-\end{figure}
+% \begin{figure}[tb]
+%   \sidecaption
+%   \includegraphics[height=1.2in]{images/smores_robot.png}
+%   \{SMORES robot \TODO{Could this be combined with figure 1?  Use it
+%   as the single module}}
+%   \label{fig:SmoresRobot}
+% \end{figure}
 
-\subsection{Configuration Builder}
+A design interface was implemented to aid users in building complex configurations and behaviors from a set of basic configurations and associated behaviors,
+and then verifying their correct execution. We separated the program into two main parts: a configuration builder and a behavior builder.
+%\subsection{Configuration Builder}
 Given a set of basic configurations (which could be just single modules), the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
 \cite{koenig2004design}.
 
-\subsection{Behavior Builder}
+%\subsection{Behavior Builder}
 Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:smores_conf} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions in the configuration during the execution of composed behaviors without simulations in a physical engine.
 
 \begin{figure}
@@ -1114,6 +1115,7 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
 
 
 
