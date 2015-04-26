@@ -1,0 +1,61 @@
+%&pdflatex
+\documentclass{standalone}
+%\documentclass[a4paper, landscape]{article}
+\usepackage{graphicx}
+\usepackage{overpic}
+\usepackage{color}
+
+\newcommand{\picHeight}{1.5in}
+\newcommand{\capX}{3}
+\newcommand{\capY}{7}
+\newcommand{\format}[1]{\color{white}\textbf{#1}}
+\begin{document}
+
+    \begin{tabular}{c c c}
+        % Module
+        \begin{overpic}[height=\picHeight]{unity/singleModule.png}
+            \put(\capX,\capY) {\format{(0) Module}}
+        \end{overpic}&
+        % Chain3
+        \hspace{-0.5cm}
+        \begin{overpic}[height=\picHeight]{unity/threeModules.png}
+            \put(\capX,\capY) {\format{(1) Chain3}}
+        \end{overpic} &
+        % Car
+        \hspace{-0.5cm}
+        \begin{overpic}[height=\picHeight]{car.png}
+            \put(\capX,\capY) {\format{(2) Car}}
+        \end{overpic} \\
+        %%%%%%%%%%%%%%%%%%
+        % Grasper
+        \begin{overpic}[height=\picHeight]{unity/cross.png}
+            \put(\capX,\capY) {\format{(2) Grasper}}
+        \end{overpic} &
+        % PUMA
+        %\hspace{-2.5cm}
+        \begin{overpic}[height=\picHeight]{unity/singleModule.png}
+            \put(\capX,\capY) {\format{(2) PUMA}}
+        \end{overpic} &
+        % Walkbot
+        \hspace{-2cm}
+        \begin{overpic}[height=\picHeight]{walkbot.png}
+            \put(\capX,\capY) {\format{(3) Walkbot}}
+        \end{overpic} \\
+        %%%%%%%%%%%%%%%%%%
+        % Backhoe
+        \multicolumn{2}{c}{
+        \begin{overpic}[height=\picHeight]{backhoe.jpeg}
+            \put(\capX,\capY) {\format{(3) Backhoe}}
+        \end{overpic}} &
+        % Centaur
+        \begin{overpic}[height=\picHeight]{unity/centaur.png}
+            \put(\capX,\capY) {\format{(4) Centaur}}
+        \end{overpic} 
+    \end{tabular}
+\end{document}
+
+
+
+
+
+
