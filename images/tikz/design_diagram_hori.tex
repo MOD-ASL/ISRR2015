@@ -28,10 +28,10 @@
 \draw [arrow] (library) |- ([yshift = -0.7cm]build_conf.south) --  (build_conf);
 \draw [arrow] (library) |- ([yshift = -0.7cm]build_conf.south) --  (build_behavior);
 \draw [arrow] (verify_conf) -- node[anchor=east] {yes} (build_behavior);
-\draw [arrow] (verify_conf) -- ([yshift=0.5cm]verify_conf.north)  node[anchor=north east]{no} -| (build_conf.north);
+\draw [arrow] (verify_conf) -- ([yshift=0.5cm]verify_conf.north)  node[anchor=north east]{no} -- node[anchor=north]{Unstable or Self-collision} ([yshift=0.83cm]build_conf.north) -- (build_conf.north);
 \draw [arrow] (build_behavior) -- (verify_behavior);
 \draw [arrow] (verify_behavior) -- node[anchor=south] {yes} (sim);
-\draw [arrow] (verify_behavior) -- ([yshift=-0.5cm]verify_behavior.south)  node[anchor=south east]{no}  -| (build_behavior);
+\draw [arrow] (verify_behavior) -- ([yshift=-0.5cm]verify_behavior.south)  node[anchor=south east]{no}  -- node[anchor=south]{Unstable or Self-collision} node[anchor=north]{or Behavior-conflict} node[below=0.3cm,anchor=north]{or Force limit reached} ([yshift=-0.5cm]build_behavior.south) -- (build_behavior);
 
 
 \end{tikzpicture}
