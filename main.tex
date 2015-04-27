@@ -933,13 +933,13 @@ Formally, we denote the state of a SMORES module as \(X=\lbrace \theta_L, \theta
 % \end{figure}
 
 A design interface was implemented to aid users in building complex configurations and behaviors from a set of basic configurations and associated behaviors,
-and then verifying their correct execution. We separated the program into two main parts: a configuration builder and a behavior builder.
+and then verifying their correct execution. We separated the design tool into two main parts: a configuration builder and a behavior builder.
 %\subsection{Configuration Builder}
-Given a set of basic configurations (which could be just single modules), the configuration builder allows users to combine basic configurations by choosing connection node on each configuration, as demonstrated in Figure~\ref{fig:smores_conf}. In addition, the configuration builder will warn users when the composed configuration is not valid without the usage of a physical simulator, e.g. Gazebo
+Given a set of basic configurations (which could be just single modules), the configuration builder allows users to combine basic configurations by choosing connection nodes on each configuration, as demonstrated in Figure~\ref{fig:smores_conf}. In addition, the configuration builder warns users when the composed configuration is not stable or contains self-collisions. It does so without the computation complexity of a physical simulator, e.g. Gazebo
 \cite{koenig2004design}.
 
 %\subsection{Behavior Builder}
-Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:smores_conf} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions or behavior conflict in the configuration during the execution of composed behaviors without simulations in a physical engine. To check force limit for connection and actuators, we create the module model and specify its joint and connection in the PhysX \cite{PhysX} physics engine with Unity3D \cite{Unity}, a graphical designing tool. 
+Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging behaviors in a parallel and series composition. Figure~\ref{fig:smores_conf} illustrates a new behavior composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder warns users if there are self-collisions or behavior conflict in the configuration during the execution of composed behaviors without the need of a physics-based simulator. To check force limit for connection and actuators, we create the module model and specify its joint and connection in the PhysX \cite{PhysX} physics engine with Unity3D \cite{Unity}, a graphical designing tool. 
 
 \begin{figure}
 \begin{center}
