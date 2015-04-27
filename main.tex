@@ -1048,7 +1048,7 @@ evaluate the quality of such a library is an interesting opportunity for future 
 
 %\subsection{The User Perspective}
 Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration and its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider the
-order-1 `Chain3'' configuration. We can form a ``Grasper'' configuration. With two ``Grasper'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:walkbot1}. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than by
+order-1 `Chain3'' configuration. We can form a ``Grasper'' configuration. With two ``Grasper'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:centaur}-1. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:centaur}-2. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than by
 creating it with individual modules.
 
 \begin{figure}
@@ -1091,7 +1091,9 @@ creating it with individual modules.
     \caption{Building the Centaur. (1) Two Graspers are composed to form a Walkbot.
     (2) The Walkbot is composed with one more Grasper and two individual modules
     to form the Centaur.}
+    \label{fig:centaur}
   \end{center}
+  
 \end{figure}
 
 %\subsection{Scale-up through composition}
