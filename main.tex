@@ -467,7 +467,7 @@ unchanged from Definition~\ref{def:configuration}.
 
 \subsection{Behavior Composition: Series-Parallel Action Graphs}
 \label{sec:behavior-representation}
-The modular robotics community has developed a number of languages and  methods
+The modular robotics community has developed a number of methods
 to create behaviors, including gait tables \cite{yim1994locomotion}, phased automata
 \cite{zhang2003phase}, hormone-based control \cite{salemi2001hormone},
 and role-based control \cite{stoy2002using}. Phased automata, hormone, and role-based
@@ -482,7 +482,7 @@ application.  However, gait tables are difficult to re-use, and also hard to
 scale to very complicated designs. The  motion description language we present
 allows low-level behaviors to be combined in series and parallel to create new
 higher-level behaviors, encapsulating complexity and facilitating code re-use.
-The resulting programs are precise and expressive, and have a nested structure
+The resulting programs are expressive, and have a nested structure
 that is easy to understand and debug.
 
 %    
@@ -496,12 +496,12 @@ that is easy to understand and debug.
 % of commands \cite{hristu2003motion}.  Our language distinguishes itself by allowing
 % existing behaviors to be easily composed to form new behaviors.
 
- The atoms of the language are called actions.  Similar to a single entry of a gait
+ The atoms of the language are called \textit{actions}.  Similar to a single entry of a gait
 table, an action specifies a controller setpoint for a single DoF of a module.  Unlike
 a gait table entry, actions do not have explicit timestamps.  Rather, each action has an associated
 interrupt condition, which is a boolean function of the (sensed) state of the robot. Similar
 to a state transition in a finite state machine (FSM), when the interrupt condition is met the action is  considered
-complete, and  execution moves on to the next actions.  Interrupts allow the programmer
+complete, and  execution moves on to the next action.  Interrupts allow the programmer
 to precisely specify behaviors in a natural way: rather than specifying a timed sequence
 of motions, the programmer specifies an ordered sequence of actions and has some
 assurance that an action will not begin until the robot has actually achieved the goal
@@ -516,10 +516,11 @@ the second begins when the first ends. When composed in parallel they
 begin simultaneously, and the following actions do not begin until both complete.
 A behavior created using these operations is a directed acyclic graph of actions with
 series-parallel structure \cite{valdes1979recognition};  Figure \ref{fig:graph-composition} provides
-a visual example. This structure is advantageous because the
- series and parallel composition operations   
-remain valid for behaviors of arbitrary size, allowing new behaviors to be easily
-created by combining existing behaviors.
+a visual example.
+% This structure is advantageous because the
+%  series and parallel composition operations   
+% remain valid for behaviors of arbitrary size, allowing new behaviors to be easily
+% created by combining existing behaviors.
  
 % The fundamental atoms of the language are called actions.  An \textit{action} is a tuple \(
 % (J, X, \xi, T)\), where \(J\) identifies a single DoF of a configuration, \(X\) is a
@@ -576,7 +577,7 @@ created by combining existing behaviors.
 \end{figure}
 
 %\subsubsection*{Example}
-As an example, consider the car design shown in figure \ref{fig:car-and-backhoe}. To create a low-level
+As an example, consider the car design shown in Figure \ref{fig:car-and-backhoe}. To create a low-level
 ``drive-forward'' behavior, we simply command all of its wheels to spin  in parallel.
 The car steers by swiveling its central steering column, so a ``turn right''
 behavior can be similarly achieved by commanding parallel actions for the steering column joints.
@@ -584,17 +585,17 @@ With these low-level behaviors established, we can command trajectories through 
 composition, for example: \textit{square=series(drive, turn, drive, turn, drive, turn,
 drive, turn)}.
 
-This paradigm  is lightweight enough to code  low-level behaviors quickly and
+This paradigm  allows  low-level behaviors to be coded quickly and
 easily. However, the real value comes from its ability to  combine behaviors
 in layers and quickly generate behaviors for complicated designs. This works
 particularly well when designs are made by composing smaller designs. For
-example, we can easily develop ``drive'' and ``turn''\ behaviors for the
+example, we can develop ``drive'' and ``turn''\ behaviors for the
 18-module backhoe shown in Figure \ref{fig:car-and-backhoe} by composing  behaviors of
 its component car designs: \(driveBackhoe= parallel( driveCar1, driveCar2)\),
 and \(turnBackhoe = parallel(turnCar1, turnCar2)\). Each of these one-line
 statements commands the movement of  28 degrees of freedom.
 
-We can extend this further to generate a useful high-level behaviors for the
+We can extend this further to generate high-level behaviors for the
 backhoe.  Suppose that the arm has a laser rangefinder attached to the end,
 and that we've already created a ``scan'' behavior that sweeps or rotates the
 sensor.  We might create a ``patrol'' behavior that scans continuously while
@@ -603,13 +604,15 @@ the robot to scan the corners of a room, we can precisely specify this using
 lower-level behaviors:  \(cornerScan=series(drive, scan, turn, drive,scan,
 turn, \ldots) \).
 
-Building behaviors in a layered fashion make it much easier
-to re-use code.
-If primitive behaviors have not yet been built, building a single complicated behavior like ``patrol'' from scratch might  be faster
-than first building primitive behaviors and then composing them into the desired
-complex behavior. However, the latter process is more efficient in the long run,
-because the low-level behaviors can be re-used to quickly create many different
-high-level behaviors.
+% Building behaviors in a layered fashion make it much easier
+% to re-use code.
+% If primitive behaviors have not yet been built, building a single complicated behavior like ``patrol'' from scratch might  be faster
+% than first building primitive behaviors and then composing them into the desired
+% complex behavior. However, the latter process is more efficient in the long run,
+% because the low-level behaviors can be re-used to quickly create many different
+% high-level behaviors.
+
+\TODO{talk about verification here}
 
 Our emphasis on abstraction begs the question: why not use  a a more fully-featured
 plan execution model such as behavior trees \cite{marzinotto2014towards}, or even a
@@ -622,6 +625,8 @@ for large designs (see Section \ref{sec:examples}). In the future, we hope to ex
 its capabilities without sacrificing ease-of-use.  In particular, facilities
 for high-level decision making based on sensed information about the environment
 will be a priority.
+\TODO{Talk about PHFSM here.}
+
 
 % \begin{figure}
 % \begin{center}
@@ -1024,7 +1029,7 @@ evaluate the quality of such a library is an interesting opportunity for future 
 
 %\subsection{The User Perspective}
 Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration an its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider the
-order-1 `Chain3'' configuration. We can form a ``CROSS'' configuration. With two ``CROSS'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:walkbot1}. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than creating with individual modules.
+order-1 `Chain3'' configuration. We can form a ``Grasper'' configuration. With two ``Grasper'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:walkbot1}. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than creating with individual modules.
 
 \begin{figure}
 \begin{center}
@@ -1146,53 +1151,6 @@ order-1 `Chain3'' configuration. We can form a ``CROSS'' configuration. With two
 % \label{fig:break_joint}
 % \end{figure}
 
-
-\section{Results}
-In the past, designing configurations and behaviors to address new tasks has required
-time on the order of one to dozens of hours \cite{sastra2011using}.  To evaluate the rapid creation of solutions for robotic tasks using modular robot systems, we can look to the modular robot competitions held at large conferences IROS 2003, ICRA 2008, ICRA 2010, ICRA 2011 and ICRA 2012. In each case participants used modular robot systems to solve problems with little a priori knowledge of the task (except that the task would likely require remote operation/manipulation of objects).
-
-In the case of IROS 2003, the task was to create a robot that could ``gamble'' by placing plastic tokens into a toy slot machine, pulling a lever and catching the chips as they popped out.  One team created a solution with PolyBot G1V4 system with 14 modules (14 DoF). Participants
-had one day to create primitive configurations and behaviors (snake-like mobility, and arm like structures) and
- 6 hours on the following day to solve the task. No teams completed the task, though
-some came close. 
-At ICRA 2008, participants created designs to address a mock disaster scenario
-at a space station on Mars. Teams spent on average about 3 hours building configurations and
-3 hours programming them to address the task \cite{sastra2011using}.  
-  
-Using our framework and library, a single person has created and programmed   configurations of similar complexity to those used at
-the competitions (such as the Centaur or 18-module snake)
-in under an hour,
-or in a few minutes if the right primitives already exist in the library. Figure~\ref{fig:walk} shows a four-step walking behavior for the Centaur. It would
-not be fair to compare these times to the competition times directly, since they do not include any
-hardware tests or hardware debugging. However, we think we can safely say that
-our framework is an improvement over past design practices.
-%
-% \begin{figure}
-% \begin{center}
-%         \begin{subfigure}[b]{0.23\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/library/unity/step1.png}
-%                 \caption{}
-%                 \label{fig:step1}
-%            \end{subfigure}
-%         \begin{subfigure}[b]{0.23\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/library/unity/step2.png}
-%                 \caption{}
-%                 \label{fig:step2}
-%         \end{subfigure}
-%         \begin{subfigure}[b]{0.23\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/library/unity/step3.png}
-%                 \caption{}
-%                 \label{fig:step3}
-%            \end{subfigure}
-%         \begin{subfigure}[b]{0.23\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/library/unity/step4.png}
-%                 \caption{}
-%                 \label{fig:step4}
-%         \end{subfigure}
-% \end{center}
-% \caption{A four-step walking behavior}
-% \label{fig:walk}
-% \end{figure}
 \begin{figure}
 \begin{center}
                 \includegraphics[width=0.23\textwidth]{images/library/unity/step1.png}
@@ -1204,8 +1162,27 @@ our framework is an improvement over past design practices.
 \label{fig:walk}
 \end{figure}
 
-
+% \section{Results}
+% In the past, designing configurations and behaviors to address new tasks has required
+% time on the order of one to dozens of hours \cite{sastra2011using}.  To evaluate the rapid creation of solutions for robotic tasks using modular robot systems, we can look to the modular robot competitions held at large conferences IROS 2003, ICRA 2008, ICRA 2010, ICRA 2011 and ICRA 2012. In each case participants used modular robot systems to solve problems with little a priori knowledge of the task (except that the task would likely require remote operation/manipulation of objects).
+% 
+% In the case of IROS 2003, the task was to create a robot that could ``gamble'' by placing plastic tokens into a toy slot machine, pulling a lever and catching the chips as they popped out.  One team created a solution with PolyBot G1V4 system with 14 modules (14 DoF). Participants
+% had one day to create primitive configurations and behaviors (snake-like mobility, and arm like structures) and
+%  6 hours on the following day to solve the task. No teams completed the task, though
+% some came close. 
+% At ICRA 2008, participants created designs to address a mock disaster scenario
+% at a space station on Mars. Teams spent on average about 3 hours building configurations and
+% 3 hours programming them to address the task \cite{sastra2011using}.  
+%   
+% Using our framework and library, a single person has created and programmed   configurations of similar complexity to those used at
+% the competitions (such as the Centaur or 18-module snake)
+% in under an hour,
+% or in a few minutes if the right primitives already exist in the library. Figure~\ref{fig:walk} shows a four-step walking behavior for the Centaur. It would
+% not be fair to compare these times to the competition times directly, since they do not include any
+% hardware tests or hardware debugging. However, we think we can safely say that
+% our framework is an improvement over past design practices.
 \section{Conclusions}
+\TODO{Add a couple sentences about results in this section}
 In this paper, we presented a design framework that facilitates the rapid creation
 of configurations and behaviors for modular robots.
 Complex configurations  are hierarchically constructed from basic
