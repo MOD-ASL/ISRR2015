@@ -675,10 +675,10 @@ will be a priority.
 % \mathrm{SQUARE} = Sc (~\mathrm{DRIVE},~\mathrm{TURN},~\mathrm{DRIVE},~\mathrm{TURN},\\
 % ~\mathrm{DRIVE},~\mathrm{TURN},~\mathrm{DRIVE},~\mathrm{TURN} )
 % \end{align*}
-\subsection{ Verification of Configurations and Behaviors}
+\subsection{ Verification of Configurations and Behaviors} \label{sec:verify}
 
-\subsubsection{Verification of Configurations \TODO{Consider removing these
-subsection headings to save space}}\label{sec:verify_conf}
+%\subsubsection{Verification of Configurations \TODO{Consider removing these subsection headings to save space}}\label{sec:verify_conf}
+{\bf Verification of Configurations: }
 In Section~\ref{sec:conf_composition}, we introduced the definition of configuration composition. During the design process, a user might attempt to compose configurations in a way that is unsafe or physically impossible. We provide facilities to automatically verify designs during construction, saving time that would otherwise be spent simulating or testing invalid designs.
 
 Given a configuration $\mathcal{C}$ and state \(X_0\), we consider to be  $\mathcal{C}$ valid in state \(X_0\) if it is gravitationally stable and free from self
@@ -758,7 +758,8 @@ lies within the convex hull of the ground contact points, gravity exerts no
 moment and the configuration
 is considered statically stable in state \(X_0\).
 
-\subsubsection{Verification of Behaviors}
+%\subsubsection{Verification of Behaviors}
+\noindent{\bf Verification of Behaviors: }
 In Section~\ref{sec:behavior-representation}, we introduced a novel motion description language for modular robots. Like
 configurations, behaviors are automatically verified as the user builds them.
   In addition to being free from self-collision and gravitationally stable during
@@ -788,7 +789,7 @@ conflict}.
 % \end{itemize}
 % \end{definition}
 % State is the right term, so I deleted the TODO.
-To verify a behavior with time duration  $T_B$, we discretize execution with sampling time $t_B$. At each time step, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on the commands. We then check for self-collision and gravitational instability, using the methods described in section~\ref{sec:verify_conf}.  
+To verify a behavior with time duration  $T_B$, we discretize execution with sampling time $t_B$. At each time step, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on the commands. We then check for self-collision and gravitational instability, using the methods described in section~\ref{sec:verify}.  
 A behavior that results in self-collision during a single time step is considered
 invalid. For gravitational stability, we specify a time bound
 \(t_{max} > t_B\). A behavior is considered unstable if it
@@ -800,68 +801,97 @@ For checking force limit, we create the model for a module and specify its joint
 the joint and actuator limit checks without mentioning specific physics engines.
  The specific engines can be included in the implementation section.}.
 
-\TODO{I have copied this text here from the verification examples section. 
-I think putting it here makes sense, because it helps motivate why we are doing
-behavior verification.  It will also save space, since there is one less section
-heading.  If possible, try to cut down the text as well to save space.}
-The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:designer_unstable}. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:gazebo_unstable2}, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
+%\TODO{I have copied this text here from the verification examples section. 
+%I think putting it here makes sense, because it helps motivate why we are doing
+%behavior verification.  It will also save space, since there is one less section
+%heading.  If possible, try to cut down the text as well to save space.}
+The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:verification}-1. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:verification}-2, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
 
-Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between some modules in this behavior, as shown in Figure~\ref{fig:gait_collision}. The photo shown in Figure~\ref{fig:gait_collision2} demonstrates the moment of collision during simulation.
+Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between some modules in this behavior, as shown in Figure~\ref{fig:verification}-3. The photo shown in Figure~\ref{fig:verification}-4 demonstrates the moment of collision during simulation.
 
 Despite the design of the modular robot system, modules all have limits on maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from module's hardware to execute a behavior while maintaining all modules connections. 
-As shown in Figure~\ref{fig:break_joint1}, the program detected an undesired disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:break_joint1} demonstrates the disconnection in simulation.
+As shown in Figure~\ref{fig:verification}-5, the program detected an undesired disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:verification}-6 demonstrates the disconnection in simulation.
  
-\begin{figure}
-\begin{center}
-        \begin{subfigure}[b]{0.48\columnwidth}
-                \includegraphics[width=\textwidth]{images/designer_unstable.png}
-                \caption{}
-                \label{fig:designer_unstable}
-           \end{subfigure}
-        \begin{subfigure}[b]{0.48\columnwidth}
-                \includegraphics[width=\textwidth]{images/gazebo_unstable2.png}
-                \caption{}
-                \label{fig:gazebo_unstable2}
-        \end{subfigure}
-\end{center}
-\caption{(a) The program warns the composed configuration is not gravitationally stable; (b) The robot fell to ground plane due to instability in simulation}
-\label{fig:unstable}
-\end{figure}
+%\begin{figure}
+%\begin{center}
+%        \begin{subfigure}[b]{0.48\columnwidth}
+%                \includegraphics[width=\textwidth]{images/designer_unstable.png}
+%                \caption{}
+%                \label{fig:designer_unstable}
+%           \end{subfigure}
+%        \begin{subfigure}[b]{0.48\columnwidth}
+%                \includegraphics[width=\textwidth]{images/gazebo_unstable2.png}
+%                \caption{}
+%                \label{fig:gazebo_unstable2}
+%        \end{subfigure}
+%\end{center}
+%\caption{(a) The program warns the composed configuration is not gravitationally stable; (b) The robot fell to ground plane due to instability in simulation}
+%\label{fig:unstable}
+%\end{figure}
+%
+%\begin{figure}
+%\begin{center}
+%        \begin{subfigure}[b]{0.48\columnwidth}
+%                \includegraphics[width=\textwidth]{images/designer_gait_collision.png}
+%                \caption{}
+%                \label{fig:gait_collision}
+%           \end{subfigure}
+%        \begin{subfigure}[b]{0.48\columnwidth}
+%                \includegraphics[width=\textwidth]{images/gazebo_gait_collision.png}
+%                \caption{}
+%                \label{fig:gait_collision2}
+%        \end{subfigure}
+%\end{center}
+%\caption{(a) The program indicates there is collision during the behavior execution; (b) Two feet of  the robot collided during simulation}
+%\label{fig:gait_unstable}
+%\end{figure}
+%
+%\begin{figure}
+%\begin{center}
+%        \begin{subfigure}[b]{0.48\columnwidth}
+%                \includegraphics[width=\textwidth]{images/library/unity/breakJoint.png}
+%                \caption{}
+%                \label{fig:break_joint1}
+%           \end{subfigure}
+%        \begin{subfigure}[b]{0.48\columnwidth}
+%                \includegraphics[width=\textwidth]{images/library/unity/breakJoint2.png}
+%                \caption{}
+%                \label{fig:break_joint2}
+%        \end{subfigure}
+%\end{center}
+%\caption{(a) The program indicates there is undesired disconnection; (b) The configuration disconnected during simulation}
+%\label{fig:break_joint}
+%\end{figure}
 
 \begin{figure}
-\begin{center}
-        \begin{subfigure}[b]{0.48\columnwidth}
-                \includegraphics[width=\textwidth]{images/designer_gait_collision.png}
-                \caption{}
-                \label{fig:gait_collision}
-           \end{subfigure}
-        \begin{subfigure}[b]{0.48\columnwidth}
-                \includegraphics[width=\textwidth]{images/gazebo_gait_collision.png}
-                \caption{}
-                \label{fig:gait_collision2}
-        \end{subfigure}
-\end{center}
-\caption{(a) The program indicates there is collision during the behavior execution; (b) Two feet of  the robot collided during simulation}
-\label{fig:gait_unstable}
+%1 
+\begin{overpic}[width=0.5\textwidth]{images/gazebo_unstable.png}
+  \put(4,6) {(1)}
+\end{overpic}
+%2 
+\begin{overpic}[width=0.5\textwidth]{images/gazebo_unstable2.png}
+  \put(4,6) {(2)}
+\end{overpic}
+%3
+\begin{overpic}[width=0.5\textwidth]{images/designer_gait_collision.png}
+  \put(4,6) {(3)}
+\end{overpic}
+%4
+\begin{overpic}[width=0.5\textwidth]{images/gazebo_gait_collision.png}
+  \put(4,6) {(4)}
+\end{overpic}
+%5
+\begin{overpic}[width=0.5\textwidth]{images/library/unity/breakJoint.png}
+  \put(4,6) {(5)}
+\end{overpic}
+%6
+\begin{overpic}[width=0.5\textwidth]{images/library/unity/breakJoint2.png}
+  \put(4,6) {(6)}
+\end{overpic}
+\caption{From top and left: (1) The program warns the composed configuration is not gravitationally stable; (2) The robot fell to ground plane due to instability in simulation; (3)
+The program indicates there is collision during the behavior execution; (4) Two feet of  the robot collided during simulation; (5) The program indicates there is undesired disconnection; (6) The configuration disconnected during simulation.}
+\label{fig:verification}
 \end{figure}
-
-\begin{figure}
-\begin{center}
-        \begin{subfigure}[b]{0.48\columnwidth}
-                \includegraphics[width=\textwidth]{images/library/unity/breakJoint.png}
-                \caption{}
-                \label{fig:break_joint1}
-           \end{subfigure}
-        \begin{subfigure}[b]{0.48\columnwidth}
-                \includegraphics[width=\textwidth]{images/library/unity/breakJoint2.png}
-                \caption{}
-                \label{fig:break_joint2}
-        \end{subfigure}
-\end{center}
-\caption{(a) The program indicates there is undesired disconnection; (b) The configuration disconnected during simulation}
-\label{fig:break_joint}
-\end{figure}
-
 
 %\subsection{Complexity}
 %\TODO{Discuss the complexity of the algorithm with respect to the number of modules and size of gait tables.}
