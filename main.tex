@@ -176,6 +176,17 @@ workflow.
 % user time and effort, and allows him or her to easily develop complex and
 % capable designs.
 
+\begin{figure}
+\begin{center}
+                \includegraphics[width=0.23\textwidth]{images/library/unity/step1.png}
+                \includegraphics[width=0.23\textwidth]{images/library/unity/step2.png}
+                \includegraphics[width=0.23\textwidth]{images/library/unity/step3.png}
+                \includegraphics[width=0.23\textwidth]{images/library/unity/step4.png}
+\end{center}
+\caption{A four-step walking behavior\TODO{talk about this more} }
+\label{fig:walk}
+\end{figure}
+
 \section{Related Work} \label{sec:related-work} 
 In some respects, our work parallels the efforts of Mehta \cite{mehta2014design}
 and Bezzo \cite{bezzo2014demo}, who aim to create and program printable robots
@@ -987,7 +998,7 @@ For the library to be most effective, the set of configurations and behaviors av
  at each level (and especially at the lowest levels) should provide a rich set of
  functionalities without presenting the user with an overwhelming number of options. 
  Considering the small library in Figure~\ref{fig:library},
- it is interested to note that a diverse set of second- and third-order configurations can
+ it is interesting to note that a diverse set of second- and third-order configurations can
 be constructed from only one zero- and one first-order configuration. Developing metrics to
 evaluate the quality of such a library is an interesting opportunity for future work. 
 %
@@ -1036,8 +1047,9 @@ evaluate the quality of such a library is an interesting opportunity for future 
 % \end{table*}
 
 %\subsection{The User Perspective}
-Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration an its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider the
-order-1 `Chain3'' configuration. We can form a ``Grasper'' configuration. With two ``Grasper'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:walkbot1}. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than creating with individual modules.
+Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration and its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider the
+order-1 `Chain3'' configuration. We can form a ``Grasper'' configuration. With two ``Grasper'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:walkbot1}. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:walkbot2}. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than by
+creating it with individual modules.
 
 \begin{figure}
 \begin{center}
@@ -1159,17 +1171,6 @@ order-1 `Chain3'' configuration. We can form a ``Grasper'' configuration. With t
 % \label{fig:break_joint}
 % \end{figure}
 
-\begin{figure}
-\begin{center}
-                \includegraphics[width=0.23\textwidth]{images/library/unity/step1.png}
-                \includegraphics[width=0.23\textwidth]{images/library/unity/step2.png}
-                \includegraphics[width=0.23\textwidth]{images/library/unity/step3.png}
-                \includegraphics[width=0.23\textwidth]{images/library/unity/step4.png}
-\end{center}
-\caption{A four-step walking behavior}
-\label{fig:walk}
-\end{figure}
-
 % \section{Results}
 % In the past, designing configurations and behaviors to address new tasks has required
 % time on the order of one to dozens of hours \cite{sastra2011using}.  To evaluate the rapid creation of solutions for robotic tasks using modular robot systems, we can look to the modular robot competitions held at large conferences IROS 2003, ICRA 2008, ICRA 2010, ICRA 2011 and ICRA 2012. In each case participants used modular robot systems to solve problems with little a priori knowledge of the task (except that the task would likely require remote operation/manipulation of objects).
@@ -1197,14 +1198,15 @@ Complex configurations  are hierarchically constructed from basic
 subcomponents.
 We presented a novel motion description language, which allows existing behaviors
 to be combined in series and parallel  to create more complex  behaviors.
-The framework verifies  configurations and behaviors as they are being created, allowing
-early detection of  design flaws, specifically self-collision and gravitational instability. After
-verification, designs can be evaluated in a physical simulator before testing on
+The framework verifies  configurations and behaviors, allowing
+early detection of  design flaws, specifically behavior conflict, self-collision, loss of gravitational stability, and forces 
+exceeding the limits of safety for actuators and connectors. After verification, designs can be evaluated in a physical simulator before testing on
 hardware.
 
 \section{Future}
-Future work will include expansion of the features of our framework.  We will add verification tools to check for behavior conflict (when two behaviors composed in parallel command the same DoF), and check for behaviors that would exceed the actuator and connector force limits of the modules.  We will also work to include configurations with cycles.
-Another area of future work is developing a standard library of configurations and
+Future work will include expansion of the features of our framework.  We hope to expand
+the capabilities of our motion description language without sacrificing ease-of-use,
+and add more verification tools to assist in problem identification. Another area of future work is developing a standard library of configurations and
 behaviors for the SMORES robot.  We will also investigate metrics to evaluate the quality of such a library.
 Perhaps most importantly, we will test and evaluate the designs and behaviors with actual hardware modules.
 Currently, each behavior is associated with exactly one configuration. In many cases, a given behavior could be executed by several different configurations (if it were correctly mapped onto a subset of their modules). In the future, we will apply an embedding detection algorithm (see \cite{mantzouratos2014embeddability}) to map behaviors into any configuration capable of executing them.
@@ -1214,6 +1216,7 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
 
 
 
