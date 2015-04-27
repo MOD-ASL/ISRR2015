@@ -118,8 +118,8 @@ programming them \cite{salemi2001hormone, stoy2002using,
 zhang2003phase}.  Over 800 papers, a book \cite{stoy2010book}, and a survey \cite{yim2007modular} have been written on the subject.
 
 This versatility places an additional burden on the user, because
-solving problems with modular robots involves not only designing  programs,
-but also the best physical form for the task at hand. If this
+solving problems with modular robots involves not only writing  programs,
+but also determining the best physical form for the task at hand. If this
 complexity is not appropriately managed, it will present a significant barrier to
 using modular robots to address practical tasks \cite{yim2000modular}. If the user is free to create any new design to
 solve a new task, but must program the design from scratch every time, creating
@@ -128,15 +128,14 @@ hardware will be defeated.
 
 Software modularity is a well-established practice for developing large
 maintainable systems and avoiding duplication of effort. In robotics, software
-behaviors are inextricably linked to the hardware they control, resulting in challenges to making modularity effective. Strong
-ties to physical hardware also increase the need for software verification, to ensure
-that hardware is not damaged. Significant progress has been made on these fronts
+behaviors are inextricably linked to the hardware they control, resulting in challenges to making modularity effective. Significant progress has been made on these fronts
 in traditional robotics, most notably
 ROS \cite{Quigley2009} which provides inter-process communication and standard libraries for common robot tasks,
-as well as powerful verification tools \cite{huang2014rosrv}.
+as well as verification tools \cite{huang2014rosrv}.
   
-In modular robotics, the challenge is different.  Modular robot systems are not optimized
-for specific tasks, so in order for them to be useful, we must take full advantage of their flexibility. To do
+In modular robotics, the challenge is different.  Modular robot systems are not usually
+optimized
+for specific tasks, so in order to use them most effectively, we must take advantage of their flexibility. To do
 so, a user must be able to generate and verify configurations and behaviors
 as quickly as possible.  
 
@@ -149,14 +148,16 @@ for example combining four legs and a body to create a walking robot.
 Behaviors are associated with each configuration, so that when sub-configurations
 are composed, their associated behaviors are immediately available for composition
 as well.
-We introduce a new motion description language (Series-Parallel Action Graphs)
+We introduce a new motion description language (Series-Parallel Action Graphs,
+Section~\ref{sec:behavior-representation})
 that facilitates the rapid creation of complex behaviors by composition of simpler
 behaviors.
 We provide tools that automatically verify configurations and behaviors during the
-design process, allowing the user to identify problems early and iterate quickly.
-After verification, users can  evaluate their configurations and behaviors in a physical simulator.
+design process, allowing the user to identify problems early and iterate quickly
+\TODO{write more about verification}.
+After verification, users can  evaluate their configurations and behaviors in a physics-based simulator.
 The software we have developed is open-source, and will be made freely available
-online.
+online at \texttt{http://modlabupenn.org/compositional-design/}.
 
 The remainder of this paper provides a  description of the
 structure and algorithmic components of our framework.  In Section \ref{sec:related-work},
@@ -169,9 +170,11 @@ composition, and verification.  In Section
 \ref{sec:implementation}, we discuss the open-source software
 tools used to implement our framework. In Section \ref{sec:examples}, we provide examples highlighting
 important aspects of the framework, including a demonstration of the user's
-workflow.  We demonstrate that our framework saves the
-user time and effort, and allows him or her to easily develop complex and
-capable designs.
+workflow.
+% 
+% We demonstrate that our framework saves the
+% user time and effort, and allows him or her to easily develop complex and
+% capable designs.
 
 \section{Related Work} \label{sec:related-work} 
 In some respects, our work parallels the efforts of Mehta \cite{mehta2014design}
@@ -575,7 +578,7 @@ a visual example.
 \includegraphics[height=0.8in]{images/tikz/parallel.pdf} \vspace{0.in}
 \includegraphics[height=0.8in]{images/tikz/parallel-and-series.pdf}
 \end{center}
-\caption{Series and parallel composition }
+\caption{Series and parallel composition \TODO{make this reflect example}}
 \label{fig:graph-composition}
 \end{figure}
 
@@ -1209,6 +1212,7 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
 
 
 
