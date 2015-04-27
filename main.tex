@@ -105,8 +105,9 @@ Graphs) that facilitates the rapid creation of complex behaviors by composition
 of simpler behaviors. We provide tools that automatically verify configurations
 and behaviors during the design process, allowing the user to identify problems
 early and iterate quickly. After verification, users can  evaluate their
-configurations and behaviors in a physical simulator. The software we have
-developed is open-source, and will be made freely available online.}
+configurations and behaviors in a physics-based simulator.
+%The software we have developed is open-source, and will be made freely available online.
+}
 
 \section{Introduction} 
 
@@ -186,14 +187,13 @@ is designed and built once, and then programmed many times.  In the case of a
 modular robot system, the system can be reconfigured to meet new tasks, so
 hardware configuration and behavior programming go hand in hand.  We intend our
 system to be fast enough that the user could conceivably develop and program a
-new design for every new task - designs are built once, and programmed once.
+new configuration for every new task - configurations are built once, and programmed once.
 Where Mehta et al. provide many facilities to generate and verify low-level
 behaviors (\textit{e.g.} motor drivers appropriate for motors), we do so for
 high-level behaviors.
 
 A significant amount of work has been done in developing behaviors and software
-for modular robots. Much of this work focused on automatically generating
-designs and behaviors using artificial intelligence systems. Genetic algorithms
+for modular robots. Genetic algorithms
 have been applied for the automated generation of designs and behaviors
 \cite{hornby2003generative}. Other work has focused on distributed control
 \cite{walter2002choosing} and hormone-based control \cite{salemi2001hormone}.
@@ -214,12 +214,15 @@ robots.
 
 A number of robot simulators have been developed, including simulators specifically for modular robots \cite{christensen2008unified}. For our work, we opted to use Gazebo \cite{koenig2004design} because of its growing popularity in the robotics community. While our software currently only supports the SMORES robot \cite{Davey2012}, other modular robot designs can easily be incorporated given appropriate SDF files. Future work includes incorporating native support for the ckBot robot \cite{davey2012modlock}.
 
-Our framework assists users in verifying design validity by identifying self-
-collision and loss of gravitational stability. In existing literature, these
+Our framework assists users in verifying design validity by identifying conflicting
+commands, self-collision, loss of gravitational stability, and forces 
+exceeding the limits of safety for actuators and connectors. In existing literature, some
+of these
 conditions have been checked in the context of modular robot reconfiguration
 planning \cite{casal2001reconfiguration} and motion planning
 \cite{yoshida2002self}. To our knowledge, there is no modular robot design tool
 that verifies these conditions to provide assistance to a human designer.
+\TODO{Add reference to central pattern generators}.
 
 \section{Definitions}
 \label{sec:preliminaries}
@@ -231,7 +234,7 @@ $\mathcal{M}=({^\mathcal{W}}D^{\mathcal{M}}, X, A,K)$.
 The rigid body \textit{displacement}, ${^\mathcal{W}}D^{\mathcal{M}}\in SE(3)$ 
 gives the position and orientation of the module body frame in the world  frame $\mathcal{W}$.
 The \textit{state} of the module, \(X=\lbrack x_1, x_2, \ldots, x_d \rbrack\),
- is a \(d\)-dimensional vector representing the \(d\) degrees of freedom (DoF) of the module.
+ is a \(d\)-dimensional vector representing the \(d\) joint angles of the module.
 $A=\{a_1, a_2, ..., a_k\}$ is the set of \textit{attachment points} where the 
 module can connect to other modules.
 The  module's \textit{forward kinematics function}, \(K: (X, a_i) \rightarrow SE(3) \) 
@@ -311,7 +314,7 @@ A \textit{configuration} is a contiguous set of connected modules which we treat
 single robot.  The identity of a configuration is determined by its connective structure; configurations
 can be represented by graphs with nodes representing modules and edges
 representing connections between modules.   Individual modules
-are considered interchangeable (as long as they are of the same kind).
+are considered interchangeable (as long as they are of the same type).
 
 In this paper, we present an object-oriented design framework for modular robot
 systems, and treat configurations as the fundamental objects. Rather than defining
@@ -329,8 +332,8 @@ $\gamma: C \rightarrow 2^M$ is a function {mapping} a configuration \( \mathcal{
 $E$ is a set of connections between modules. Elements of \(E\) are pairs of
 attachment points, $(\mathcal{M}_i.a_i, \mathcal{M}_j.a_j)\in E,$ where $\mathcal{M}_{i},\mathcal{M}_j \in M, \mathcal{M}_i \neq \mathcal{M}_j$, and $a_i\in \mathcal{M}_i.A$, $a_j\in \mathcal{M}_j.A$.
 %
-The orientation of one attachment point relative another is represented by the
-labeling function $\delta: E \rightarrow SO(3)$, returning.
+The orientation of one attachment point relative to another is represented by the
+labeling function $\delta: E \rightarrow SO(3)$, returning \({^{\mathcal{M}_i.a_i}}R^{\mathcal{M}_j.a_j}\).
 %
 The \textit{state} of the configuration is \(X = \bigcup_{\mathcal{M}_i \in M} \mathcal{M}_i.X \).
 %
@@ -407,13 +410,13 @@ A \textit{behavior} is a programmed sequence of movements for a specific configu
 intended to produce a desired effect.  A gait for walking is one example.  In
 this paper, we consider open-loop kinematic behaviors represented as
 series-parallel action graphs, described in detail in section
-\ref{sec:behavior-representation}.
+\ref{sec:behavior-representation}. \TODO{try to make this more formal.}
 \end{definition}
 \begin{definition}[Controller]
 A \textit{controller} is a position or velocity servo for one DoF of a modular
 robot.  A controller takes as input a desired position or angular velocity, and
 drives the error between the desired and actual state of the DoF it controls to
-zero over time.
+zero over time. \TODO{Determine whether we need this.}
 \end{definition}
 
 % \begin{definition}[Behavior Conflict]
@@ -1206,6 +1209,7 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
 
 
 
