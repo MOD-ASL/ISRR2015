@@ -449,21 +449,21 @@ composition, and verification of configurations and behaviors.  Together,
 these three components provide a streamlined workflow to quickly create
 functional robots by leveraging an existing library of designs and behaviors.
 Combining existing designs and behaviors into new ones allows users to create
-large, complicated, and highly functional designs.
+large, complicated, functional designs.
 
 \subsection{Configuration Composition} \label{sec:conf_composition}
 
-Before discussing about configuration composition, we will first define a set of connections $E_C$ between configurations in a given set $C$ as $(\mathcal{C}_i.\mathcal{M}_i.a_i, \mathcal{C}_j.\mathcal{M}_j.a_j) \in E_C$, where $\mathcal{C}_{i},\mathcal{C}_j\in C$, $\mathcal{M}_i \in \gamma(\mathcal{C}_i), \mathcal{M}_j \in \gamma(\mathcal{C}_j)$, and $a_i\in \mathcal{M}_i.A$, $a_j\in \mathcal{M}_j.A$. Similar to the assumption about connections in a configuration, we assume that we form an
+Before discussing configuration composition, we will first define a set of connections $E_C$ between configurations in a given set $C$ as $(\mathcal{C}_i.\mathcal{M}_i.a_i, \mathcal{C}_j.\mathcal{M}_j.a_j) \in E_C$, where $\mathcal{C}_{i},\mathcal{C}_j\in C$, $\mathcal{M}_i \in \gamma(\mathcal{C}_i), \mathcal{M}_j \in \gamma(\mathcal{C}_j)$, and $a_i\in \mathcal{M}_i.A$, $a_j\in \mathcal{M}_j.A$. We assume that we form an
 acyclic graph with configurations in $C$ as nodes and connections in $E_C$ as edges.
-\begin{definition}[Configuration Composition]
-Given a set of configurations $C$ and a set $E_C$ of connections between them,
-configuration composition combines all configurations in $C$ to a single
-configuration $\mathcal{C}^*$ that includes all modules and connections from $C$
-and $E_C$. we define the composed configuration to be $\mathcal{C}^*=(C^*, \gamma, M, E, \delta,
-X, B)$, where \(C^*\), \(M\), \(E\), and \(B\) are defined as the unions of the
-corresponding sets of the sub-configurations in \(C\). The definitions of $\gamma$, \(X\), and $\delta$ remain
-unchanged from Definition~\ref{def:configuration}. 
-\end{definition}
+%\begin{definition}[Configuration Composition]
+%Given a set of configurations $C$ and a set $E_C$ of connections between them,
+%configuration composition combines all configurations in $C$ to a single
+%configuration $\mathcal{C}^*$ that includes all modules and connections from $C$
+%and $E_C$. we define the composed configuration to be $\mathcal{C}^*=(C^*, \gamma, M, E, \delta,
+%X, B)$, where \(C^*\), \(M\), \(E\), and \(B\) are defined as the unions of the
+%corresponding sets of the sub-configurations in \(C\). The definitions of $\gamma$, \(X\), and $\delta$ remain
+%unchanged from Definition~\ref{def:configuration}. 
+%\end{definition}
 
 \subsection{Behavior Composition: Series-Parallel Action Graphs}
 \label{sec:behavior-representation}
