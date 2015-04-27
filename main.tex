@@ -1034,22 +1034,39 @@ order-1 `Chain3'' configuration. We can form a ``CROSS'' configuration. With two
 \end{center}
 \end{figure}
 
+% \begin{figure}
+% \begin{center}
+%         \begin{subfigure}[b]{0.3\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/tikz/walkbot.pdf}
+%                 \caption{Two identical configurations form a body}
+%                 \label{fig:walkbot1}
+%         \end{subfigure}
+%         ~
+%         \begin{subfigure}[b]{0.65\columnwidth}
+%                 \includegraphics[width=\textwidth]{images/tikz/walkbot2.pdf}
+%                 \caption{The body and other configurations form a Centaur}
+%                 \label{fig:walkbot2}
+%         \end{subfigure}
+% \end{center}
+% \caption{Building a Centaur with a set of configurations}
+% \label{fig:walkbot}
+% \end{figure}
+
 \begin{figure}
-\begin{center}
-        \begin{subfigure}[b]{0.3\columnwidth}
-                \includegraphics[width=\textwidth]{images/tikz/walkbot.pdf}
-                \caption{Two identical configurations form a body}
-                \label{fig:walkbot1}
-        \end{subfigure}
-        ~
-        \begin{subfigure}[b]{0.65\columnwidth}
-                \includegraphics[width=\textwidth]{images/tikz/walkbot2.pdf}
-                \caption{The body and other configurations form a Centaur}
-                \label{fig:walkbot2}
-        \end{subfigure}
-\end{center}
-\caption{Building a Centaur with a set of configurations}
-\label{fig:walkbot}
+  \begin{center}
+    %1 
+    \begin{overpic}[height=1in]{images/tikz/walkbot.pdf}
+      \put(4,6) {(1)}
+    \end{overpic}
+    \hspace{1cm}
+    %2 
+    \begin{overpic}[height=1in]{images/tikz/walkbot2.pdf}
+      \put(4,6) {(2)}
+    \end{overpic}
+    \caption{Building the Centaur. (1) Two Graspers are composed to form a Walkbot.
+    (2) The Walkbot is composed with one more Grasper and two individual modules
+    to form the Centaur.}
+  \end{center}
 \end{figure}
 
 %\subsection{Scale-up through composition}
@@ -1212,6 +1229,7 @@ Currently, each behavior is associated with exactly one configuration. In many c
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
 
 
 
