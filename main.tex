@@ -690,9 +690,9 @@ will be a priority.
 
 %\subsubsection{Verification of Configurations \TODO{Consider removing these subsection headings to save space}}\label{sec:verify_conf}
 {\bf Verification of Configurations: }
-In Section~\ref{sec:conf_composition}, we introduced the definition of configuration composition. During the design process, a user might attempt to compose configurations in a way that is unsafe or physically impossible. We provide facilities to automatically verify designs during construction, saving time that would otherwise be spent simulating or testing invalid designs.
+In Section~\ref{sec:conf_composition}, we introduced the definition of configuration composition. During the design process, a user might attempt to compose configurations in a way that is unstable or physically impossible. We provide tools to automatically verify designs during construction, saving time that would otherwise be spent simulating or testing invalid designs.
 
-Given a configuration $\mathcal{C}$ and state \(X_0\), we consider to be  $\mathcal{C}$ valid in state \(X_0\) if it is gravitationally stable and free from self
+Given a configuration $\mathcal{C}$ and state \(X_0\), we consider $\mathcal{C}$ to be valid in state \(X_0\) if it is gravitationally stable and free from self
 collision between modules.  A robot is gravitationally
 stable when it is balanced, and gravity does not create any net moment on it.
 If this condition is not met, the robot could tip over and suffer damage.
@@ -701,7 +701,7 @@ If this condition is not met, the robot could tip over and suffer damage.
 %of its center of mass onto the group plane lies within the convex hull of its
 %load-supporting contact points in the ground plane.
 A \textit{self-collision}
-occurs when two different parts of configuration are commanded to occupy the
+occurs when two different parts of the configuration are commanded to occupy the
 same location in space.  Self-collisions can also cause damage, and are almost
 always unwanted.
 
@@ -734,21 +734,22 @@ always unwanted.
 % %Notice that in order to verify the validity of the configuration, one needs to know some properties of all modules for the given modular robot system, e.g. the geometry information, and the mass of each module.
 % \end{definition}
 
-We will now describe the methods used to identify gravitational instability and
-self-collision. We assume that geometric, kinematic, and mass
+To determine gravitational instability and
+self-collision, we assume that the geometric, kinematic, and mass
 information for each module are available. 
 %
 To check for self-collision, the positions and orientation of all modules are
-obtained  through forward kinematics.
+obtained  through forward kinematics as in Definition~\ref{def:configuration}.
 %Using the known module geometry, we  check
 %whether any two modules occupy the same space. If so, there exists a self-
 %collision in the configuration.
-Our implementation checks self-collision by
+Our tool checks self-collision by
 approximating modules as spheres, and checking the distance (radius) between all
 pairs. More sophisticated techniques are available which efficiently produce
-exact results \cite{pan2012fcl}.
+exact results \cite{pan2012fcl}, at the cost of higher complexity.
 %
-Gravitational stability is checked by computing the location of the center of
+To offer instant feedback to user when designing the configurations, we
+ check gravitational stability by computing the location of the center of
 mass of the configuration based on the known kinematics and mass properties of 
 the modules.
 % For the given configuration $\mathcal{C}$
@@ -772,10 +773,11 @@ is considered statically stable in state \(X_0\).
 %\subsubsection{Verification of Behaviors}
 \noindent{\bf Verification of Behaviors: }
 In Section~\ref{sec:behavior-representation}, we introduced a novel motion description language for modular robots. Like
-configurations, behaviors are automatically verified as the user builds them.
+configurations, behaviors are automatically verified as the user composes them.
   In addition to being free from self-collision and gravitationally stable during
 execution, a valid behavior also must not exceed the actuator or connector force
 limits of the modules, and must be free from \textit{behavior conflict}.
+Since in this work, we do not consider command to disconnect modules, any disconnection detected during behavior execution is undesired.
 Since our motion description language allows behaviors to be composed in parallel,
 it is possible to compose two behaviors that simultaneously command one controller
 to hold more than one desired position; we refer to this as \textit{behavior
@@ -800,28 +802,28 @@ conflict}.
 % \end{itemize}
 % \end{definition}
 % State is the right term, so I deleted the TODO.
-To verify a behavior with time duration  $T_B$, we discretize execution with sampling time $t_B$. At each time step, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on the commands. We then check for self-collision and gravitational instability, using the methods described in section~\ref{sec:verify}.  
+To verify a behavior with time duration  $T_B$, we discretize execution with a preset sampling time $t_B$. At each time step, we first detect behavior conflict by checking if different commands are given to the same joint of a module simultaneously. If there is no behavior conflict, we update the positions and orientations of all modules in the configuration based on the commands. We then check for self-collision and gravitational instability, using the methods described above.  
 A behavior that results in self-collision during a single time step is considered
 invalid. For gravitational stability, we specify a time bound
 \(t_{max} > t_B\). A behavior is considered unstable if it
 includes any period of instability longer than \(t_{max}\), or if the behavior is unstable at time \(T_B\) (at the end).
 
+To check force limit, unlike other verifications for behaviors, we use an existing physics engine to detect unsafe conditions during simulation. By setting the maximum force allowed for the connection between modules and for controlling each joint in the module, we are able to identify unsafe behaviors if we detect, during the behavior execution, any undesired module disconnection or any joint's mismatch between its target position and steady state position.
 
-For checking force limit, we create the model for a module and specify its joint and connection mechanisms in PhysX \cite{PhysX} physics engine with a graphical designing tool called Unity3D \cite{Unity}. By setting the maximum force allowed for the connection between modules and for controlling each joint in the module, we are able to identify a unsafe behavior if we detect, during the behavior execution, any undesired module disconnection or any joint's mismatch between its target position and steady state position
-\TODO{Since this is not the implementation section, it might be better to describe
-the joint and actuator limit checks without mentioning specific physics engines.
- The specific engines can be included in the implementation section.}.
+%\TODO{Since this is not the implementation section, it might be better to describe
+%the joint and actuator limit checks without mentioning specific physics engines.
+% The specific engines can be included in the implementation section.}
 
 %\TODO{I have copied this text here from the verification examples section. 
 %I think putting it here makes sense, because it helps motivate why we are doing
 %behavior verification.  It will also save space, since there is one less section
 %heading.  If possible, try to cut down the text as well to save space.}
-The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:verification}-1. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:verification}-2, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
+The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example shown in Figure~\ref{fig:verification}-1. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:verification}-1. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:verification}-2, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
 
-Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between some modules in this behavior, as shown in Figure~\ref{fig:verification}-3. The photo shown in Figure~\ref{fig:verification}-4 demonstrates the moment of collision during simulation.
+Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between modules in this behavior, as shown in Figure~\ref{fig:verification}-3. The image shown in Figure~\ref{fig:verification}-4 demonstrates the moment of collision during simulation.
 
-Despite the design of the modular robot system, modules all have limits on maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from module's hardware to execute a behavior while maintaining all modules connections. 
-As shown in Figure~\ref{fig:verification}-5, the program detected an undesired disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:verification}-6 demonstrates the disconnection in simulation.
+Modules all have limits on the maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from the module's hardware to execute a behavior while maintaining all module connections. 
+As shown in Figure~\ref{fig:verification}-5, the program detected a disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:verification}-6 demonstrates the disconnection in simulation.
  
 %\begin{figure}
 %\begin{center}
@@ -876,7 +878,7 @@ As shown in Figure~\ref{fig:verification}-5, the program detected an undesired d
 
 \begin{figure}
 %1 
-\begin{overpic}[width=0.5\textwidth]{images/gazebo_unstable.png}
+\begin{overpic}[width=0.5\textwidth]{images/designer_unstable.png}
   \put(4,6) {(1)}
 \end{overpic}
 %2 
@@ -899,8 +901,8 @@ As shown in Figure~\ref{fig:verification}-5, the program detected an undesired d
 \begin{overpic}[width=0.5\textwidth]{images/library/unity/breakJoint2.png}
   \put(4,6) {(6)}
 \end{overpic}
-\caption{From top and left: (1) The program warns the composed configuration is not gravitationally stable; (2) The robot fell to ground plane due to instability in simulation; (3)
-The program indicates there is collision during the behavior execution; (4) Two feet of  the robot collided during simulation; (5) The program indicates there is undesired disconnection; (6) The configuration disconnected during simulation.}
+\caption{From top and left: (1) The design tool warns the composed configuration is not gravitationally stable; (2) The robot fell to ground plane due to instability, in simulation; (3)
+The design tool indicates there is collision during the behavior execution; (4) Two feet of  the robot collided during simulation; (5) The design tool indicates there is undesired disconnection; (6) The configuration disconnected during simulation.}
 \label{fig:verification}
 \end{figure}
 
@@ -937,7 +939,7 @@ Given a set of basic configurations (which could be just single modules), the co
 \cite{koenig2004design}.
 
 %\subsection{Behavior Builder}
-Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:smores_conf} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions in the configuration during the execution of composed behaviors without simulations in a physical engine.
+Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging a set of basic behaviors in parallel or in series. Figure~\ref{fig:smores_conf} illustrates a new behavior is composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder will also warn users if there are self-collisions or behavior conflict in the configuration during the execution of composed behaviors without simulations in a physical engine. To check force limit for connection and actuators, we create the module model and specify its joint and connection in the PhysX \cite{PhysX} physics engine with Unity3D \cite{Unity}, a graphical designing tool. 
 
 \begin{figure}
 \begin{center}
