@@ -144,18 +144,23 @@ of new configurations
 and behaviors through composition, and tools to verify configurations and behaviors
 while they are being created. New configurations are created by combining existing
 sub-configurations,
-for example combining four legs and a body to create a walking robot.
+for example combining a four-legged walking robot with a two-fingered gripper
+to form a mobile manipulator, like the ``Centaur'' configuration shown in Figure~\ref{fig:walk}
+.
 Behaviors are associated with each configuration, so that when sub-configurations
-are composed, their associated behaviors are immediately available for composition
-as well.
-We introduce a new motion description language (Series-Parallel Action Graphs,
+are composed, their associated behaviors are immediately available for use.
+The Centaur in Figure~\ref{fig:walk}, for example, can immediately execute the
+walking behavior of its component four-legged base. We introduce a new motion description language (Series-Parallel Action Graphs,
 Section~\ref{sec:behavior-representation})
 that facilitates the rapid creation of complex behaviors by composition of simpler
-behaviors.
+behaviors (for example, composing  ``Grasp'' and ``Walk'' behaviors to make
+the Centaur pick up and carry an object).
 We provide tools that automatically verify configurations and behaviors during the
-design process, allowing the user to identify problems early and iterate quickly
-\TODO{write more about verification}.
-After verification, users can  evaluate their configurations and behaviors in a physics-based simulator.
+design process, 
+identifying conflicting
+commands, self-collision, loss of gravitational stability, and forces 
+exceeding the limits of safety for actuators and connectors. This allows users
+to identify problems early and iterate quickly on complex new designs. In addition to verification, users can  evaluate their configurations and behaviors in a physics-based simulator.
 The software we have developed is open-source, and will be made freely available
 online at \texttt{http://modlabupenn.org/compositional-design/}.
 
@@ -183,7 +188,9 @@ workflow.
                 \includegraphics[width=0.23\textwidth]{images/library/unity/step3.png}
                 \includegraphics[width=0.23\textwidth]{images/library/unity/step4.png}
 \end{center}
-\caption{A four-step walking behavior\TODO{talk about this more} }
+\caption{The Centaur is a  mobile manipulator made of 29 modules. The framework
+we present provides tools that help users quickly create, program, and verify complex designs
+like the Centaur by composing existing designs and behaviors from a library.  }
 \label{fig:walk}
 \end{figure}
 
@@ -210,7 +217,8 @@ A significant amount of work has been done in developing behaviors and software
 for modular robots. Genetic algorithms
 have been applied for the automated generation of designs and behaviors
 \cite{hornby2003generative}. Other work has focused on distributed control
-\cite{walter2002choosing} and hormone-based control \cite{salemi2001hormone}.
+\cite{walter2002choosing}, hormone-based control \cite{salemi2001hormone}, and
+central pattern generators \cite{sproewitz2008learning}.
 
 Efforts have also been made to generate behaviors by automatically identifying the ``role'' a module should play based on its place in a connected structure \cite{stoy2002using}.  Functionality is propagated downward: based on a high-level goal (like ``walk'') and a connected structure of modules, functional sub-structures (like legs and a spine) are automatically identified, and modules are directed to execute appropriate roles in a distributed fashion.  In our work, modular structures are similarly associated with appropriate behaviors. Rather than identifying roles in a top-down fashion, we build designs with the desired functionality from the bottom up. The use creates new designs by composing sub-components and associated behaviors from a library, building a new structure that can definitely execute the desired behavior.
 
@@ -236,7 +244,6 @@ conditions have been checked in the context of modular robot reconfiguration
 planning \cite{casal2001reconfiguration} and motion planning
 \cite{yoshida2002self}. To our knowledge, there is no modular robot design tool
 that verifies these conditions to provide assistance to a human designer.
-\TODO{Add reference to central pattern generators}.
 
 \section{Definitions}
 \label{sec:preliminaries}
@@ -420,17 +427,18 @@ composing displacements in the manner above.
 
 
 \begin{definition}[Behavior]\label{def:behavior}
-A \textit{behavior} is a programmed sequence of movements for a specific configuration
-intended to produce a desired effect.  A gait for walking is one example.  In
-this paper, we consider open-loop kinematic behaviors represented as
+A \textit{behavior} \(B:(t,X)\to X_{set}\) is a programmed sequence of movements for a specific configuration
+intended to produce a desired effect - a gait for walking is one example.  Behaviors
+determine the controller setpoints \(X_{set}\) for a configuration as a function
+of state \(X\) and time \(t\). In this paper, we represent behaviors as
 series-parallel action graphs, described in detail in section
-\ref{sec:behavior-representation}. \TODO{try to make this more formal.}
+\ref{sec:behavior-representation}.
 \end{definition}
 \begin{definition}[Controller]
 A \textit{controller} is a position or velocity servo for one DoF of a modular
 robot.  A controller takes as input a desired position or angular velocity, and
 drives the error between the desired and actual state of the DoF it controls to
-zero over time. \TODO{Determine whether we need this.}
+zero over time.
 \end{definition}
 
 % \begin{definition}[Behavior Conflict]
@@ -495,7 +503,7 @@ to specifying  the non-cyclic, globally coordinated behaviors required for many 
 (like picking up and moving an object with an arm).
   
 The simplicity and clarity of gait tables makes them appealing for our
-application.  However, gait tables are difficult to re-use, and also hard to
+application.  However, gait tables are often difficult to compose or re-use, and also hard to
 scale to very complicated designs. The  motion description language we present
 allows low-level behaviors to be combined in series and parallel to create new
 higher-level behaviors, encapsulating complexity and facilitating code re-use.
@@ -585,11 +593,11 @@ a visual example.
 
 \begin{figure}
 \begin{center}
-\includegraphics[height=0.8in]{images/tikz/series.pdf}
-\includegraphics[height=0.8in]{images/tikz/parallel.pdf} \vspace{0.in}
-\includegraphics[height=0.8in]{images/tikz/parallel-and-series.pdf}
+\includegraphics[height=0.9in]{images/tikz/series.pdf}
+\includegraphics[height=0.95in]{images/tikz/parallel.pdf} \vspace{0.in}
+\includegraphics[height=0.95in]{images/tikz/parallel-and-series.pdf}
 \end{center}
-\caption{Series and parallel composition \TODO{make this reflect example}}
+\caption{Series and parallel composition}
 \label{fig:graph-composition}
 \end{figure}
 
@@ -629,10 +637,18 @@ turn, \ldots) \).
 % because the low-level behaviors can be re-used to quickly create many different
 % high-level behaviors.
 
-\TODO{talk about verification here}
+Building behaviors in this layered fashion makes it easy to re-use code and
+quickly generate complicated behaviors. Of course, there is no guarantee that
+two composed behaviors will be compatible; it is possible to mistakenly create
+behaviors that are impossible or dangerous to execute. For this reason, we provide
+verification tools that automatically identify problems - for example, if we
+accidentally commanded the backhoe arm to collide with the drivetrain, this
+would be automatically identified. Our verification tools are explained in detail
+in Section~\ref{sec:verify}.
 
 Our emphasis on abstraction begs the question: why not use  a a more fully-featured
-plan execution model such as behavior trees \cite{marzinotto2014towards}, or even a
+plan execution model such as behavior trees \cite{marzinotto2014towards}, parallel-hierarchical
+finite state machines \cite{sklyarov2008design} or even a
 traditional object-oriented programming language (like Java or C++)?  Our
 decision was driven by the tradeoff between complexity and ease-of-use: given
 our desire for a simplicity and speed of programming, we chose to use an
@@ -642,8 +658,6 @@ for large designs (see Section \ref{sec:examples}). In the future, we hope to ex
 its capabilities without sacrificing ease-of-use.  In particular, facilities
 for high-level decision making based on sensed information about the environment
 will be a priority.
-\TODO{Talk about PHFSM here.}
-
 
 % \begin{figure}
 % \begin{center}
@@ -923,8 +937,8 @@ The design tool indicates there is collision during the behavior execution; (4) 
 \section{Implementation }
 \label{sec:implementation}
 Our implementation currently supports only the SMORES modular robot \cite{Davey2012},  but
-could easily  incorporate any other modular robot for which an SDF description is available
-\TODO{is this true? And should we cite SDF?}. Each SMORES modules has four DoF
+could easily  incorporate any other modular robot for which kinematic, geometric,
+and mass information is available. Each SMORES modules has four DoF
 - three continuously rotating faces called {\em turntables} and one
 central hinge with a 180\textdegree\ range of motion (Figure~\ref{fig:graphical-representations}-1). The
 DoF marked 1, 2, and 4 have rotational axes that are parallel and coincident.
@@ -954,8 +968,8 @@ Given a composed configuration, the behavior builder aids users in designing beh
 
 \begin{figure}
 \begin{center}
-    \includegraphics[height=1.1in]{images/library/unity/config_designer.png}
-    \includegraphics[height=1.1in]{images/gait_window.png}
+    \includegraphics[height=1.3in]{images/library/unity/config_designer.png}
+    \includegraphics[height=1.3in]{images/gait_window.png}
     \caption{GUIs for configuration builder (left) and behavior builder (right)}
     \label{fig:smores_conf}
 \end{center}
@@ -1193,7 +1207,6 @@ creating it with individual modules.
 % hardware tests or hardware debugging. However, we think we can safely say that
 % our framework is an improvement over past design practices.
 \section{Conclusions}
-\TODO{Add a couple sentences about results in this section}
 In this paper, we presented a design framework that facilitates the rapid creation
 of configurations and behaviors for modular robots.
 Complex configurations  are hierarchically constructed from basic
@@ -1213,11 +1226,17 @@ behaviors for the SMORES robot.  We will also investigate metrics to evaluate th
 Perhaps most importantly, we will test and evaluate the designs and behaviors with actual hardware modules.
 Currently, each behavior is associated with exactly one configuration. In many cases, a given behavior could be executed by several different configurations (if it were correctly mapped onto a subset of their modules). In the future, we will apply an embedding detection algorithm (see \cite{mantzouratos2014embeddability}) to map behaviors into any configuration capable of executing them.
 
+Finally, while our implementation currently supports only SMORES, other modular
+robots
+could be easily incorporated. In the future, we plan to incorporate support
+for the CKbot robot \cite{davey2012modlock} into our software. 
+
 %\input{referenc}
 %\bibliographystyle{plainnat}
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
 
 
 
