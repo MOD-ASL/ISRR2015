@@ -651,8 +651,9 @@ Building behaviors in this layered fashion makes it easy to re-use code and
 quickly generate complicated behaviors. Of course, there is no guarantee that
 two composed behaviors will be compatible; it is possible to mistakenly create
 behaviors that are impossible or dangerous to execute. For this reason, we provide
-verification tools that automatically identify problems - for example, if we
-accidentally commanded the backhoe arm to collide with the drivetrain, this
+verification tools that automatically identify problems - for example, if two
+behaviors composed in parallel commanded the same DoF simultaneously (a problem
+we call \textit{behavior conflict}),  this
 would be automatically identified. Our verification tools are explained in detail
 in Section~\ref{sec:verify}.
 
@@ -783,7 +784,7 @@ approximating modules as spheres, and checking the distance (radius) between all
 pairs. More sophisticated techniques are available which efficiently produce
 exact results \cite{pan2012fcl}, at the cost of higher complexity.
 %
-To offer instant feedback to user when designing the configurations, we
+To offer instant feedback to the user when designing the configurations, we
  check gravitational stability by computing the location of the center of
 mass of the configuration based on the known kinematics and mass properties of 
 the modules.
@@ -803,7 +804,7 @@ set of ground contact points.
 If the projection of the configuration center of mass onto the ground plane
 lies within the convex hull of the ground contact points, gravity exerts no
 moment and the configuration
-is considered statically stable in state \(X_0\).
+is stable.
 
 %\subsubsection{Verification of Behaviors}
 \noindent{\bf Verification of Behaviors: }
@@ -811,12 +812,13 @@ In Section~\ref{sec:behavior-representation}, we introduced a novel motion descr
 configurations, behaviors are automatically verified as the user composes them.
   In addition to being free from self-collision and gravitationally stable during
 execution, a valid behavior also must not exceed the actuator or connector force
-limits of the modules, and must be free from \textit{behavior conflict}.
-Since in this work, we do not consider command to disconnect modules, any disconnection detected during behavior execution is undesired.
-Since our motion description language allows behaviors to be composed in parallel,
-it is possible to compose two behaviors that simultaneously command one controller
-to hold more than one desired position; we refer to this as \textit{behavior
-conflict}.
+limits of the modules, and must be free from behavior conflict.
+% 
+% Since in this work, we do not consider command to disconnect modules, any disconnection detected during behavior execution is undesired.
+% Since our motion description language allows behaviors to be composed in parallel,
+% it is possible to compose two behaviors that simultaneously command one controller
+% to hold more than one desired position; we refer to this as \textit{behavior
+% conflict}.
 
   % Actions defined by the language can be combined to produce more complex behaviors. Similar to configuration composition, we want to make sure the composed behaviors are valid and safe to execute. For example, a behavior that results in two modules colliding during the execution should be considered unsafe.
 % 
