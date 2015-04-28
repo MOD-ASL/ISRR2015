@@ -26,7 +26,7 @@
 \usepackage[bottom]{footmisc}% places footnotes at page bottom
 \usepackage{titlesec}
 
-\titlespacing\section{0pt}{22pt plus 2pt minus 2pt}{22pt plus 2pt minus 2pt}
+\titlespacing\section{0pt}{20pt plus 2pt minus 2pt}{20pt plus 2pt minus 2pt}
 % see the list of further useful packages
 % in the Reference Guide
 
@@ -94,7 +94,7 @@ Tarik Tosun \at University of Pennsylvania, Philadelphia PA, \email{tarikt@grasp
 \maketitle
 
 \abstract{To take full advantage of the flexibility of a modular robot system,
-users must be able to create new configurations and behaviors quickly. We
+users must be able to create and verify new configurations and behaviors quickly. We
 present a design framework  that facilitates  rapid creation of new
 configurations and behaviors through composition of existing ones, and tools to
 verify configurations and behaviors as they are being created. New
@@ -106,7 +106,7 @@ as well. We introduce a new motion description language (Series-Parallel Action
 Graphs) that facilitates the rapid creation of complex behaviors by composition
 of simpler behaviors. We provide tools that automatically verify configurations
 and behaviors during the design process, allowing the user to identify problems
-early and iterate quickly. After verification, users can  evaluate their
+early and iterate quickly. In addition to verification, users can  evaluate their
 configurations and behaviors in a physics-based simulator.
 %The software we have developed is open-source, and will be made freely available online.
 }
@@ -134,7 +134,6 @@ behaviors are inextricably linked to the hardware they control, resulting in cha
 in traditional robotics, most notably
 ROS \cite{Quigley2009} which provides inter-process communication and standard libraries for common robot tasks,
 as well as verification tools \cite{huang2014rosrv}.
-  
 In modular robotics, the challenge is different.  Modular robot systems are not usually
 optimized
 for specific tasks, so in order to use them most effectively, we must take advantage of their flexibility. To do
@@ -143,7 +142,7 @@ as quickly as possible.
 
 Toward that end, we present a design framework that facilitates the rapid creation
 of new configurations
-and behaviors through composition, and tools to verify configurations and behaviors
+and behaviors through composition, and tools to verify them
 while they are being created. New configurations are created by combining existing
 sub-configurations,
 for example combining a four-legged walking robot with a two-fingered gripper
@@ -164,7 +163,7 @@ commands, self-collision, loss of gravitational stability, and forces
 exceeding the limits of safety for actuators and connectors. This allows users
 to identify problems early and iterate quickly on complex new designs. In addition to verification, users can  evaluate their configurations and behaviors in a physics-based simulator.
 The software we have developed is open-source, and will be made freely available
-online at \texttt{http://modlabupenn.org/compositional-design/}.
+online at: \texttt{http://modlabupenn.org/compositional-design/}.
 
 The remainder of this paper provides a  description of the
 structure and algorithmic components of our framework.  In Section \ref{sec:related-work},
@@ -231,7 +230,7 @@ have been applied for the automated generation of designs and behaviors
 \cite{walter2002choosing}, hormone-based control \cite{salemi2001hormone}, and
 central pattern generators \cite{sproewitz2008learning}.
 
-Efforts have also been made to generate behaviors by automatically identifying the ``role'' a module should play based on its place in a connected structure \cite{stoy2002using}.  Functionality is propagated downward: based on a high-level goal (like ``walk'') and a connected structure of modules, functional sub-structures (like legs and a spine) are automatically identified, and modules are directed to execute appropriate roles in a distributed fashion.  In our work, modular structures are similarly associated with appropriate behaviors. Rather than identifying roles in a top-down fashion, we build designs with the desired functionality from the bottom up. The use creates new designs by composing sub-components and associated behaviors from a library, building a new structure that can definitely execute the desired behavior.
+Efforts have also been made to generate behaviors by automatically identifying the ``role'' a module should play based on its place in a connected structure \cite{stoy2002using}.  Functionality is propagated downward: based on a high-level goal (like ``walk'') and a connected structure of modules, functional sub-structures (like legs and a spine) are automatically identified, and modules are directed to execute appropriate roles in a distributed fashion.  In our work, modular structures are similarly associated with appropriate behaviors. Rather than identifying roles in a top-down fashion, we build designs with the desired functionality from the bottom up. The user creates new designs by composing sub-components and associated behaviors from a library, building a new structure that can definitely execute the desired behavior.
 
 While significant progress has been made in the automated generation of modular
 robot behaviors, automated systems are not yet capable of making modular robots
@@ -245,7 +244,7 @@ robots \cite{zhang2003phase}. In this paper, we introduce a novel motion
 description language that enables users to quickly create behaviors for modular
 robots.
 
-A number of robot simulators have been developed, including simulators specifically for modular robots \cite{christensen2008unified}. For our work, we opted to use Gazebo \cite{koenig2004design} because of its growing popularity in the robotics community. While our software currently only supports the SMORES robot \cite{Davey2012}, other modular robot designs can easily be incorporated given appropriate SDF files. Future work includes incorporating native support for the ckBot robot \cite{davey2012modlock}.
+A number of robot simulators have been developed, including simulators specifically for modular robots \cite{christensen2008unified}. For our work, we opted to use Gazebo \cite{koenig2004design} because of its growing popularity in the robotics community. While our software currently only supports the SMORES robot \cite{Davey2012}, other modular robot designs can easily be incorporated. Future work includes incorporating  support for the CKBot robot \cite{davey2012modlock}.
 
 Our framework assists users in verifying design validity by identifying conflicting
 commands, self-collision, loss of gravitational stability, and forces 
@@ -318,7 +317,7 @@ Figure~\ref{fig:graphical-representations} shows a schematic representation of a
 % \end{figure}
 \begin{figure}
 %1 
-\begin{overpic}[height=01.0in]{images/smores_robot.png}
+\begin{overpic}[height=1.0in]{images/smores_robot.png}
   \put(3,30) {(1)}
 \end{overpic}
 %2 
@@ -489,8 +488,8 @@ large, complicated, functional designs.
 
 \subsection{Configuration Composition} \label{sec:conf_composition}
 
-Before discussing configuration composition, we will first define a set of connections $E_C$ between configurations in a given set $C$ as $(\mathcal{C}_i.\mathcal{M}_i.a_i, \mathcal{C}_j.\mathcal{M}_j.a_j) \in E_C$, where $\mathcal{C}_{i},\mathcal{C}_j\in C$, $\mathcal{M}_i \in \gamma(\mathcal{C}_i), \mathcal{M}_j \in \gamma(\mathcal{C}_j)$, and $a_i\in \mathcal{M}_i.A$, $a_j\in \mathcal{M}_j.A$. We assume that we form an
-acyclic graph with configurations in $C$ as nodes and connections in $E_C$ as edges.
+Before discussing configuration composition, we will first define a set of connections $E_C$ between configurations in a given set $C$ as $(\mathcal{C}_i.\mathcal{M}_i.a_i, \mathcal{C}_j.\mathcal{M}_j.a_j) \in E_C$, where $\mathcal{C}_{i},\mathcal{C}_j\in C$, $\mathcal{M}_i \in \gamma(\mathcal{C}_i), \mathcal{M}_j \in \gamma(\mathcal{C}_j)$, and $a_i\in \mathcal{M}_i.A$, $a_j\in \mathcal{M}_j.A$. We form a
+ graph with configurations in $C$ as nodes and connections in $E_C$ as edges.
 %\begin{definition}[Configuration Composition]
 
 Given a set of configurations $C$ and a set $E_C$ of connections between them,
@@ -847,7 +846,9 @@ invalid. For gravitational stability, we specify a time bound
 \(t_{max} > t_B\). A behavior is considered unstable if it
 includes any period of instability longer than \(t_{max}\), or if the behavior is unstable at time \(T_B\) (at the end).
 
-To check force limit, unlike other verifications for behaviors, we use an existing physics engine to detect unsafe conditions during simulation. By setting the maximum force allowed for the connection between modules and for controlling each joint in the module, we are able to identify unsafe behaviors if we detect, during the behavior execution, any undesired module disconnection or any joint's mismatch between its target position and steady state position.
+To check force limits, unlike other verifications for behaviors, we use an existing physics engine to detect unsafe conditions during simulation. By setting the maximum force that
+can be supported by connectors and exerted by  joints, we are able to identify unsafe behaviors if we detect, during the behavior execution, any undesired module disconnection or a  mismatch between any
+joints target position and actual  position.
 
 %\TODO{Since this is not the implementation section, it might be better to describe
 %the joint and actuator limit checks without mentioning specific physics engines.
@@ -859,7 +860,7 @@ To check force limit, unlike other verifications for behaviors, we use an existi
 %heading.  If possible, try to cut down the text as well to save space.}
 The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example shown in Figure~\ref{fig:verification}-1. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:verification}-1. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:verification}-2, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
 
-Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between modules in this behavior, as shown in Figure~\ref{fig:verification}-3. The image shown in Figure~\ref{fig:verification}-4 demonstrates the moment of collision during simulation.
+Verification of behaviors  also aids the user in creating valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between modules in this behavior, as shown in Figure~\ref{fig:verification}-3. The image shown in Figure~\ref{fig:verification}-4 demonstrates the moment of collision during simulation.
 
 Modules all have limits on the maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from the module's hardware to execute a behavior while maintaining all module connections. 
 As shown in Figure~\ref{fig:verification}-5, the program detected a disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:verification}-6 demonstrates the disconnection in simulation.
@@ -978,7 +979,9 @@ Given a set of basic configurations (which could be just single modules), the co
 \cite{koenig2004design}.
 
 %\subsection{Behavior Builder}
-Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging behaviors in a parallel and series composition. Figure~\ref{fig:smores_conf} illustrates a new behavior composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder warns users if there are self-collisions or behavior conflict in the configuration during the execution of composed behaviors without the need of a physics-based simulator. To check force limit for connection and actuators, we create the module model and specify its joint and connection in the PhysX \cite{PhysX} physics engine with Unity3D \cite{Unity}, a graphical designing tool. 
+Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging behaviors in a parallel and series composition. Figure~\ref{fig:smores_conf} illustrates a new behavior composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder warns users if there are self-collisions or behavior conflict in the configuration during the execution of composed behaviors without the need of a physics-based simulator. To check force limits for connections and actuators, we create a
+model of the module in the PhysX \cite{PhysX} physics engine with Unity3D \cite{Unity}, and specify joint and connection
+force limits. 
 
 \begin{figure}
 \begin{center}
@@ -1076,10 +1079,20 @@ evaluate the quality of such a library is an interesting opportunity for future 
 
 %\subsection{The User Perspective}
 Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration and its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider the
-order-1 `Chain3'' configuration. We can form a ``Grasper'' configuration. With two ``Grasper'' configuration, we can form a body, as demonstrated in Figure~\ref{fig:centaur}-1. With three more configurations attaching to the top of the body configuration with certain angle offset, we can build a complex configuration, Centaur, with four legs, as shown in Figure~\ref{fig:centaur}-2. Notice that by connecting multiple  basic configurations together, we can design a complex configuration more easily than by
-creating it with individual modules.
-
-\begin{figure}
+order-1 `Chain3'' configuration. A second-order ``Grasper'' configuration, capable of grasping
+objects, can be formed by combining three first-order ``Chain3'' configurations.   Combining two Graspers allows
+us to form the legs and body of the third-order ``Walkbot'' configuration, now using the
+Grasper arms as legs for walking, as demonstrated in Figure~\ref{fig:centaur}-1. If
+we attach
+another Grasper to the top of the Walkbot (with two additional modules for structural
+support), we get the fourth-order ``Centaur'', a mobile manipulator, as shown in Figure~\ref{fig:centaur}-2. Connecting
+multiple lower-order configurations allows us to quickly develop complex high-order
+configurations like the Centaur. Given access to a library already containing
+the Grasper design, for example, creating the Centaur is involves just two composition
+steps.  The user can then immediately
+compose behaviors already associated with the lower-order configurations (like``Walk'' and
+``Grasp'') to create behaviors for higher-order configurations (like picking
+up and carrying an object). \begin{figure}
 \begin{center}
 \includegraphics[width=\columnwidth]{images/tikz/design_diagram_hori.pdf}
 \caption{The design flow}
@@ -1229,7 +1242,7 @@ We presented a novel motion description language, which allows existing behavior
 to be combined in series and parallel  to create more complex  behaviors.
 The framework verifies  configurations and behaviors, allowing
 early detection of  design flaws, specifically behavior conflict, self-collision, loss of gravitational stability, and forces 
-exceeding the limits of safety for actuators and connectors. After verification, designs can be evaluated in a physical simulator before testing on
+exceeding the limits of safety for actuators and connectors. In addition to verification, designs can be evaluated in a physical simulator before testing on
 hardware.
 
 \section{Future}
@@ -1250,6 +1263,7 @@ for the CKbot robot \cite{davey2012modlock} into our software.
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
 
 
 
