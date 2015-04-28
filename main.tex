@@ -187,7 +187,7 @@ workflow.
                 \includegraphics[width=0.23\textwidth]{images/library/unity/step2.png}
                 \includegraphics[width=0.23\textwidth]{images/library/unity/step3.png}
                 \includegraphics[width=0.23\textwidth]{images/library/unity/step4.png}
-                \includegraphics[width=0.9\textwidth]{images/tikz/walkgraph.pdf}
+                %\includegraphics[width=0.9\textwidth]{images/tikz/walkgraph.pdf}
 \end{center}
 \caption{The Centaur is a  mobile manipulator made of 29 modules. The framework
 we present provides tools that help users quickly create, program, and verify complex designs
@@ -268,8 +268,8 @@ The \textit{state} of the module, \(X=\lbrack x_1, x_2, \ldots, x_d \rbrack\),
 $A=\{a_1, a_2, ..., a_k\}$ is the set of \textit{attachment points} where the 
 module can connect to other modules.
 The  module's \textit{forward kinematics function}, \(K: (X, a_i) \rightarrow SE(3) \) 
-returns \({^\mathcal{B}}D^{a_{i}}\) (the displacement of attachment point \(a_i\) 
-in the body frame) as a function of \(X\).
+returns \({^\mathcal{M}}D^{a_{i}}\) (the displacement of attachment point \(a_i\) 
+in the module frame) as a function of \(X\).
 % , where:
 % \begin{itemize}
 % \item ${^\mathcal{W}}D^{\mathcal{M}}\in SE(3)$ is the rigid-body \textit{displacement} (position and orientation)
@@ -394,7 +394,7 @@ connection.
 %Assuming acyclic configurations, w
 We can compute forward kinematics for the entire
 configuration by composing displacements module-to-module. Let any module \(\mathcal{M}_f \in M\) have
-fixed displacement \({^\mathcal{W}}D^{\mathcal{B}_f}\) in the world frame.
+fixed displacement \({^\mathcal{W}}D^{\mathcal{M}_f}\) in the world frame.
 Let \(\mathcal{M}_i: (\mathcal{M}_i.a_i,~\mathcal{M}_f.a_f) \in E \) be connected to \(\mathcal{M}_f\).
  We can find \({^\mathcal{W}}D^{\mathcal{M}_i}\) by composing displacements as follows:
 \begin{align*}
@@ -490,13 +490,14 @@ large, complicated, functional designs.
 Before discussing configuration composition, we will first define a set of connections $E_C$ between configurations in a given set $C$ as $(\mathcal{C}_i.\mathcal{M}_i.a_i, \mathcal{C}_j.\mathcal{M}_j.a_j) \in E_C$, where $\mathcal{C}_{i},\mathcal{C}_j\in C$, $\mathcal{M}_i \in \gamma(\mathcal{C}_i), \mathcal{M}_j \in \gamma(\mathcal{C}_j)$, and $a_i\in \mathcal{M}_i.A$, $a_j\in \mathcal{M}_j.A$. We assume that we form an
 acyclic graph with configurations in $C$ as nodes and connections in $E_C$ as edges.
 %\begin{definition}[Configuration Composition]
-%Given a set of configurations $C$ and a set $E_C$ of connections between them,
-%configuration composition combines all configurations in $C$ to a single
-%configuration $\mathcal{C}^*$ that includes all modules and connections from $C$
-%and $E_C$. we define the composed configuration to be $\mathcal{C}^*=(C^*, \gamma, M, E, \delta,
-%X, B)$, where \(C^*\), \(M\), \(E\), and \(B\) are defined as the unions of the
-%corresponding sets of the sub-configurations in \(C\). The definitions of $\gamma$, \(X\), and $\delta$ remain
-%unchanged from Definition~\ref{def:configuration}. 
+
+Given a set of configurations $C$ and a set $E_C$ of connections between them,
+configuration composition combines all configurations in $C$ to a single
+configuration $\mathcal{C}^*$ that includes all modules and connections from $C$
+and $E_C$. The composed configuration is $\mathcal{C}^*=(C^*, \gamma, M, E, \delta,
+X, B)$, where \(C^*\), \(M\), \(E\), and \(B\) are  the unions of the
+corresponding sets of the sub-configurations in \(C\).
+%The definitions of $\gamma$, \(X\), and $\delta$ remain unchanged from Definition~\ref{def:configuration}. 
 %\end{definition}
 
 \subsection{Behavior Composition: Series-Parallel Action Graphs}
@@ -1245,6 +1246,7 @@ for the CKbot robot \cite{davey2012modlock} into our software.
 \bibliographystyle{spmpsci}
 \bibliography{references}
 \end{document}
+
 
 
 
