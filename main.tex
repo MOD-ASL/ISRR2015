@@ -284,7 +284,7 @@ in the module frame) as a function of \(X\).
 %
 Figure~\ref{fig:graphical-representations} shows a schematic representation of a module with  four attachment points.
 
-In this paper, we demonstrate our framework using a homogeneous modular robot system (all modules are identical). The framework could easily be extended to accommodate a heterogeneous system by expanding the definition of a module to include additional information - for example, if the system used multiple kinds of connectors, labels on the attachment points could be included. 
+In this paper, we demonstrate our framework using a homogeneous modular robot system (all modules are identical). The framework could be extended to heterogeneous systems by including more information in the definition of a module - for example, if the system used multiple kinds of connectors, labels on the attachment points could be included. 
 \end{definition}
 %
 % \begin{figure}
@@ -440,7 +440,8 @@ composing displacements in the manner above.
 
 
 \begin{definition}[Behavior]\label{def:behavior}
-A \textit{behavior} \(B:(t,X)\to X_{set}\) is a programmed sequence of movements for a specific configuration
+A \textit{behavior} \(B:(t,X)\to X_{set}\) is a programmed sequence of movements defined
+over the joints of a specific configuration, and
 intended to produce a desired effect - a gait for walking is one example.  Behaviors
 determine the controller setpoints \(X_{set}\) for a configuration as a function
 of state \(X\) and time \(t\). In this paper, we represent behaviors as
@@ -620,28 +621,25 @@ As an example, consider the car design shown in Figure \ref{fig:car-and-backhoe}
 ``drive-forward'' behavior, we simply command all of its wheels to spin  in parallel.
 The car steers by swiveling its central steering column, so a ``turn right''
 behavior can be similarly achieved by commanding parallel actions for the steering column joints.
-With these low-level behaviors established, we can command trajectories through series
-composition, for example: \textit{square=series(drive, turn, drive, turn, drive, turn,
-drive, turn)}.
+With these low-level behaviors established, we can command trajectories through series composition. For example, if we name our car configuration \texttt{c}: \texttt{c.square = \textbf{series}(c.drive, c.turn, c.drive, c.turn, c.drive, c.turn, c.drive, c.turn)}.
 
 This paradigm  allows  low-level behaviors to be coded quickly and
 easily. However, the real value comes from its ability to  combine behaviors
 in layers and quickly generate behaviors for complicated designs. This works
 particularly well when designs are made by composing smaller designs. For
 example, we can develop ``drive'' and ``turn''\ behaviors for the
-18-module backhoe shown in Figure \ref{fig:car-and-backhoe} by composing  behaviors of
-its component car designs: \(driveBackhoe= parallel( driveCar1, driveCar2)\),
-and \(turnBackhoe = parallel(turnCar1, turnCar2)\). Each of these one-line
-statements commands the movement of  28 degrees of freedom.
+18-module backhoe shown in Figure \ref{fig:car-and-backhoe} (name \texttt{bh}) by composing  behaviors of its component car designs (named \texttt{c1} and \texttt{c2}):
+\texttt{bh.drive = \textbf{parallel}(c1.drive, c2.drive)}, and \texttt{bh.turn = \textbf{parallel}(c1.turn, c2.turn)}.
+Each of these one-line statements commands the movement of  28 degrees of freedom.
 
 We can extend this further to generate high-level behaviors for the
 backhoe.  Suppose that the arm has a laser rangefinder attached to the end,
 and that we've already created a ``scan'' behavior that sweeps or rotates the
 sensor.  We might create a ``patrol'' behavior that scans continuously while
-driving in a square: \(patrol = parallel( scan, square)\). Or, if we only want
+driving in a square: \texttt{bh.patrol = \textbf{parallel}(bh.scan, bh.square)}. Or, if we only want
 the robot to scan the corners of a room, we can precisely specify this using
-lower-level behaviors:  \(cornerScan=series(drive, scan, turn, drive,scan,
-turn, \ldots) \).
+lower-level behaviors: \texttt{bh.cornerScan = \textbf{series}(bh.drive, bh.scan, bh.turn,
+bh.drive, bh.scan, bh.turn, \ldots)}.
 
 % Building behaviors in a layered fashion make it much easier
 % to re-use code.
