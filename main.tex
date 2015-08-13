@@ -664,14 +664,13 @@ plan execution model such as behavior trees \cite{marzinotto2014towards}, parall
 finite state machines \cite{sklyarov2008design} or even a
 traditional object-oriented programming language (like Java or C++)?  Our
 decision was driven by the tradeoff between complexity and ease-of-use: given
-our desire for a simplicity and speed of programming, we chose to use an
-extremely minimal  paradigm with only two composition operations.
-The language is quite expressive: we have used it to develop a number of  complex behaviors
-for large designs (see Section \ref{sec:examples}). In the future, we hope to expand
-its capabilities without sacrificing ease-of-use.  In particular, facilities
-for high-level decision making based on sensed information about the environment
-will be a priority.
-
+our desire for a simplicity and speed of programming, we chose a
+ minimal paradigm with only two composition operations.
+The language is quite expressive: we have used it to develop complex behaviors
+for large designs (see Section \ref{sec:examples}). The language is also limited:
+it does not yet include conditional statements, iteration, or access to environmental
+sensor
+information (other than joint angles). In the future, we hope to include these capabilities without sacrificing ease-of-use. 
 % \begin{figure}
 % \begin{center}
 %   \begin{subfigure}[b]{0.4\textwidth}
@@ -1298,3 +1297,4 @@ for the CKbot robot \cite{davey2012modlock} into our software.
 
 
  
+
