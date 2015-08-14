@@ -284,7 +284,7 @@ in the module frame) as a function of \(X\).
 %
 Figure~\ref{fig:graphical-representations} shows a schematic representation of a module with  four attachment points.
 
-In this paper, we demonstrate our framework using a homogeneous modular robot system (all modules are identical). The framework could be extended to heterogeneous systems by including more information in the definition of a module - for example, if the system used multiple kinds of connectors, labels on the attachment points could be included. 
+{\color{red}In this paper, we demonstrate our framework using a homogeneous modular robot system (all modules are identical). The framework could be extended to heterogeneous systems by including more information in the definition of a module - for example, if the system used multiple kinds of connectors, labels on the attachment points could be included.} 
 \end{definition}
 %
 % \begin{figure}
@@ -617,6 +617,11 @@ a visual example.
 \end{figure}
 
 %\subsubsection*{Example}
+
+{\color{red} Note:\ In this section, I changed the behavior examples to use
+dot notation (i.e. ``c.drive'') to make it clear that behaviors are associated
+with designs, to address the reviewer comment about ambiguity when two behaviors
+have the same name.}
 As an example, consider the car design shown in Figure \ref{fig:car-and-backhoe}. To create a low-level
 ``drive-forward'' behavior, we simply command all of its wheels to spin  in parallel.
 The car steers by swiveling its central steering column, so a ``turn right''
@@ -664,13 +669,13 @@ plan execution model such as behavior trees \cite{marzinotto2014towards}, parall
 finite state machines \cite{sklyarov2008design} or even a
 traditional object-oriented programming language (like Java or C++)?  Our
 decision was driven by the tradeoff between complexity and ease-of-use: given
-our desire for a simplicity and speed of programming, we chose a
+our desire for simplicity and speed of programming, we chose a
  minimal paradigm with only two composition operations.
 The language is quite expressive: we have used it to develop complex behaviors
-for large designs (see Section \ref{sec:examples}). The language is also limited:
+for large designs (see Section \ref{sec:examples}). {\color{red}The language is also limited:
 it does not yet include conditional statements, iteration, or access to environmental
 sensor
-information (other than joint angles). In the future, we hope to include these capabilities without sacrificing ease-of-use. 
+information (other than joint angles). In the future, we hope to include these capabilities without sacrificing ease-of-use.} 
 % \begin{figure}
 % \begin{center}
 %   \begin{subfigure}[b]{0.4\textwidth}
