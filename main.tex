@@ -732,7 +732,7 @@ information (other than joint angles). In the future, we hope to include these c
 
 %\subsubsection{Verification of Configurations \TODO{Consider removing these subsection headings to save space}}\label{sec:verify_conf}
 {\bf Verification of Configurations: }
-In Section~\ref{sec:conf_composition}, we introduced the definition of configuration composition. During the design process, a user might attempt to compose configurations in a way that is unstable or physically impossible. We provide tools to automatically verify designs during construction, saving time that would otherwise be spent simulating or testing invalid designs.
+In Section~\ref{sec:conf_composition}, we introduced the definition of configuration composition. During the design process, a user might attempt to compose configurations in a way that is unstable or physically impossible. \abj{By incorporating existing algorithms into the design process,} we provide tools to automatically verify designs during construction, saving time that would otherwise be spent simulating or testing invalid designs.
 
 Given a configuration $\mathcal{C}$ and state \(X_0\), we consider $\mathcal{C}$ to be valid in state \(X_0\) if it is gravitationally stable and free from self
 collision between modules.  A robot is gravitationally
@@ -787,7 +787,8 @@ obtained  through forward kinematics as in Definition~\ref{def:configuration}.
 %collision in the configuration.
 Our tool checks self-collision by
 approximating modules as spheres, and checking the distance (radius) between all
-pairs. More sophisticated techniques are available which efficiently produce
+pairs. \abj{Due to this over approximation, false-positive collision might be detected. When that happens, a user can easily spot the faulty detection in the final configuration and choose to ignore such warning.}
+More sophisticated techniques are available which efficiently produce
 exact results \cite{pan2012fcl}, at the cost of higher complexity.
 %
 To offer instant feedback to the user when designing the configurations, we
@@ -866,6 +867,8 @@ joints target position and actual  position.
 The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example shown in Figure~\ref{fig:verification}-1. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:verification}-1. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:verification}-2, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
 
 Verification of behaviors  also aids the user in creating valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between modules in this behavior, as shown in Figure~\ref{fig:verification}-3. The image shown in Figure~\ref{fig:verification}-4 demonstrates the moment of collision during simulation.
+
+\abj{There is a trade-off between the correctness and the efficiency of the verification. By reducing the sampling time $t_b$, more potential self-collisions or gravitational instability can be detected with the cost of longer computation time. However, we only need to conduct the verification when configurations and behaviors are created. The safety of the robot can still be guaranteed during run-time without any online verification.}
 
 Modules all have limits on the maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from the module's hardware to execute a behavior while maintaining all module connections. 
 As shown in Figure~\ref{fig:verification}-5, the program detected a disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:verification}-6 demonstrates the disconnection in simulation.
