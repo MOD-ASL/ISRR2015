@@ -284,7 +284,7 @@ in the module frame) as a function of \(X\).
 %
 Figure~\ref{fig:graphical-representations} shows a schematic representation of a module with  four attachment points.
 
-{\color{red}In this paper, we demonstrate our framework using a homogeneous modular robot system (all modules are identical). The framework could be extended to heterogeneous systems by including more information in the definition of a module - for example, if the system used multiple kinds of connectors, labels on the attachment points could be included.} 
+In this paper, we demonstrate our framework using a homogeneous modular robot system (all modules are identical). The framework could be extended to heterogeneous systems by including more information in the definition of a module - for example, if the system used multiple kinds of connectors, labels on the attachment points could be included. 
 \end{definition}
 %
 % \begin{figure}
@@ -617,11 +617,6 @@ a visual example.
 \end{figure}
 
 %\subsubsection*{Example}
-
-{\color{red} Note:\ In this section, I changed the behavior examples to use
-dot notation (i.e. ``c.drive'') to make it clear that behaviors are associated
-with designs, to address the reviewer comment about ambiguity when two behaviors
-have the same name.}
 As an example, consider the car design shown in Figure \ref{fig:car-and-backhoe}. To create a low-level
 ``drive-forward'' behavior, we simply command all of its wheels to spin  in parallel.
 The car steers by swiveling its central steering column, so a ``turn right''
@@ -672,10 +667,10 @@ decision was driven by the tradeoff between complexity and ease-of-use: given
 our desire for simplicity and speed of programming, we chose a
  minimal paradigm with only two composition operations.
 The language is quite expressive: we have used it to develop complex behaviors
-for large designs (see Section \ref{sec:examples}). {\color{red}The language is also limited:
+for large designs (see Section \ref{sec:examples}). The language is also limited:
 it does not yet include conditional statements, iteration, or access to environmental
 sensor
-information (other than joint angles). In the future, we hope to include these capabilities without sacrificing ease-of-use.} 
+information (other than joint angles). In the future, we hope to include these capabilities without sacrificing ease-of-use. 
 % \begin{figure}
 % \begin{center}
 %   \begin{subfigure}[b]{0.4\textwidth}
@@ -732,7 +727,7 @@ information (other than joint angles). In the future, we hope to include these c
 
 %\subsubsection{Verification of Configurations \TODO{Consider removing these subsection headings to save space}}\label{sec:verify_conf}
 {\bf Verification of Configurations: }
-In Section~\ref{sec:conf_composition}, we introduced the definition of configuration composition. During the design process, a user might attempt to compose configurations in a way that is unstable or physically impossible. \abj{By incorporating existing algorithms into the design process,} we provide tools to automatically verify designs during construction, saving time that would otherwise be spent simulating or testing invalid designs.
+In Section~\ref{sec:conf_composition}, we introduced the definition of configuration composition. During the design process, a user might attempt to compose configurations in a way that is unstable or physically impossible. By incorporating existing algorithms into the design process, we provide tools to automatically verify designs during construction, saving time that would otherwise be spent simulating or testing invalid designs.
 
 Given a configuration $\mathcal{C}$ and state \(X_0\), we consider $\mathcal{C}$ to be valid in state \(X_0\) if it is gravitationally stable and free from self
 collision between modules.  A robot is gravitationally
@@ -787,7 +782,7 @@ obtained  through forward kinematics as in Definition~\ref{def:configuration}.
 %collision in the configuration.
 Our tool checks self-collision by
 approximating modules as spheres, and checking the distance (radius) between all
-pairs. \abj{Due to this over approximation, false-positive collision might be detected. When that happens, a user can easily spot the faulty detection in the final configuration and choose to ignore such warning.}
+pairs. Due to this approximation, false-positive collisions might be detected. When this happens, a user can easily spot the faulty detection in the final configuration and choose to ignore such warning.
 More sophisticated techniques are available which efficiently produce
 exact results \cite{pan2012fcl}, at the cost of higher complexity.
 %
@@ -868,7 +863,11 @@ The need for verification becomes more important as design complexity increases.
 
 Verification of behaviors  also aids the user in creating valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between modules in this behavior, as shown in Figure~\ref{fig:verification}-3. The image shown in Figure~\ref{fig:verification}-4 demonstrates the moment of collision during simulation.
 
-\abj{There is a trade-off between the correctness and the efficiency of the verification. By reducing the sampling time $t_b$, more potential self-collisions or gravitational instability can be detected with the cost of longer computation time. However, we only need to conduct the verification when configurations and behaviors are created. The safety of the robot can still be guaranteed during run-time without any online verification.}
+There is a trade-off between the correctness and the efficiency of the verification. By reducing the sampling time $t_b$, more potential self-collisions or gravitational instability can be detected with the cost of longer computation time.
+%However, we only need to conduct the verification when configurations and behaviors are created. The safety of the robot can still be guaranteed during run-time without any online verification.
+However, since there is no real-time requirement (verification is done during
+the design process, not at runtime), the computational cost of fine-resolution
+verification is worthwhile in most cases.
 
 Modules all have limits on the maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from the module's hardware to execute a behavior while maintaining all module connections. 
 As shown in Figure~\ref{fig:verification}-5, the program detected a disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:verification}-6 demonstrates the disconnection in simulation.
