@@ -1018,6 +1018,7 @@ force limits.
 %
 \section{Examples and User Perspective}
 \label{sec:examples}
+\vspace{-0.4cm}
 Our eventual intention is to develop a large library of configurations and associated
 behaviors which are available to all users of our framework, analogous to the standard
 libraries of major programming languages.  The compositional nature of our framework
@@ -1062,10 +1063,9 @@ evaluate the quality of such a library is an interesting opportunity for future 
 %         \label{Order-2-configurations}
 %     \end{center}
 % \end{table*}
-
 \begin{figure}
   \begin{center}
-    \includegraphics[width=\textwidth]{images/library/bigGrid.pdf}
+    \includegraphics[width=0.92\textwidth]{images/library/bigGrid.pdf}
     \caption{Library of designs, listed by order. 
     \textbf{Order 0:} Module. \textbf{Order 1:} Chain3=3x Module.
     \textbf{Order 2:} Car = Chain3 + 4x Module, Grasper = 3x Chain3, PUMA= Chain3 + Module.
@@ -1075,55 +1075,13 @@ evaluate the quality of such a library is an interesting opportunity for future 
   \end{center}
 \end{figure}
 
-
-% \begin{table*}
-%     \begin{center}
-%         \includegraphics[scale=1]{images/library/tier3.pdf}
-%         \caption{Order-3 configuration}
-%         \label{Order-3-configurations}
-%     \end{center}
-% \end{table*}
-
-%\subsection{The User Perspective}
-Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration and its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider the
-order-1 `Chain3'' configuration. A second-order ``Grasper'' configuration, capable of grasping
-objects, can be formed by combining three first-order ``Chain3'' configurations.   Combining two Graspers allows
-us to form the legs and body of the third-order ``Walkbot'' configuration, now using the
-Grasper arms as legs for walking, as demonstrated in Figure~\ref{fig:centaur}-1. If
-we attach
-another Grasper to the top of the Walkbot (with two additional modules for structural
-support), we get the fourth-order ``Centaur'', a mobile manipulator, as shown in Figure~\ref{fig:centaur}-2. Connecting
-multiple lower-order configurations allows us to quickly develop complex high-order
-configurations like the Centaur. Given access to a library already containing
-the Grasper design, for example, creating the Centaur is involves just two composition
-steps.  The user can then immediately
-compose behaviors already associated with the lower-order configurations (like``Walk'' and
-``Grasp'') to create behaviors for higher-order configurations (like picking
-up and carrying an object). \begin{figure}
+\begin{figure}
 \begin{center}
-\includegraphics[width=\columnwidth]{images/tikz/design_diagram_hori.pdf}
+\includegraphics[width=0.92\textwidth]{images/tikz/design_diagram_hori.pdf}
 \caption{The design flow}
 \label{fig:design}
 \end{center}
 \end{figure}
-
-% \begin{figure}
-% \begin{center}
-%         \begin{subfigure}[b]{0.3\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/tikz/walkbot.pdf}
-%                 \caption{Two identical configurations form a body}
-%                 \label{fig:walkbot1}
-%         \end{subfigure}
-%         ~
-%         \begin{subfigure}[b]{0.65\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/tikz/walkbot2.pdf}
-%                 \caption{The body and other configurations form a Centaur}
-%                 \label{fig:walkbot2}
-%         \end{subfigure}
-% \end{center}
-% \caption{Building a Centaur with a set of configurations}
-% \label{fig:walkbot}
-% \end{figure}
 
 \begin{figure}
   \begin{center}
@@ -1141,106 +1099,29 @@ up and carrying an object). \begin{figure}
     to form the Centaur.}
     \label{fig:centaur}
   \end{center}
-  
+\vspace{-2cm}
 \end{figure}
 
-%\subsection{Scale-up through composition}
-% Our framework allows users to quickly create and program large configurations. The
-% first-order CHAIN3 configuration (Table~\ref{Order-1-configurations}) can use a \(sineGait\)
-% behavior to locomote like a snake. Defining \(sineGait\)  as the series composition
-% of two half-waves will allow us to re-use the gait with larger snakes:
-% \begin{displaymath}
-% sineGait = Sc(~halfSine1,~halfSine2~)
-% \end{displaymath}
-% Arbitrarily long snake configurations can be created
-% by composing CHAIN3 configurations end-to-end; Table~\ref{Order-2-configurations} shows one with 18 modules.
-% A gait for an arbitrarily long snake is created by composing sine wave
-% gaits for each component in parallel, but with alternating phase:
-% \begin{align*}
-% nSnakeSineGait = ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
-% Pc \left(~Sc\begin{pmatrix} halfSine1 \\ halfSine2 \end{pmatrix},
-% ~Sc\begin{pmatrix} halfSine2 \\ halfSine1 \end{pmatrix},\ldots ~\right)
-% \end{align*}
+%\subsection{The User Perspective}
+Figure~\ref{fig:design} demonstrates the design flow when a user is designing a configuration and its behaviors. We present the start-to-end user perspective in designing a complicated configuration called Centaur. Consider the
+order-1 `Chain3'' configuration. A second-order ``Grasper'' configuration, capable of grasping
+objects, can be formed by combining three first-order ``Chain3'' configurations.   Combining two Graspers allows
+us to form the legs and body of the third-order ``Walkbot'' configuration, now using the
+Grasper arms as legs for walking, as demonstrated in Figure~\ref{fig:centaur}-1. If
+we attach
+another Grasper to the top of the Walkbot (with two additional modules for structural
+support), we get the fourth-order ``Centaur'', a mobile manipulator, as shown in Figure~\ref{fig:centaur}-2. Connecting
+multiple lower-order configurations allows us to quickly develop complex high-order
+configurations like the Centaur. Given access to a library already containing
+the Grasper design, for example, creating the Centaur is involves just two composition
+steps.  The user can then immediately
+compose behaviors already associated with the lower-order configurations (like``Walk'' and
+``Grasp'') to create behaviors for higher-order configurations (like picking
+up and carrying an object).
 
-% \subsection{Verification}
-% The need for verification becomes more important as design complexity increases. Consider a four-legged Walkbot example. If the user sets two of the connections with different angle offset, the composed Walkbot configuration will have two legs pointing in the opposite direction of the other two legs, as shown in Figure~\ref{fig:designer_unstable}. Since the projection of the configuration's center of mass now falls out of the supporting base, the program will warn the user that the configuration is not gravitationally stable. As shown in Figure~\ref{fig:gazebo_unstable2}, in simulation the configuration quickly fell to the ground due to the instability as warned by the program. 
-% 
-% Verification of behavior design can also aid the user to create valid and safe robot behaviors. When designing the walking behavior for the Walkbot, if the user commands the front and rear leg at the same side of the robot to swing toward each other at the same time, the program will warn the user that there will be collision between some modules in this behavior, as shown in Figure~\ref{fig:gait_collision}. The photo shown in Figure~\ref{fig:gait_collision2} demonstrates the moment of collision during simulation.
-% 
-% Despite the design of the modular robot system, modules all have limits on maximum force that is available to maintain connections with other modules and to drive each joint to desired positions. Thus, it is crucial to notify the user if there is no sufficient force from module's hardware to execute a behavior while maintaining all modules connections. 
-% As shown in Figure~\ref{fig:break_joint1}, the program detected an undesired disconnection when the user tried to lift a long cantilever arm. Figure~\ref{fig:break_joint1} demonstrates the disconnection in simulation.
-%  
-% \begin{figure}
-% \begin{center}
-%         \begin{subfigure}[b]{0.48\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/designer_unstable.png}
-%                 \caption{}
-%                 \label{fig:designer_unstable}
-%            \end{subfigure}
-%         \begin{subfigure}[b]{0.48\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/gazebo_unstable2.png}
-%                 \caption{}
-%                 \label{fig:gazebo_unstable2}
-%         \end{subfigure}
-% \end{center}
-% \caption{(a) The program warns the composed configuration is not gravitationally stable; (b) The robot fell to ground plane due to instability in simulation}
-% \label{fig:unstable}
-% \end{figure}
-% 
-% \begin{figure}
-% \begin{center}
-%         \begin{subfigure}[b]{0.48\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/designer_gait_collision.png}
-%                 \caption{}
-%                 \label{fig:gait_collision}
-%            \end{subfigure}
-%         \begin{subfigure}[b]{0.48\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/gazebo_gait_collision.png}
-%                 \caption{}
-%                 \label{fig:gait_collision2}
-%         \end{subfigure}
-% \end{center}
-% \caption{(a) The program indicates there is collision during the behavior execution; (b) Two feet of  the robot collided during simulation}
-% \label{fig:gait_unstable}
-% \end{figure}
-% 
-% \begin{figure}
-% \begin{center}
-%         \begin{subfigure}[b]{0.48\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/library/unity/breakJoint.png}
-%                 \caption{}
-%                 \label{fig:break_joint1}
-%            \end{subfigure}
-%         \begin{subfigure}[b]{0.48\columnwidth}
-%                 \includegraphics[width=\textwidth]{images/library/unity/breakJoint2.png}
-%                 \caption{}
-%                 \label{fig:break_joint2}
-%         \end{subfigure}
-% \end{center}
-% \caption{(a) The program indicates there is undesired disconnection; (b) The configuration disconnected during simulation}
-% \label{fig:break_joint}
-% \end{figure}
-
-% \section{Results}
-% In the past, designing configurations and behaviors to address new tasks has required
-% time on the order of one to dozens of hours \cite{sastra2011using}.  To evaluate the rapid creation of solutions for robotic tasks using modular robot systems, we can look to the modular robot competitions held at large conferences IROS 2003, ICRA 2008, ICRA 2010, ICRA 2011 and ICRA 2012. In each case participants used modular robot systems to solve problems with little a priori knowledge of the task (except that the task would likely require remote operation/manipulation of objects).
-% 
-% In the case of IROS 2003, the task was to create a robot that could ``gamble'' by placing plastic tokens into a toy slot machine, pulling a lever and catching the chips as they popped out.  One team created a solution with PolyBot G1V4 system with 14 modules (14 DoF). Participants
-% had one day to create primitive configurations and behaviors (snake-like mobility, and arm like structures) and
-%  6 hours on the following day to solve the task. No teams completed the task, though
-% some came close. 
-% At ICRA 2008, participants created designs to address a mock disaster scenario
-% at a space station on Mars. Teams spent on average about 3 hours building configurations and
-% 3 hours programming them to address the task \cite{sastra2011using}.  
-%   
-% Using our framework and library, a single person has created and programmed   configurations of similar complexity to those used at
-% the competitions (such as the Centaur or 18-module snake)
-% in under an hour,
-% or in a few minutes if the right primitives already exist in the library. Figure~\ref{fig:walk} shows a four-step walking behavior for the Centaur. It would
-% not be fair to compare these times to the competition times directly, since they do not include any
-% hardware tests or hardware debugging. However, we think we can safely say that
-% our framework is an improvement over past design practices.
+\vspace{-0.4cm}
 \section{Conclusions}
+\vspace{-0.4cm}
 In this paper, we presented a design framework that facilitates the rapid creation
 of configurations and behaviors for modular robots.
 Complex configurations  are hierarchically constructed from basic
@@ -1252,7 +1133,9 @@ early detection of  design flaws, specifically behavior conflict, self-collision
 exceeding the limits of safety for actuators and connectors. In addition to verification, designs can be evaluated in a physical simulator before testing on
 hardware.
 
+\vspace{-0.4cm}
 \section{Future}
+\vspace{-0.4cm}
 Future work will include expansion of the features of our framework.  We hope to expand
 the capabilities of our motion description language without sacrificing ease-of-use,
 and add more verification tools to assist in problem identification. Another area of future work is developing a standard library of configurations and
@@ -1268,6 +1151,7 @@ for the CKbot robot \cite{davey2012modlock} into our software.
 %\input{referenc}
 %\bibliographystyle{plainnat}
 \bibliographystyle{spmpsci}
+\vspace{-0.4cm}
 \bibliography{references}
 \end{document}
 
