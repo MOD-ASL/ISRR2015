@@ -986,7 +986,9 @@ Given a set of basic configurations (which could be just single modules), the co
 \cite{koenig2004design}.
 
 %\subsection{Behavior Builder}
-Given a composed configuration, the behavior builder aids users in designing behaviors for the composed configuration by arranging behaviors in a parallel and series composition. Figure~\ref{fig:smores_conf} illustrates a new behavior composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder warns users if there are self-collisions or behavior conflict in the configuration during the execution of composed behaviors without the need of a physics-based simulator. To check force limits for connections and actuators, we create a
+Given a configuration, the behavior builder aids users in designing behaviors by
+composing existing behaviors in series and parallel. Figure~\ref{fig:smores_conf} illustrates a new behavior composed by putting four basic behaviors in parallel. Similar to the configuration builder, the behavior builder warns users if there are self-collisions or behavior conflicts during 
+the execution of composed behaviors, without the need of a physics-based simulator. To check force limits for connections and actuators, we create a
 model of the module in the PhysX \cite{PhysX} physics engine with Unity3D \cite{Unity}, and specify joint and connection
 force limits. 
 
@@ -1031,7 +1033,7 @@ Configurations in the library are organized by \textit{order}, defined recursive
 as follows: a single module is an order-zero configuration, and the order of all
 other configurations is one greater than the largest order of the sub-configurations
 from which it is composed. Each configuration has an associated set of behaviors,
-which the user can compose to accomplish tasks.  New behaviors for higher-order configuration can be created by composing the behaviors of its component sub-configurations.
+which the user can compose to accomplish tasks.  New behaviors for a higher-order configuration can be created by composing the behaviors of its component sub-configurations.
 
 For the library to be most effective, the set of configurations and behaviors available
  at each level (and especially at the lowest levels) should provide a rich set of
@@ -1115,7 +1117,8 @@ multiple lower-order configurations allows us to quickly develop complex high-or
 configurations like the Centaur. Given access to a library already containing
 the Grasper design, for example, creating the Centaur is involves just two composition
 steps.  The user can then immediately
-compose behaviors already associated with the lower-order configurations (like``Walk'' and
+compose behaviors already associated with the lower-order configurations (like
+``Walk'' and
 ``Grasp'') to create behaviors for higher-order configurations (like picking
 up and carrying an object).
 
@@ -1138,7 +1141,8 @@ hardware.
 \vspace{-0.4cm}
 Future work will include expansion of the features of our framework.  We hope to expand
 the capabilities of our motion description language without sacrificing ease-of-use,
-and add more verification tools to assist in problem identification. Another area of future work is developing a standard library of configurations and
+and add more verification tools to assist in problem identification. Another area of future work lies in
+developing a standard library of configurations and
 behaviors for the SMORES robot.  We will also investigate metrics to evaluate the quality of such a library.
 Perhaps most importantly, we will test and evaluate the designs and behaviors with actual hardware modules.
 Currently, each behavior is associated with exactly one configuration. In many cases, a given behavior could be executed by several different configurations (if it were correctly mapped onto a subset of their modules). In the future, we will apply an embedding detection algorithm (see \cite{mantzouratos2014embeddability}) to map behaviors into any configuration capable of executing them.
